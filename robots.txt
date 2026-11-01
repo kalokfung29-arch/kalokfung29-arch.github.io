@@ -1,0 +1,9 @@
+# kalokfung29-arch.github.io robots
+User-agent: *
+Allow: /
+
+# 保留页与内部校验脚本不收录（不影响全站放行，仅按最长匹配排除这几项）
+Disallow: /index_backup_20261031.html
+Disallow: /_chk.js
+
+Sitemap: https://kalokfung29-arch.github.io/sitemap.xml
