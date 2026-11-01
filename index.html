@@ -880,6 +880,89 @@
     font-family:ui-monospace,Menlo,Consolas,monospace;}
   .sc-brief .st{font-size:11.5px;font-weight:800;text-align:right;}
 </style>
+<script>
+/* MIG-IMPORT v1 · 從舊版(tetrisjames.surge.sh)搬入 localStorage 存檔與代幣 */
+(function(){
+  var PREFIX="TGM1.", NUMRE=/^-?\d+(\.\d+)?$/;
+  function toStr(b64){var bin=atob(b64),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u);}
+  function apply(code){
+    if(!code||code.indexOf(PREFIX)!==0)return null;
+    var p=null;try{p=JSON.parse(toStr(code.slice(PREFIX.length)));}catch(e){return null;}
+    if(!p||!p.data)return null;
+    var keys=Object.keys(p.data),added=0,upd=0,skip=0,err=0;
+    keys.forEach(function(k){
+      var v=String(p.data[k]); if(v===""){skip++;return;}
+      var cur=null;try{cur=localStorage.getItem(k);}catch(e){}
+      try{
+        if(cur===null||cur===""){localStorage.setItem(k,v);added++;return;}
+        if(cur===v){skip++;return;}
+        if(NUMRE.test(v)&&NUMRE.test(cur)){ if(+v>+cur){localStorage.setItem(k,v);upd++;}else skip++; return; }
+        var a=null,b=null;try{a=JSON.parse(cur);b=JSON.parse(v);}catch(e){}
+        if(Array.isArray(a)&&Array.isArray(b)){
+          var seen={},out=[];
+          b.concat(a).forEach(function(it){var s=JSON.stringify(it);if(!seen[s]){seen[s]=1;out.push(it);}});
+          localStorage.setItem(k,JSON.stringify(out));upd++;return;
+        }
+        skip++;
+      }catch(e){err++;}
+    });
+    var res={added:added,upd:upd,skip:skip,err:err,total:keys.length,
+      tokens:p.data["tetris_web_tokens"]||"0",balls:p.data["tetris_web_balls"]||"0",best:p.data["tetris_best"]||"0"};
+    try{sessionStorage.setItem("__migResult",JSON.stringify(res));}catch(e){}
+    return res;
+  }
+  function runHash(){
+    var code="",h=location.hash||"";
+    if(h.indexOf("mig=")<0) return null;
+    var raw=h.slice(h.indexOf("mig=")+4);
+    try{code=decodeURIComponent(raw);}catch(e){code=raw;}
+    var res=apply(code);
+    if(res){try{history.replaceState(null,"",location.pathname+location.search);}catch(e){try{location.hash="";}catch(_e){}}}
+    return res;
+  }
+  var res=runHash();
+  window.addEventListener("hashchange",function(){ runHash(); });
+  function toast(msg){
+    var d=document.createElement("div");
+    d.style.cssText="position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483600;background:#4ce0ff;color:#070b12;font:700 13px/1.65 -apple-system,'Segoe UI',system-ui,sans-serif;padding:9px 14px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:92vw;text-align:center;";
+    d.textContent=msg;document.body.appendChild(d);
+    setTimeout(function(){d.style.transition="opacity .4s";d.style.opacity="0";setTimeout(function(){d.remove();},450);},5600);
+  }
+  window.__migToast=toast;
+  window.__migOpen=function(){
+    var ov=document.createElement("div");
+    ov.style.cssText="position:fixed;inset:0;z-index:2147483500;background:rgba(3,6,11,.86);display:flex;align-items:center;justify-content:center;padding:16px;";
+    ov.innerHTML='<div style="background:#0d1420;border:1px solid #24314a;border-radius:14px;padding:16px;max-width:520px;width:100%;color:#cfe3ff;font:500 13px/1.6 -apple-system,\'Segoe UI\',system-ui,sans-serif">'
+      +'<div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#4ce0ff">從舊版匯入資料</div>'
+      +'<div style="opacity:.82;margin-bottom:10px">在舊站 tetrisjames.surge.sh 點「帶走存檔同代幣」，複製得到的遷移碼貼到這裡（代幣、彈珠、積分、最高分、各遊戲進度一併搬入）。</div>'
+      +'<textarea id="migTa" placeholder="貼上 TGM1. 開頭的遷移碼" style="width:100%;height:110px;box-sizing:border-box;background:#070b12;color:#cfe3ff;border:1px solid #24314a;border-radius:10px;padding:10px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;resize:vertical"></textarea>'
+      +'<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">'
+      +'<button id="migCancel" type="button" style="background:transparent;border:1px solid #24314a;color:#9fb4d0;padding:7px 14px;border-radius:9px;font:700 13px inherit;cursor:pointer">取消</button>'
+      +'<button id="migOk" type="button" style="background:#4ce0ff;border:0;color:#070b12;padding:7px 16px;border-radius:9px;font:800 13px inherit;cursor:pointer">匯入</button></div></div>';
+    document.body.appendChild(ov);
+    var ta=ov.querySelector("#migTa");
+    ov.querySelector("#migCancel").onclick=function(){ov.remove();};
+    ov.querySelector("#migOk").onclick=function(){
+      var r=apply((ta.value||"").replace(/\s+/g,""));
+      ov.remove();
+      if(!r){toast("遷移碼無效，請回舊站重新複製");return;}
+      if(r.added+r.upd===0){toast("本機已是最新，無需匯入");return;}
+      toast("已匯入 "+(r.added+r.upd)+" 項｜代幣 "+r.tokens+"｜彈珠 "+r.balls);
+      setTimeout(function(){try{location.reload();}catch(e){}},1500);
+    };
+    setTimeout(function(){try{ta.focus();}catch(e){}},80);
+  };
+  window.addEventListener("DOMContentLoaded",function(){
+    var mo=document.getElementById("migOpen");
+    if(mo) mo.addEventListener("click",function(e){e.preventDefault();window.__migOpen();});
+    var r=null;try{r=JSON.parse(sessionStorage.getItem("__migResult")||"null");}catch(e){}
+    if(r){
+      try{sessionStorage.removeItem("__migResult");}catch(e){}
+      toast("已從舊版搬入 "+(r.added+r.upd)+" 項資料｜代幣 "+r.tokens+"｜彈珠 "+r.balls+"｜最高分 "+r.best);
+    }
+  });
+})();
+</script>
 </head>
 <body class="atHome">
 <div id="app">
@@ -941,6 +1024,7 @@
       <div class="w"><small>代幣</small><b id="homeTokens">0</b></div>
       <div class="w"><small>最高分</small><b id="homeBest">0</b></div>
     </div>
+    <button id="migOpen" type="button" title="從舊版搬入存檔與代幣" style="flex:0 0 auto;align-self:center;height:fit-content;background:rgba(76,224,255,.12);border:1px solid rgba(76,224,255,.5);color:#4ce0ff;padding:6px 10px;border-radius:10px;font:800 12px inherit;cursor:pointer;white-space:nowrap;">⇄ 匯入</button>
   </div>
 
   <div id="minorBar" style="display:none;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:rgba(255,138,101,.14);border:1px solid rgba(255,138,101,.45);font-size:12.5px;line-height:1.55;color:#FFE0D2"></div>
