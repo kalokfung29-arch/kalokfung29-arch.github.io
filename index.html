@@ -2664,28 +2664,36 @@
       rows = await sb("/rest/v1/recharge_applications?select=id,balls,price,status,created_at&" + acctFilter() + "&status=in.(approved,adjust)&order=created_at.desc&limit=500");
     }catch(e){ return 0; }
     const done = creditedIds();
-    let added = 0, tBalls = balls, tTokens = tokens, tPoints = points;
+    let added = 0, tBalls = balls, tTokens = tokens;
+    // 積分改為「雲端重算」：以 adjust 快照為基準，再疊加其後的贈送/購買，
+    // 換瀏覽器、清快取後再綁定同一設備碼，積分也不會變零。
+    let cloudPoints = 0;
     // 由舊到新套用，adjust 以最後一筆為準
     (rows || []).slice().reverse().forEach(r => {
-      if (done.indexOf(r.id) >= 0) return;
       const n = Math.max(0, Math.floor(+(r.balls || 0)));
       const price = +(r.price || 0);
-      if (r.status === "adjust"){
+      const isAdjust = r.status === "adjust";
+      if (isAdjust){
         // 後台調整（與手機版一致）：price<0 扣積分；price>=0 直接設定積分（升降段位）
-        tPoints = price < 0 ? Math.max(0, tPoints - Math.floor(-price)) : Math.floor(price);
-      } else if (price === POINTS_GRANT_PRICE) tPoints += n; // 後台贈送積分哨兵（-1），數量在 balls
-      else if (price <= -1000) tTokens += n;   // 代幣儲值
-      else if (price < 0) tPoints += n;        // 舊式積分儲值（price=-金額）
-      else tBalls += n;                        // 彈珠儲值
+        cloudPoints = price < 0 ? Math.max(0, cloudPoints - Math.floor(-price)) : Math.floor(price);
+      } else if (price === POINTS_GRANT_PRICE) cloudPoints += n;      // 後台贈送積分哨兵（-1）
+      else if (price < 0 && price > -1000) cloudPoints += n;          // 舊式積分儲值（price=-金額）
+      // 彈珠 / 代幣維持增量入帳：雲端沒有消耗紀錄，全量重算會虛高
+      if (done.indexOf(r.id) >= 0) return;
+      if (!isAdjust){
+        if (price <= -1000) tTokens += n;   // 代幣儲值
+        else if (price >= 0) tBalls += n;   // 彈珠儲值
+      }
       markCredited(r.id);
       added++;
     });
     if ($("rankOrders")) $("rankOrders").textContent = (rows || []).length + " 筆";
-    if (added){
-      saveBalls(tBalls);
-      saveTokens(tTokens);
-      savePoints(tPoints);
-      toast("管理員已核准 " + added + " 筆儲值，已入帳");
+    const hasRows = (rows || []).length > 0;
+    const pointsChanged = hasRows && cloudPoints !== points;
+    if (added || pointsChanged){
+      if (added){ saveBalls(tBalls); saveTokens(tTokens); }
+      if (pointsChanged) savePoints(cloudPoints);
+      toast(added ? ("管理員已核准 " + added + " 筆儲值，已入帳") : ("積分已同步：" + cloudPoints));
       paintRank();
     }
     return added;
