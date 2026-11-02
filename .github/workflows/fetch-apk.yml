@@ -8,12 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download APK from release
-        run: curl -sSL -o tetris-share.apk https://github.com/kalokfung29-arch/kalokfung29-arch.github.io/releases/download/v1.0.0/tetris-share.apk
+      - name: Download APK from release v1.0.2
+        run: curl -sSL -o tetris-share.apk https://github.com/kalokfung29-arch/kalokfung29-arch.github.io/releases/download/v1.0.2/app-share-universal-debug.apk
+      - name: Verify size
+        run: ls -l tetris-share.apk
       - name: Commit APK to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add tetris-share.apk
-          git commit -m "add tetris-share.apk for in-page download"
+          git commit -m "update tetris-share.apk from release v1.0.2"
           git push
