@@ -140,7 +140,8 @@
 
   /* 触控 */
   footer{flex:0 0 auto;display:flex;flex-direction:column;gap:7px;}
-  .pad{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;}
+  .pad{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;}
+  .key.undo{background:linear-gradient(180deg,rgba(255,200,90,.20),rgba(255,200,90,.05));border-color:rgba(255,200,90,.5);color:#ffc857;}
   .key{
     height:52px;border-radius:14px;border:1px solid var(--line);
     background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
@@ -1008,8 +1009,9 @@
       <button class="key" id="kRight">▶</button>
       <button class="key primary" id="kRotate">↻<small>旋转</small></button>
       <button class="key purple" id="kDrop">⤓<small>速降</small></button>
+      <button class="key undo" id="kUndo">↶<small>撤回</small></button>
     </div>
-    <div class="hint">键盘 ← → ↓ ↑ / 空格 / C / P · 手机可滑动操作</div>
+    <div class="hint">键盘 ← → ↓ ↑ / 空格 / C / P / U（撤回）· 手机可滑动操作</div>
   </footer>
 </div>
 
@@ -1584,6 +1586,8 @@
   let running = false, paused = false, over = false;
   let dropTimer = 0, dropInterval = 800;
   let clearing = null;     // {rows:[], t:0}
+  let undoStack = [];      // 撤回栈：每落一块前存一份快照，可逐步回到上一步
+  let clearToken = 0;      // 消行动画令牌：撤回时递增，作废旧的 setTimeout 回调
   let soundOn = localStorage.getItem("tetris_sound") !== "0";
   let shakeT = 0;
 
@@ -1737,7 +1741,36 @@
     draw();
   }
 
+  /* ---- 撤回：落子前存快照，可一格一格退回去 ---- */
+  function pushUndo(){
+    undoStack.push({
+      grid: grid.map(r => r.slice()),
+      cur: cur ? { type: cur.type, mat: cur.mat.map(r => r.slice()), x: cur.x, y: cur.y } : null,
+      next: nextQueue.slice(),
+      holdType: holdType, holdUsed: holdUsed,
+      score: score, lines: lines, level: level, dropInterval: dropInterval
+    });
+    if (undoStack.length > 20) undoStack.shift();
+  }
+  function undo(){
+    if (!undoStack.length){ toast("没有可撤回的一步了"); return; }
+    const s = undoStack.pop();
+    clearToken++;                       // 作废进行中的消行动画
+    grid = s.grid.map(r => r.slice());
+    cur = s.cur ? { type: s.cur.type, mat: s.cur.mat.map(r => r.slice()), x: s.cur.x, y: s.cur.y } : null;
+    nextQueue = s.next.slice();
+    holdType = s.holdType; holdUsed = s.holdUsed;
+    score = s.score; lines = s.lines; level = s.level; dropInterval = s.dropInterval;
+    clearing = null; paused = false; dropTimer = 0;
+    if (over){ over = false; running = true; ovOver.classList.remove("show"); }
+    if (!cur) cur = spawn();
+    updateStats(); draw();
+    beep(620, .06, "sine", .04);
+    toast("已撤回一步（还可撤回 " + undoStack.length + " 步）");
+  }
+
   function lock(fromDrop){
+    if (!over) pushUndo();
     let topOut = false;
     for (let y = 0; y < cur.mat.length; y++){
       for (let x = 0; x < cur.mat[y].length; x++){
@@ -1766,8 +1799,9 @@
       if (full.length >= 4) shakeT = 260;
       updateStats();
       draw();
+      const tk = ++clearToken;
       setTimeout(() => {
-        if (!clearing) return;
+        if (tk !== clearToken || !clearing) return;
         const rest = grid.filter((r, i) => !clearing.rows.includes(i));
         while (rest.length < ROWS) rest.unshift(new Array(COLS).fill(null));
         grid = rest;
@@ -1953,6 +1987,7 @@
     score = 0; lines = 0; level = 1;
     dropInterval = 800; dropTimer = 0;
     clearing = null; over = false; paused = false;
+    undoStack = []; clearToken++;
     updateStats();
     cur = spawn();
     running = true;
@@ -2038,10 +2073,12 @@
   bindHold($("kDown"), () => softDrop(), true);
   bindHold($("kRotate"), () => rotateCur(1), false);
   bindHold($("kDrop"), () => hardDrop(), false);
+  if ($("kUndo")) $("kUndo").onclick = undo;
 
   document.addEventListener("keydown", e => {
     const k = e.key;
-    if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar"].includes(k)) e.preventDefault();
+    if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar","Backspace"].includes(k)) e.preventDefault();
+    if (k === "u" || k === "U" || k === "Backspace"){ if (undoStack.length){ undo(); return; } }
     if (!running || over){
       if (k === "Enter") start();
       if (k === "Escape") goHome();
@@ -2198,7 +2235,7 @@
       txt.innerHTML = "已綁定 · <b>" + (myNick || nickFor()) + "</b> · " + myDevice.slice(0, 8) + "…";
     }else{
       dot.classList.add("off");
-      txt.textContent = "尚未綁定手機（訂單需管理員人工認領）";
+      txt.textContent = "尚未綁定手機：管理員送給手機帳號的積分／代幣不會在此顯示，請先綁定（訂單亦需人工認領）";
     }
     if ($("inpDevice")) $("inpDevice").value = myDevice;
     if ($("inpNick")) $("inpNick").value = myNick;
@@ -2614,25 +2651,32 @@
     localStorage.setItem(CRED_KEY, JSON.stringify(a.slice(-800)));
   }
 
+  // 後台「贈送積分」哨兵價：price = -1，數量放 balls（與 Admin App、手機端同一約定）
+  // 原因：舊約定 price = -amount，金額 >=1000 時會撞上代幣編碼（<=-1000）被誤判成代幣
+  const POINTS_GRANT_PRICE = -1;
+
   // 拉取管理員已核准的儲值單，逐筆入帳（同一筆只入一次）
   async function creditApprovedOrders(){
     if (!acctIds().length) return 0;
     let rows = null;
     try{
-      rows = await sb("/rest/v1/recharge_applications?select=id,balls,price,status,created_at&" + acctFilter() + "&status=in.(approved,adjust)&order=created_at.asc&limit=500");
+      // 取最新 500 筆（降序）：升序會先被最舊的 500 筆佔滿，之後新贈送永遠取不到
+      rows = await sb("/rest/v1/recharge_applications?select=id,balls,price,status,created_at&" + acctFilter() + "&status=in.(approved,adjust)&order=created_at.desc&limit=500");
     }catch(e){ return 0; }
     const done = creditedIds();
     let added = 0, tBalls = balls, tTokens = tokens, tPoints = points;
-    (rows || []).forEach(r => {
+    // 由舊到新套用，adjust 以最後一筆為準
+    (rows || []).slice().reverse().forEach(r => {
       if (done.indexOf(r.id) >= 0) return;
       const n = Math.max(0, Math.floor(+(r.balls || 0)));
       const price = +(r.price || 0);
       if (r.status === "adjust"){
         // 後台調整（與手機版一致）：price<0 扣積分；price>=0 直接設定積分（升降段位）
         tPoints = price < 0 ? Math.max(0, tPoints - Math.floor(-price)) : Math.floor(price);
-      } else if (price <= -1000) tTokens += n;   // 代幣儲值
-      else if (price < 0) tPoints += n;          // 積分儲值／後台贈送積分
-      else tBalls += n;                          // 彈珠儲值
+      } else if (price === POINTS_GRANT_PRICE) tPoints += n; // 後台贈送積分哨兵（-1），數量在 balls
+      else if (price <= -1000) tTokens += n;   // 代幣儲值
+      else if (price < 0) tPoints += n;        // 舊式積分儲值（price=-金額）
+      else tBalls += n;                        // 彈珠儲值
       markCredited(r.id);
       added++;
     });
@@ -4845,6 +4889,13 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
   renderTiers();
   refreshBindUI();
+
+  /* ---------- 開頁自動與雲端對帳：管理員贈送的積分／代幣／彈珠不必手動按同步 ---------- */
+  setTimeout(() => { try{ syncNow(true); }catch(e){} }, 600);
+  setInterval(() => { if (!document.hidden) { try{ syncNow(true); }catch(e){} } }, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) { try{ syncNow(true); }catch(e){} }
+  });
 
   /* ==================== 賭博合集：新增四款遊戲（百家樂 / 鬥地主 / 六合彩 / 刮刮樂） ==================== */
   const MINI_RULES = {
