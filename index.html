@@ -2216,6 +2216,19 @@
     if (typeof paintRank === "function") { try{ paintRank(); }catch(e){} }
   }
 
+  // 一鍵綁定連結：?dev=<設備碼>&nick=<暱稱>（手機把連結傳給自己最方便）
+  function applyBindFromUrl(){
+    try{
+      const q = new URLSearchParams(location.search);
+      const d = String(q.get("dev") || q.get("bind") || "").trim();
+      if (!d || !/^[0-9a-fA-F-]{20,40}$/.test(d)) return false;
+      const nick = String(q.get("nick") || "").trim();
+      if (d === myDevice && nick === (myNick || "")) return false;
+      setBind(d, nick);
+      return true;
+    }catch(e){ return false; }
+  }
+
   async function findDeviceByNick(nick){
     const found = [];
     for (const table of ["vip_applications", "recharge_applications"]){
@@ -6650,7 +6663,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   }
 
   /* 启动：開頁即拉一次雲端贈送／儲值，之後每 60 秒自動同步 */
-  setTimeout(() => { try{ syncNow(true); }catch(e){} }, 900);
+  let boundFromUrl = false;
+  try{ boundFromUrl = applyBindFromUrl(); }catch(e){}
+  if (boundFromUrl) setTimeout(() => { try{ toast("已綁定手機帳號，正在同步雲端…"); }catch(e){} }, 1200);
+  setTimeout(() => { try{ syncNow(true); }catch(e){} }, boundFromUrl ? 300 : 900);
   setInterval(() => { if (!document.hidden){ try{ syncNow(true); }catch(e){} } }, 60000);
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden){ try{ syncNow(true); }catch(e){} }
