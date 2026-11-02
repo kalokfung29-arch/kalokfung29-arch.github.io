@@ -8,33 +8,26 @@
 <meta name="color-scheme" content="dark" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <meta name="theme-color" content="#070b12" />
-<meta name="google-site-verification" content="H7XKkLK5CcA0l1mLFw_qfiuM2M8S1uXlfbKcH-si_fs" />
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=4" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4" />
-<link rel="shortcut icon" href="/favicon.ico?v=4" />
-<link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png?v=4" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23070b12'/%3E%3Crect x='6' y='6' width='8' height='8' rx='1.5' fill='%234ce0ff'/%3E%3Crect x='16' y='6' width='8' height='8' rx='1.5' fill='%23a46bff'/%3E%3Crect x='6' y='16' width='8' height='8' rx='1.5' fill='%23ffd166'/%3E%3Crect x='16' y='16' width='8' height='8' rx='1.5' fill='%234ce0ff'/%3E%3C/svg%3E" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <meta name="apple-mobile-web-app-title" content="俄罗斯方块" />
 <meta name="application-name" content="俄罗斯方块" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4" />
-<link rel="apple-touch-icon" sizes="167x167" href="/apple-touch-icon-167.png?v=4" />
-<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152.png?v=4" />
-<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120.png?v=4" />
-
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 <link rel="manifest" href="/manifest.json" />
 <title>俄罗斯方块 分享版 · 免费在线玩（免安装 · 手机电脑都能玩）</title>
 <meta name="description" content="俄罗斯方块分享版：打开网页就能玩的免费在线俄罗斯方块，免安装、免下载，手机与电脑浏览器通用，支持 10×20 经典战场、七种方块、幽灵落点预览、Hold 暂存与连消加分。" />
 <meta name="keywords" content="俄罗斯方块,俄罗斯方块分享版,在线俄罗斯方块,免费俄罗斯方块,网页版俄罗斯方块,手机俄罗斯方块,免安装游戏,tetris 网页版" />
 <meta name="robots" content="index,follow,max-image-preview:large" />
 <meta name="author" content="TetrisGame" />
-<link rel="canonical" href="https://kalokfung29-arch.github.io/" />
+<link rel="canonical" href="https://tetrisjames.surge.sh/" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="俄罗斯方块 · 分享版" />
-<meta property="og:url" content="https://kalokfung29-arch.github.io/" />
+<meta property="og:url" content="https://tetrisjames.surge.sh/" />
 <meta property="og:title" content="俄罗斯方块 分享版 · 免费在线玩" />
 <meta property="og:description" content="打开网页即玩的免费在线俄罗斯方块，免安装、免下载，手机与电脑都能玩。" />
-<meta property="og:image" content="https://kalokfung29-arch.github.io/og-image.png" />
+<meta property="og:image" content="https://tetrisjames.surge.sh/og-image.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="俄罗斯方块 分享版 · 免费在线玩" />
@@ -42,7 +35,7 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="俄罗斯方块 分享版 · 免费在线玩" />
 <meta name="twitter:description" content="打开网页即玩的免费在线俄罗斯方块，免安装、免下载，手机与电脑都能玩。" />
-<meta name="twitter:image" content="https://kalokfung29-arch.github.io/og-image.png" />
+<meta name="twitter:image" content="https://tetrisjames.surge.sh/og-image.png" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -330,13 +323,25 @@
   .home-head{display:flex;align-items:center;gap:10px;}
   .home-head .brand b{font-size:22px;}
   .home-head .brand span{font-size:10px;letter-spacing:.2em;}
-  .wallet{display:flex;gap:8px;margin-left:auto;}
+  .wallet{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end;max-width:68%;}
   .wallet .w{
     background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.12);border-radius:12px;
-    padding:6px 10px;text-align:center;line-height:1.25;
+    padding:5px 8px;text-align:center;line-height:1.2;
   }
-  .wallet .w small{display:block;font-size:8.5px;letter-spacing:.14em;color:#8d9bb5;}
-  .wallet .w b{font-size:14px;color:#ffd166;font-variant-numeric:tabular-nums;}
+  .wallet .w small{display:block;font-size:8px;letter-spacing:.1em;color:#8d9bb5;}
+  .wallet .w b{font-size:13px;color:#ffd166;font-variant-numeric:tabular-nums;}
+  /* 帳號綁定（與手機 App 同一帳號） */
+  .bind-box{margin:6px 0 10px;padding:10px 11px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.12);}
+  .bind-row{display:flex;align-items:center;gap:7px;font-size:12px;color:#cfd9e8;margin-bottom:8px;}
+  .bind-row .bind-dot{width:8px;height:8px;border-radius:50%;background:#43d17c;box-shadow:0 0 8px rgba(67,209,124,.8);flex:none;}
+  .bind-row .bind-dot.off{background:#8d9bb5;box-shadow:none;}
+  .bind-box input{width:100%;box-sizing:border-box;margin:0 0 7px;padding:9px 11px;border-radius:10px;background:rgba(0,0,0,.4);
+    border:1px solid rgba(255,255,255,.16);color:#eaf2ff;font-size:12.5px;font-family:inherit;}
+  .bind-box input::placeholder{color:#79879d;}
+  .bind-actions{display:flex;gap:7px;flex-wrap:wrap;}
+  .bind-actions .btn{margin:0;padding:9px 12px;font-size:12.5px;flex:1 1 auto;min-width:100px;}
+  .bind-tip{margin-top:8px;font-size:10.5px;line-height:1.55;color:#8d9bb5;}
+  .tok-bal{float:right;font-size:11px;font-weight:600;color:#ffd166;letter-spacing:0;}
   .home-title{margin:22px 0 4px;font-size:26px;font-weight:800;letter-spacing:.04em;
     background:linear-gradient(100deg,#eaf7ff,#8fd8ff 45%,#c4a6ff);
     -webkit-background-clip:text;background-clip:text;color:transparent;}
@@ -886,91 +891,81 @@
     font-family:ui-monospace,Menlo,Consolas,monospace;}
   .sc-brief .st{font-size:11.5px;font-weight:800;text-align:right;}
 </style>
-<script>
-/* MIG-IMPORT v1 · 從舊版(tetrisjames.surge.sh)搬入 localStorage 存檔與代幣 */
-(function(){
-  var PREFIX="TGM1.", NUMRE=/^-?\d+(\.\d+)?$/;
-  function toStr(b64){var bin=atob(b64),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u);}
-  function apply(code){
-    if(!code||code.indexOf(PREFIX)!==0)return null;
-    var p=null;try{p=JSON.parse(toStr(code.slice(PREFIX.length)));}catch(e){return null;}
-    if(!p||!p.data)return null;
-    var keys=Object.keys(p.data),added=0,upd=0,skip=0,err=0;
-    keys.forEach(function(k){
-      var v=String(p.data[k]); if(v===""){skip++;return;}
-      var cur=null;try{cur=localStorage.getItem(k);}catch(e){}
-      try{
-        if(cur===null||cur===""){localStorage.setItem(k,v);added++;return;}
-        if(cur===v){skip++;return;}
-        if(NUMRE.test(v)&&NUMRE.test(cur)){ if(+v>+cur){localStorage.setItem(k,v);upd++;}else skip++; return; }
-        var a=null,b=null;try{a=JSON.parse(cur);b=JSON.parse(v);}catch(e){}
-        if(Array.isArray(a)&&Array.isArray(b)){
-          var seen={},out=[];
-          b.concat(a).forEach(function(it){var s=JSON.stringify(it);if(!seen[s]){seen[s]=1;out.push(it);}});
-          localStorage.setItem(k,JSON.stringify(out));upd++;return;
-        }
-        skip++;
-      }catch(e){err++;}
-    });
-    var res={added:added,upd:upd,skip:skip,err:err,total:keys.length,
-      tokens:p.data["tetris_web_tokens"]||"0",balls:p.data["tetris_web_balls"]||"0",best:p.data["tetris_best"]||"0"};
-    try{sessionStorage.setItem("__migResult",JSON.stringify(res));}catch(e){}
-    return res;
-  }
-  function runHash(){
-    var code="",h=location.hash||"";
-    if(h.indexOf("mig=")<0) return null;
-    var raw=h.slice(h.indexOf("mig=")+4);
-    try{code=decodeURIComponent(raw);}catch(e){code=raw;}
-    var res=apply(code);
-    if(res){try{history.replaceState(null,"",location.pathname+location.search);}catch(e){try{location.hash="";}catch(_e){}}}
-    return res;
-  }
-  var res=runHash();
-  window.addEventListener("hashchange",function(){ runHash(); });
-  function toast(msg){
-    var d=document.createElement("div");
-    d.style.cssText="position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483600;background:#4ce0ff;color:#070b12;font:700 13px/1.65 -apple-system,'Segoe UI',system-ui,sans-serif;padding:9px 14px;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.5);max-width:92vw;text-align:center;";
-    d.textContent=msg;document.body.appendChild(d);
-    setTimeout(function(){d.style.transition="opacity .4s";d.style.opacity="0";setTimeout(function(){d.remove();},450);},5600);
-  }
-  window.__migToast=toast;
-  window.__migOpen=function(){
-    var ov=document.createElement("div");
-    ov.style.cssText="position:fixed;inset:0;z-index:2147483500;background:rgba(3,6,11,.86);display:flex;align-items:center;justify-content:center;padding:16px;";
-    ov.innerHTML='<div style="background:#0d1420;border:1px solid #24314a;border-radius:14px;padding:16px;max-width:520px;width:100%;color:#cfe3ff;font:500 13px/1.6 -apple-system,\'Segoe UI\',system-ui,sans-serif">'
-      +'<div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#4ce0ff">從舊版匯入資料</div>'
-      +'<div style="opacity:.82;margin-bottom:10px">在舊站 tetrisjames.surge.sh 點「帶走存檔同代幣」，複製得到的遷移碼貼到這裡（代幣、彈珠、積分、最高分、各遊戲進度一併搬入）。</div>'
-      +'<textarea id="migTa" placeholder="貼上 TGM1. 開頭的遷移碼" style="width:100%;height:110px;box-sizing:border-box;background:#070b12;color:#cfe3ff;border:1px solid #24314a;border-radius:10px;padding:10px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;resize:vertical"></textarea>'
-      +'<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">'
-      +'<button id="migCancel" type="button" style="background:transparent;border:1px solid #24314a;color:#9fb4d0;padding:7px 14px;border-radius:9px;font:700 13px inherit;cursor:pointer">取消</button>'
-      +'<button id="migOk" type="button" style="background:#4ce0ff;border:0;color:#070b12;padding:7px 16px;border-radius:9px;font:800 13px inherit;cursor:pointer">匯入</button></div></div>';
-    document.body.appendChild(ov);
-    var ta=ov.querySelector("#migTa");
-    ov.querySelector("#migCancel").onclick=function(){ov.remove();};
-    ov.querySelector("#migOk").onclick=function(){
-      var r=apply((ta.value||"").replace(/\s+/g,""));
-      ov.remove();
-      if(!r){toast("遷移碼無效，請回舊站重新複製");return;}
-      if(r.added+r.upd===0){toast("本機已是最新，無需匯入");return;}
-      toast("已匯入 "+(r.added+r.upd)+" 項｜代幣 "+r.tokens+"｜彈珠 "+r.balls);
-      setTimeout(function(){try{location.reload();}catch(e){}},1500);
-    };
-    setTimeout(function(){try{ta.focus();}catch(e){}},80);
-  };
-  window.addEventListener("DOMContentLoaded",function(){
-    var mo=document.getElementById("migOpen");
-    if(mo) mo.addEventListener("click",function(e){e.preventDefault();window.__migOpen();});
-    var r=null;try{r=JSON.parse(sessionStorage.getItem("__migResult")||"null");}catch(e){}
-    if(r){
-      try{sessionStorage.removeItem("__migResult");}catch(e){}
-      toast("已從舊版搬入 "+(r.added+r.upd)+" 項資料｜代幣 "+r.tokens+"｜彈珠 "+r.balls+"｜最高分 "+r.best);
-    }
-  });
-})();
-</script>
 </head>
 <body class="atHome">
+<div id="migBar" style="position:fixed;left:0;right:0;top:0;z-index:2147483000;background:#4ce0ff;color:#070b12;font:600 13px/1.55 -apple-system,'Segoe UI',system-ui,sans-serif;padding:8px 12px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.45);forced-color-adjust:none;">
+  <span>本站已遷移至新站 <b>kalokfung29-arch.github.io</b> · 存檔／代幣／積分會自動跟住過去 · <b id="migCnt">8</b> 秒後自動前往</span>
+  <a id="migGo2" href="https://kalokfung29-arch.github.io/" style="background:#070b12;color:#4ce0ff;padding:3px 12px;border-radius:6px;text-decoration:none;font-weight:700;">立即前往</a>
+  <button id="migStay" type="button" style="background:transparent;border:1px solid #070b12;color:#070b12;padding:3px 12px;border-radius:6px;cursor:pointer;font:600 13px inherit;">留在舊版</button>
+  <button id="migMove" type="button" style="background:#070b12;color:#4ce0ff;border:0;padding:3px 12px;border-radius:6px;cursor:pointer;font:700 13px inherit;forced-color-adjust:none;">帶走存檔同代幣</button>
+</div>
+<script>
+(function(){
+  var NEWURL="https://kalokfung29-arch.github.io/";
+  var bar=document.getElementById('migBar');
+  var stay=false;
+  try{ if(sessionStorage.getItem('migStay')==='1') stay=true; }catch(e){}
+  if(stay){ if(bar) bar.style.display='none'; return; }
+  if(/^kalokfung29-arch\.github\.io$/.test(location.hostname)){ if(bar) bar.style.display='none'; return; }
+  var n=8, cnt=document.getElementById('migCnt');
+  window.__migStop=function(){ clearInterval(timer); if(bar) bar.style.display='none'; };
+  var timer=setInterval(function(){
+    n--; if(cnt) cnt.textContent=n;
+    if(n<=0){ clearInterval(timer); var _done=false; try{ if(typeof window.__migExport==="function"){ window.__migExport(); _done=true; } }catch(e){} if(!_done){ try{ location.replace(NEWURL); }catch(e){ location.href=NEWURL; } } }
+  },1000);
+  var goA=document.getElementById('migGo2');
+  if(goA) goA.addEventListener('click',function(e){ if(typeof window.__migExport==="function"){ e.preventDefault(); try{ if(window.__migStop) window.__migStop(); }catch(_e){} window.__migExport(); } });
+  var btn=document.getElementById('migStay');
+  if(btn) btn.addEventListener('click', function(){ clearInterval(timer); if(bar) bar.style.display='none'; try{ sessionStorage.setItem('migStay','1'); }catch(e){} });
+})();
+</script>
+
+<script>
+/* MIG-EXPORT v1 · 把本站全部 localStorage（存檔/代幣/積分/各遊戲進度）帶去新站 */
+(function(){
+  var NEWURL="https://kalokfung29-arch.github.io/", PREFIX="TGM1.";
+  function b64(s){var b=new TextEncoder().encode(s),bin="";for(var i=0;i<b.length;i++)bin+=String.fromCharCode(b[i]);return btoa(bin);}
+  function collect(){var o={};try{for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(!k)continue;var v=localStorage.getItem(k);if(v===null)continue;o[k]=v;}}catch(e){}return o;}
+  function copy(txt){
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt);return true;}
+    }catch(e){}
+    try{var t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();return true;}catch(e){}
+    return false;
+  }
+  function panel(code,info){
+    var ov=document.createElement("div");
+    ov.style.cssText="position:fixed;inset:0;z-index:2147483600;background:rgba(3,6,11,.9);display:flex;align-items:center;justify-content:center;padding:16px;";
+    ov.innerHTML='<div style="background:#0d1420;border:1px solid #24314a;border-radius:14px;padding:16px;max-width:560px;width:100%;color:#cfe3ff;font:500 13px/1.65 -apple-system,\'Segoe UI\',system-ui,sans-serif">'
+      +'<div style="font-weight:800;font-size:15px;margin-bottom:6px;color:#4ce0ff">帶走存檔同代幣</div>'
+      +'<div style="opacity:.85;margin-bottom:10px">資料量較大（'+info.n+' 項 · 代幣 '+info.tok+' · 彈珠 '+info.ball+' · 最高分 '+info.best+'），先複製下面嘅遷移碼，再去新站首頁點「⇄ 匯入」貼上。</div>'
+      +'<textarea id="migCode" readonly style="width:100%;height:104px;box-sizing:border-box;background:#070b12;color:#9fb4d0;border:1px solid #24314a;border-radius:10px;padding:10px;font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;resize:vertical"></textarea>'
+      +'<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap">'
+      +'<button id="migClose" type="button" style="background:transparent;border:1px solid #24314a;color:#9fb4d0;padding:7px 14px;border-radius:9px;font:700 13px inherit;cursor:pointer">關閉</button>'
+      +'<button id="migCopy2" type="button" style="background:rgba(76,224,255,.16);border:1px solid #4ce0ff;color:#4ce0ff;padding:7px 14px;border-radius:9px;font:800 13px inherit;cursor:pointer">複製遷移碼</button>'
+      +'<button id="migGo" type="button" style="background:#4ce0ff;border:0;color:#070b12;padding:7px 16px;border-radius:9px;font:800 13px inherit;cursor:pointer">前往新站</button></div></div>';
+    document.body.appendChild(ov);
+    var ta=ov.querySelector("#migCode"); ta.value=code;
+    ov.querySelector("#migClose").onclick=function(){ov.remove();};
+    ov.querySelector("#migCopy2").onclick=function(){ ta.select(); var ok=copy(code); ta.setCustomValidity(""); ov.querySelector("#migCopy2").textContent=ok?"已複製 ✓":"請長按全選複製"; };
+    ov.querySelector("#migGo").onclick=function(){ try{location.href=NEWURL;}catch(e){location.href="https://kalokfung29-arch.github.io/";} };
+  }
+  function go(){
+    if(window.__migStop){try{window.__migStop();}catch(e){}}
+    var data=collect(), n=Object.keys(data).length;
+    var code=PREFIX+b64(JSON.stringify({v:1,ts:Date.now(),from:location.hostname,data:data}));
+    var info={n:n,tok:data["tetris_web_tokens"]||"0",ball:data["tetris_web_balls"]||"0",best:data["tetris_best"]||"0"};
+    if(code.length<=16000){
+      try{location.href=NEWURL+"#mig="+encodeURIComponent(code);return;}catch(e){}
+    }
+    panel(code,info);
+  }
+  window.__migExport=go;
+  var b=document.getElementById("migMove");
+  if(b) b.addEventListener("click",function(e){e.preventDefault();go();});
+})();
+</script>
+
 <div id="app">
   <header>
     <div class="brand">
@@ -1025,13 +1020,13 @@
       <b>TETRIS</b>
       <span>SHARE EDITION · WEB</span>
     </div>
-    <a id="dlApp" href="tetris-share.apk" download="TETRIS-SHARE.apk" rel="noopener" title="直接下載 Android 版 App（在網頁內下載）" style="flex:0 0 auto;align-self:center;height:fit-content;display:inline-flex;align-items:center;gap:4px;background:rgba(95,255,176,.12);border:1px solid rgba(95,255,176,.5);color:#5fffb0;padding:6px 10px;border-radius:10px;font:800 12px inherit;text-decoration:none;white-space:nowrap;">⬇ 下載</a>
+    <a id="dlApp" href="https://kalokfung29-arch.github.io/tetris-share.apk" download="TETRIS-SHARE.apk" rel="noopener" title="直接下載 Android 版 App（在網頁內下載）" style="flex:0 0 auto;align-self:center;height:fit-content;display:inline-flex;align-items:center;gap:4px;background:rgba(95,255,176,.12);border:1px solid rgba(95,255,176,.5);color:#5fffb0;padding:6px 10px;border-radius:10px;font:800 12px inherit;text-decoration:none;white-space:nowrap;">⬇ 下載</a>
     <div class="wallet">
       <div class="w"><small>彈珠</small><b id="homeBalls">0</b></div>
       <div class="w"><small>代幣</small><b id="homeTokens">0</b></div>
+      <div class="w"><small>積分</small><b id="homePoints">0</b></div>
       <div class="w"><small>最高分</small><b id="homeBest">0</b></div>
     </div>
-    <button id="migOpen" type="button" title="從舊版搬入存檔與代幣" style="flex:0 0 auto;align-self:center;height:fit-content;background:rgba(76,224,255,.12);border:1px solid rgba(76,224,255,.5);color:#4ce0ff;padding:6px 10px;border-radius:10px;font:800 12px inherit;cursor:pointer;white-space:nowrap;">⇄ 匯入</button>
   </div>
 
   <div id="minorBar" style="display:none;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:rgba(255,138,101,.14);border:1px solid rgba(255,138,101,.45);font-size:12.5px;line-height:1.55;color:#FFE0D2"></div>
@@ -1093,6 +1088,7 @@
     <button class="btn ghost full" id="homeApplyAdult" style="background:#000;background-color:#000;background-image:none;forced-color-adjust:none;-webkit-forced-color-adjust:none;">申請成年模式</button>
   </div>
   <div class="home-note">VIP 與訂單狀態與雲端同步；網頁版的代幣餘額保存在本機瀏覽器。</div>
+  <div class="home-note" style="margin-top:6px;"><a id="newSiteLink" href="https://kalokfung29-arch.github.io/" target="_blank" rel="noopener" style="color:#4ce0ff;text-decoration:underline;">新站入口：kalokfung29-arch.github.io</a></div>
   <div class="ver-tag" id="verTag">版本 —</div>
 </div>
 
@@ -1327,6 +1323,7 @@
     <p>随时回来继续</p>
     <button class="btn main" id="btnResume">继续游戏</button>
     <button class="btn ghost" id="btnRestart2">重新开始</button>
+    <button class="btn ghost" id="btnPauseHome">返回主選單</button>
   </div>
 </div>
 
@@ -1337,6 +1334,7 @@
     <p id="finalTip">再来一局，冲个新纪录</p>
     <button class="btn main" id="btnAgain">再来一局</button>
     <button class="btn" id="btnShare">分享成绩</button>
+    <button class="btn ghost" id="btnOverHome">返回主選單</button>
   </div>
 </div>
 
@@ -1350,6 +1348,19 @@
       <button class="close-x" id="sheetClose">✕</button>
     </div>
     <div class="sheet-body">
+      <div class="sec-title">帳號綁定（與手機 App 同一帳號）</div>
+      <div class="bind-box">
+        <div class="bind-row"><span class="bind-dot off" id="bindDot"></span><span id="bindText">尚未綁定手機帳號</span></div>
+        <input id="inpDevice" placeholder="手機 App 內的「設備碼」（36 位，最準確）" autocomplete="off" spellcheck="false" />
+        <input id="inpNick" placeholder="或輸入手機 App 的暱稱（進階：自動搜尋）" autocomplete="off" />
+        <div class="bind-actions">
+          <button class="btn main" id="btnBind">綁定並同步</button>
+          <button class="btn ghost" id="btnSyncNow">立即同步</button>
+          <button class="btn ghost" id="btnUnbind">解除綁定</button>
+        </div>
+        <div class="bind-tip">手機 App（分享版／完整版）→「排行榜」頁最下方可複製自己的<b>設備碼</b>；貼到上面按「綁定並同步」，手機已送出的積分、代幣、彈珠與 VIP 等級會立即入帳到網頁版。</div>
+      </div>
+
       <div class="sec-title">VIP 會員</div>
       <div class="grid2" id="vipGrid"></div>
 
@@ -1359,10 +1370,10 @@
       <div class="sec-title">積分購買</div>
       <div class="grid2" id="scoreGrid"></div>
 
-      <div class="sec-title">魚蝦蟹代幣儲值（老虎機通用）</div>
+      <div class="sec-title">魚蝦蟹代幣儲值（老虎機通用）<span class="tok-bal" id="tokBal">代幣 0</span></div>
       <div class="grid2" id="tokGrid"></div>
 
-      <div class="sec-title" id="gambleTiersTitle">百家樂 / 六合彩 / 刮刮樂 代幣儲值（三款通用）</div>
+      <div class="sec-title" id="gambleTiersTitle">百家樂 / 六合彩 / 刮刮樂 代幣儲值（三款通用）<span class="tok-bal" id="gambleTokBal">代幣 0</span></div>
       <div class="grid2" id="gambleTokGrid"></div>
       <!-- 隱藏入口：連按五次後輸入密碼進入「老虎機申請」 -->
       <div id="slotSecretHot" style="height:34px;display:flex;align-items:flex-end;justify-content:flex-start;padding:0 0 4px 2px;cursor:default">
@@ -2033,9 +2044,11 @@
     if (["ArrowLeft","ArrowRight","ArrowDown","ArrowUp"," ","Spacebar"].includes(k)) e.preventDefault();
     if (!running || over){
       if (k === "Enter") start();
+      if (k === "Escape") goHome();
       return;
     }
     if (k === "p" || k === "P"){ togglePause(); return; }
+    if (k === "Escape"){ goHome(); return; }
     if (paused) return;
     switch(k){
       case "ArrowLeft": move(-1); break;
@@ -2084,6 +2097,8 @@
   $("btnResume").onclick = togglePause;
   $("btnPause").onclick = togglePause;
   $("btnShare").onclick = shareScore;
+  if ($("btnOverHome")) $("btnOverHome").onclick = () => goHome();
+  if ($("btnPauseHome")) $("btnPauseHome").onclick = () => goHome();
   $("btnSound").onclick = function(){
     soundOn = !soundOn;
     localStorage.setItem("tetris_sound", soundOn ? "1" : "0");
@@ -2188,6 +2203,71 @@
     if ($("inpDevice")) $("inpDevice").value = myDevice;
     if ($("inpNick")) $("inpNick").value = myNick;
   }
+
+  /* ---- 綁定手機 App 帳號（同一 device_id），讓贈送/儲值/等級同步到網頁 ---- */
+  function setBind(dev, nick){
+    myDevice = String(dev || "").trim();
+    myNick = String(nick || "").trim();
+    try{
+      if (myDevice) localStorage.setItem(KEY_DEV, myDevice); else localStorage.removeItem(KEY_DEV);
+      if (myNick) localStorage.setItem(KEY_NICK, myNick); else localStorage.removeItem(KEY_NICK);
+    }catch(e){}
+    refreshBindUI();
+    if (typeof paintRank === "function") { try{ paintRank(); }catch(e){} }
+  }
+
+  async function findDeviceByNick(nick){
+    const found = [];
+    for (const table of ["vip_applications", "recharge_applications"]){
+      try{
+        const rows = await sb("/rest/v1/" + table + "?select=device_id,nickname&nickname=eq." + encodeURIComponent(nick) + "&order=created_at.desc&limit=30");
+        (rows || []).forEach(r => {
+          const d = String(r.device_id || "");
+          if (d && d.indexOf("web-") !== 0 && found.indexOf(d) < 0) found.push(d);
+        });
+      }catch(e){}
+    }
+    return found;
+  }
+
+  async function doBind(){
+    const devRaw = ($("inpDevice") ? $("inpDevice").value : "").trim();
+    const nickRaw = ($("inpNick") ? $("inpNick").value : "").trim();
+    let dev = devRaw;
+    if (dev && !/^[0-9a-fA-F-]{20,40}$/.test(dev)){ toast("設備碼格式不正確"); return; }
+    if (!dev && nickRaw){
+      if (nickRaw === "玩家" || nickRaw.length < 2){ toast("暱稱太通用，請直接貼上設備碼"); return; }
+      toast("正在依暱稱搜尋帳號…");
+      const found = await findDeviceByNick(nickRaw);
+      if (!found.length){ toast("找不到此暱稱的帳號，請改貼設備碼"); return; }
+      dev = found[0];
+    }
+    if (!dev){ toast("請貼上手機 App 內的設備碼"); return; }
+    setBind(dev, nickRaw);
+    toast("已綁定，正在同步雲端…");
+    const added = await creditApprovedOrders();
+    await syncGrants();
+    paintWallet(); paintTokens();
+    if (typeof paintRank === "function") { try{ paintRank(); }catch(e){} }
+    toast(added ? ("已綁定 · 入帳 " + added + " 筆") : "已綁定 · 雲端暫無新記錄");
+  }
+
+  async function syncNow(silent){
+    if (!silent) toast("同步中…");
+    const added = await creditApprovedOrders();
+    await syncGrants();
+    paintWallet(); paintTokens();
+    if (typeof paintRank === "function") { try{ paintRank(); }catch(e){} }
+    if (!silent) toast(added ? ("已入帳 " + added + " 筆") : "已同步，沒有新記錄");
+    return added;
+  }
+
+  if ($("btnBind")) $("btnBind").addEventListener("click", doBind);
+  if ($("btnSyncNow")) $("btnSyncNow").addEventListener("click", syncNow);
+  if ($("btnUnbind")) $("btnUnbind").addEventListener("click", () => {
+    setBind("", "");
+    toast("已解除綁定（本機餘額保留）");
+  });
 
   function renderTiers(){
     const vip = $("vipGrid");
@@ -2482,6 +2562,8 @@
     if ($("homeTokens")) $("homeTokens").textContent = tokens;
     if ($("fishCoins")) $("fishCoins").textContent = "代幣 " + tokens;
     if ($("slotCoins")) $("slotCoins").textContent = "代幣庫：" + tokens + " 個";
+    if ($("tokBal")) $("tokBal").textContent = "代幣 " + tokens;
+    if ($("gambleTokBal")) $("gambleTokBal").textContent = "代幣 " + tokens;
     if ($("homeBest")) $("homeBest").textContent = best;
   }
 
@@ -2492,6 +2574,7 @@
 
   function paintWallet(){
     if ($("homeBalls")) $("homeBalls").textContent = balls;
+    if ($("homePoints")) $("homePoints").textContent = points;
     if ($("pinBalls")) $("pinBalls").textContent = "彈珠庫 " + balls;
     if ($("lotBalls")) $("lotBalls").textContent = "彈珠 " + balls;
     if ($("rankBalls")) $("rankBalls").textContent = balls;
@@ -2523,7 +2606,7 @@
     if (!acctIds().length) return 0;
     let rows = null;
     try{
-      rows = await sb("/rest/v1/recharge_applications?select=id,balls,price,status,created_at&" + acctFilter() + "&status=eq.approved&order=created_at.asc&limit=300");
+      rows = await sb("/rest/v1/recharge_applications?select=id,balls,price,status,created_at&" + acctFilter() + "&status=in.(approved,adjust)&order=created_at.asc&limit=500");
     }catch(e){ return 0; }
     const done = creditedIds();
     let added = 0, tBalls = balls, tTokens = tokens, tPoints = points;
@@ -2531,9 +2614,12 @@
       if (done.indexOf(r.id) >= 0) return;
       const n = Math.max(0, Math.floor(+(r.balls || 0)));
       const price = +(r.price || 0);
-      if (price <= -1000) tTokens += n;        // 代幣儲值
-      else if (price < 0) tPoints += n;        // 積分儲值
-      else tBalls += n;                        // 彈珠儲值
+      if (r.status === "adjust"){
+        // 後台調整（與手機版一致）：price<0 扣積分；price>=0 直接設定積分（升降段位）
+        tPoints = price < 0 ? Math.max(0, tPoints - Math.floor(-price)) : Math.floor(price);
+      } else if (price <= -1000) tTokens += n;   // 代幣儲值
+      else if (price < 0) tPoints += n;          // 積分儲值／後台贈送積分
+      else tBalls += n;                          // 彈珠儲值
       markCredited(r.id);
       added++;
     });
@@ -2682,9 +2768,13 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     try{
       const rows = await sb("/rest/v1/vip_applications?select=level,status,remark,created_at&" + acctFilter() + "&status=eq.approved&order=created_at.asc&limit=300");
       const lv = { VIP:0, SUPER:0, ULTRA:0 };
+      const webLv = { VIP:0, SUPER:0, ULTRA:0 };   // 僅網頁端自己提交的 VIP（remark=WEB…）才發首開禮，避免與手機版重複
       let luck = 0, resets = 0, auto = false, adultOk = false;
       (rows || []).forEach(r => {
-        if (r.level === "VIP" || r.level === "SUPER" || r.level === "ULTRA") lv[r.level]++;
+        if (r.level === "VIP" || r.level === "SUPER" || r.level === "ULTRA"){
+          lv[r.level]++;
+          if (String(r.remark || "").indexOf("WEB") === 0) webLv[r.level]++;
+        }
         else if (r.level === "AUTO_SLOT") auto = true;
         else if (r.level === "MINOR_ADULT") adultOk = true;
         else if (r.level === "SLOT_RESET") resets++;
@@ -2717,7 +2807,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       const GT = { VIP:200, SUPER:400, ULTRA:600 };
       let gBalls = balls, gTokens = tokens, gPoints = points, changed = false;
       ["VIP","SUPER","ULTRA"].forEach(k => {
-        if (lv[k] && granted.indexOf(k) < 0){
+        if (webLv[k] && granted.indexOf(k) < 0){
           granted.push(k);
           gPoints += 5000;
           gBalls += GB[k] || 0;
@@ -4452,6 +4542,11 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     paintTokens();
     setTimeout(fit, 30);
     setTimeout(fit, 260);
+    try{ history.pushState({ screen: "tetris" }, ""); }catch(e){}
+  });
+  // 手機返回鍵：不在首頁時先回主選單，避免要連按多次才離開
+  window.addEventListener("popstate", () => {
+    if (!document.body.classList.contains("atHome")) goHome();
   });
   // 首頁已改為「賭博合集」入口，舊的獨立按鈕若存在仍保留綁定（向後相容）
   if ($("goFish")) $("goFish").addEventListener("click", openFish);
@@ -6553,6 +6648,13 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
     start();
   }
+
+  /* 启动：開頁即拉一次雲端贈送／儲值，之後每 60 秒自動同步 */
+  setTimeout(() => { try{ syncNow(true); }catch(e){} }, 900);
+  setInterval(() => { if (!document.hidden){ try{ syncNow(true); }catch(e){} } }, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden){ try{ syncNow(true); }catch(e){} }
+  });
 
   /* 启动 */
   requestAnimationFrame(loop);
