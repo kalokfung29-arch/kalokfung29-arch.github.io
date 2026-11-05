@@ -1071,7 +1071,7 @@
       <span class="hub-lock" id="hubLockTag">鎖</span>
     </button>
     <div class="hub-name">賭博合集</div>
-    <div class="hub-desc">魚蝦蟹 · 老虎機 · 百家樂 · 鬥地主 · 六合彩 · 刮刮樂 · 澳門輪盤</div>
+    <div class="hub-desc">魚蝦蟹 · 老虎機 · 百家樂 · 鬥地主 · 六合彩 · 刮刮樂 · 澳門輪盤 · 21點</div>
   </div>
 
   <!-- 賭博合集面板 -->
@@ -1418,8 +1418,8 @@
       <input id="payFile" type="file" accept="image/*" multiple style="display:none" />
       <div class="thumbs" id="payThumbs"></div>
 
-      <div class="sec-title">備註（選填）</div>
-      <input class="inp" id="payRemark" placeholder="例如 付款時間 / 轉數快參考號" style="font-family:inherit;width:100%" />
+      <div class="sec-title">備註（選填，最多 30 字）<span id="payRemarkCnt" style="float:right;color:#ffb703;font-weight:700">0/30</span></div>
+      <input class="inp" id="payRemark" maxlength="30" placeholder="例如 付款時間 / 轉數快參考號" style="font-family:inherit;width:100%" />
 
       <div style="height:14px"></div>
       <button class="btn main" id="paySubmit">提交訂單</button>
@@ -2172,7 +2172,16 @@
   const sheet = $("sheet"), paySheet = $("paySheet");
   const payTitle = $("payTitle"), payItem = $("payItem"), payAmount = $("payAmount"),
         payAccount = $("payAccount"), payFile = $("payFile"), payThumbs = $("payThumbs"),
-        payRemark = $("payRemark"), paySubmit = $("paySubmit");
+        payRemark = $("payRemark"), payRemarkCnt = $("payRemarkCnt"), paySubmit = $("paySubmit");
+
+  // 付款備註：與手機端一致，最多 30 字並即時顯示字數
+  function syncPayRemark(){
+    if (!payRemark || !payRemarkCnt) return;
+    if (payRemark.value.length > 30) payRemark.value = payRemark.value.slice(0, 30);
+    payRemarkCnt.textContent = payRemark.value.length + "/30";
+  }
+  if (payRemark) payRemark.addEventListener("input", syncPayRemark);
+  syncPayRemark();
 
   let payOrder = null;      // {kind, title, item, amount, payload, files:[]}
 
@@ -2383,6 +2392,7 @@
     payAccount.textContent = (myNick || nickFor()) + " · " + deviceFor().slice(0, 8) + "…";
     payThumbs.innerHTML = "";
     payRemark.value = "";
+    syncPayRemark();
     payFile.value = "";
     paintPayChannels();
     if (running && !paused && !over) togglePause();
@@ -2505,7 +2515,7 @@
         try { proofs = await uploadProofs(payOrder.files); } catch(e){ proofs = []; }
       }
       const p = Object.assign({}, payOrder.payload);
-      const note = payRemark.value.trim();
+      const note = payRemark.value.trim().slice(0, 30);
       if (p.kind === "vip"){
         p.remark = "WEB" + (note ? " · " + note : "");
         p.proofs = proofs;
@@ -2514,10 +2524,20 @@
           status: "pending", remark: p.remark, proofs
         }});
       }else{
-        await sb("/rest/v1/recharge_applications", { method:"POST", json: {
+        const base = {
           device_id: p.device_id, nickname: p.nickname, balls: p.balls,
           price: p.price, status: "pending", proofs
-        }});
+        };
+        if (note){
+          try{
+            await sb("/rest/v1/recharge_applications", { method:"POST", json: Object.assign({ remark: note }, base) });
+          }catch(e1){
+            // 表若尚未補 remark 欄位，退回不帶備註提交，避免整筆申請失敗
+            await sb("/rest/v1/recharge_applications", { method:"POST", json: base });
+          }
+        }else{
+          await sb("/rest/v1/recharge_applications", { method:"POST", json: base });
+        }
       }
       paySheet.classList.remove("show");
       toast("訂單已提交，等管理員批准後入賬");
@@ -2731,7 +2751,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
         bar.style.display = "block";
         bar.innerHTML = minorInWindow()
           ? "未成年模式 · 賭博遊戲現時開放（開放時段：週一至五 早上7:00–晚上8:00；週六日 下午2:00–下午3:00）。俄羅斯方塊、彈珠機、抽獎任何時間都可玩。"
-          : "未成年模式 · 賭博遊戲現時鎖定（合集內七款）：開放時段為 週一至五 早上7:00–晚上8:00、週六日 下午2:00–下午3:00，其餘時間鎖定。俄羅斯方塊、彈珠機、抽獎不受限制。";
+          : "未成年模式 · 賭博遊戲現時鎖定（合集內八款）：開放時段為 週一至五 早上7:00–晚上8:00、週六日 下午2:00–下午3:00，其餘時間鎖定。俄羅斯方塊、彈珠機、抽獎不受限制。";
       }
     }
     const ab = $("homeApplyAdult");
@@ -2749,7 +2769,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   function minorHint(){
     toast(minorAdult()
       ? "此遊戲需開通 超級VIP / 無敵VIP"
-      : "未成年模式：賭博遊戲（合集內七款）現時鎖定。開放時段：週一至五 早上7:00–晚上8:00；週六日 下午2:00–下午3:00。俄羅斯方塊、彈珠機、抽獎不受限制。");
+      : "未成年模式：賭博遊戲（合集內八款）現時鎖定。開放時段：週一至五 早上7:00–晚上8:00；週六日 下午2:00–下午3:00。俄羅斯方塊、彈珠機、抽獎不受限制。");
   }
 
   /* ---- 未成年申請成年模式：表單 / 提交 ---- */
@@ -4554,7 +4574,8 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     { id: "mark6", name: "六合彩", icon: "🎱", accent: "#ef6c00", open: openMarkSix },
     { id: "scratch", name: "刮刮樂", icon: "🎫", accent: "#00897b", open: openScratch },
     // 輪盤實作若尚未載入（或暫未提供）時以 null 佔位，buildHub 會自動略過，避免整個腳本拋錯
-    { id: "roulette", name: "澳門輪盤", icon: "🎡", accent: "#e0a800", open: openRoulette }
+    { id: "roulette", name: "澳門輪盤", icon: "🎡", accent: "#e0a800", open: openRoulette },
+    { id: "blackjack", name: "21點", icon: "♠", accent: "#27ae60", open: openBlackjack }
   ];
 
   function buildHub(){
@@ -4586,7 +4607,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     if (sub){
       sub.classList.toggle("locked", locked);
       sub.textContent = locked
-        ? "現時為鎖定時段 · 合集內七款全部受限\n開放時段：週一至五 早上7:00–晚上8:00；週六日 下午2:00–下午3:00\n鎖定時段：晚上8:00–隔天早上7:00（週六日除下午2:00–3:00 外全鎖）"
+        ? "現時為鎖定時段 · 合集內八款全部受限\n開放時段：週一至五 早上7:00–晚上8:00；週六日 下午2:00–下午3:00\n鎖定時段：晚上8:00–隔天早上7:00（週六日除下午2:00–3:00 外全鎖）"
         : "點擊圖標直接進入 · 新增遊戲只需往列表加一項";
     }
   }
@@ -5172,6 +5193,49 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 ・未成年人不得購買或兌換。
 ・各票種的中獎機率與獎級結構由發行方公佈，購買前可查閱票面說明。`,
 
+    blackjack: `21點 詳細玩法說明
+
+一、基本目標
+
+21點是玩家與莊家比點數的紙牌遊戲。目標是讓手中牌的點數總和盡量接近 21 點，但不可超過 21 點；超過 21 點即「爆牌」，該局必定判輸。
+
+本遊戲使用六副標準撲克牌（不含鬼牌），牌靴剩餘不足 20 張時自動重新洗牌。
+
+二、點數計算
+
+・A 可算 1 點或 11 點，系統自動取對玩家最有利的算法。
+・2 至 10 按牌面數值計算。
+・J、Q、K 均算 10 點。
+
+三、下注與發牌
+
+・先選注碼（100 / 200 / 500 / 1000），再按「發牌」開始；下注時即從代幣庫扣除注額。
+・發牌順序：玩家一張、莊家一張、玩家第二張、莊家第二張；莊家第二張為暗牌，玩家回合期間顯示為「?」。
+
+四、玩家操作
+
+・叫牌：再取一張牌，可重複叫牌直至停牌或爆牌。
+・停牌：不再取牌，交由莊家行動。
+・加倍：僅限首兩張牌時使用，需再押相同注額，加注後只補一張牌即自動停牌。
+・分牌：首兩張牌點值相同時可分成兩手，各再補一張牌，兩手分別與莊家比點；每局只可分牌一次。
+・投降：僅限首兩張牌且未分牌、未加倍時使用，放棄本局並退回一半注額。
+
+五、莊家規則
+
+玩家所有手牌行動完畢後，莊家翻開暗牌並按固定規則補牌：16 點或以下必須補牌，17 點或以上必須停牌。莊家補爆時，未爆的玩家手牌全部勝出。
+
+六、勝負與賠付
+
+・首兩張牌為 A 加 10 點牌（21 點）稱為 BLACKJACK，賠率 1.5 倍（押 100 贏 150）。
+・一般勝出賠 1 賠 1；點數相同為和局，注額全數退回。
+・點數較小或爆牌，該注判輸；分牌後取得的 21 點只按普通勝出計算。
+
+七、其他
+
+・頁面下方保留最近十局淨收益記錄。
+・本遊戲全部使用虛擬代幣，不涉及任何真實金錢交易。
+・未成年人不得參與。`,
+
     roulette: `澳門輪盤 詳細玩法說明
 
 一、輪盤結構
@@ -5353,6 +5417,290 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
         paint();
       }
     };
+  }
+
+  /* ---------- 21點 ---------- */
+  const BJ_SUITS = ["♠","♥","♦","♣"];
+  const BJ_RANKS = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+  const BJ_KEY = "web_blackjack_v1";
+  let bjShoe = [];
+
+  function bjNewShoe(){
+    const d = [];
+    for (let n = 0; n < 6; n++) BJ_SUITS.forEach(su => BJ_RANKS.forEach(r => d.push(su + r)));
+    for (let i = d.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = d[i]; d[i] = d[j]; d[j] = t;
+    }
+    bjShoe = d;
+  }
+  function bjDraw(){
+    if (!bjShoe.length || bjShoe.length < 20) bjNewShoe();
+    return bjShoe.pop();
+  }
+  function bjRank(card){ return card.slice(1); }
+  function bjValue(card){
+    const r = bjRank(card);
+    if (r === "A") return 11;
+    if (r === "10" || r === "J" || r === "Q" || r === "K") return 10;
+    return Number(r);
+  }
+  function bjTotal(cards){
+    let total = 0, aces = 0;
+    cards.forEach(c => {
+      const r = bjRank(c);
+      if (r === "A"){ total += 11; aces++; }
+      else total += bjValue(c);
+    });
+    while (total > 21 && aces > 0){ total -= 10; aces--; }
+    return total;
+  }
+  function bjCardsHtml(cards, hideHole){
+    return cards.map((c, i) => {
+      if (hideHole && i === 1) return '<div class="pcard">?</div>';
+      return '<div class="pcard' + ((c[0] === "♥" || c[0] === "♦") ? " red" : "") + '">' + c + '</div>';
+    }).join("");
+  }
+  function bjHistLoad(){
+    try {
+      const v = JSON.parse(localStorage.getItem(BJ_KEY) || "[]");
+      return Array.isArray(v) ? v.slice(-10) : [];
+    } catch(e){ return []; }
+  }
+  function bjHistPush(net){
+    const arr = bjHistLoad();
+    arr.push(net);
+    while (arr.length > 10) arr.shift();
+    try { localStorage.setItem(BJ_KEY, JSON.stringify(arr)); } catch(e){}
+  }
+  function openBlackjack(){
+    openMiniScreen("blackjack", "21點", "blackjack");
+    const body = $("miniBody");
+    const st = {
+      chips: tokens,
+      bet: 100,
+      hands: [],
+      bets: [],
+      active: 0,
+      dealer: [],
+      hideHole: true,
+      running: false,
+      splitUsed: false,
+      doubled: false,
+      msg: "選擇注碼後按「發牌」開始",
+      color: "#8fa3bf"
+    };
+    body.innerHTML =
+      '<div class="mini-big" id="bjChips"></div>' +
+      '<div class="mini-note">注碼</div>' +
+      '<div class="mini-row" id="bjBets"></div>' +
+      '<div class="mini-row" style="margin-top:6px">' +
+        '<button class="mini-btn" id="bjDeal">發牌</button>' +
+        '<button class="mini-btn ghost" id="bjHit">叫牌</button>' +
+        '<button class="mini-btn ghost" id="bjStand">停牌</button>' +
+        '<button class="mini-btn ghost" id="bjDouble">加倍</button>' +
+        '<button class="mini-btn ghost" id="bjSplit">分牌</button>' +
+        '<button class="mini-btn pink" id="bjSurrender">投降</button>' +
+        '<button class="mini-btn ghost" id="bjRecharge">充值</button>' +
+      '</div>' +
+      '<div class="mini-note" id="bjDealerRow" style="margin-top:8px">莊家 —</div>' +
+      '<div class="card-row" id="bjDealerCards"></div>' +
+      '<div class="mini-note" id="bjPlayerRow">玩家 —</div>' +
+      '<div class="card-row" id="bjPlayerCards"></div>' +
+      '<div class="mini-note" id="bjMsg"></div>' +
+      '<div class="mini-note" id="bjHist"></div>';
+
+    function paint(){
+      $("bjChips").textContent = "代幣庫 " + st.chips + " 個";
+      $("bjBets").innerHTML = [100, 200, 500, 1000].map(v =>
+        '<button class="mini-chip' + (st.bet === v ? " on" : "") + '" data-bet="' + v + '"' +
+        (st.running ? " disabled" : "") + '>' + v + '</button>').join("");
+
+      const dRow = st.dealer.length
+        ? "莊家 " + (st.hideHole ? "?" : bjTotal(st.dealer) + " 點")
+        : "莊家 —";
+      $("bjDealerRow").textContent = dRow;
+      $("bjDealerCards").innerHTML = st.dealer.length ? bjCardsHtml(st.dealer, st.hideHole) : "";
+
+      if (!st.hands.length){
+        $("bjPlayerRow").textContent = "玩家 —";
+        $("bjPlayerCards").innerHTML = "";
+      } else if (st.hands.length === 1){
+        const h = st.hands[0];
+        $("bjPlayerRow").textContent = "玩家 " + bjTotal(h) + " 點" + (bjTotal(h) > 21 ? "（爆牌）" : "") +
+          " · 注 " + st.bets[0];
+        $("bjPlayerCards").innerHTML = bjCardsHtml(h, false);
+      } else {
+        $("bjPlayerRow").textContent = st.hands.map((h, i) =>
+          "第" + (i + 1) + "手 " + bjTotal(h) + " 點" + (bjTotal(h) > 21 ? "（爆）" : "") +
+          (i === st.active && st.running ? " ◀" : "")).join(" ／ ");
+        $("bjPlayerCards").innerHTML = st.hands.map((h, i) =>
+          '<div style="display:flex;gap:6px;align-items:center">' +
+          '<span class="mini-note" style="min-width:34px">' + (i + 1) + '</span>' +
+          bjCardsHtml(h, false) + '</div>').join("");
+      }
+
+      const m = $("bjMsg");
+      m.textContent = st.msg;
+      m.style.color = st.color;
+
+      const hist = bjHistLoad();
+      $("bjHist").innerHTML = hist.length
+        ? "最近 " + hist.length + " 局淨收益　" + hist.map(v =>
+            '<span style="color:' + (v > 0 ? "#6be3a0" : (v < 0 ? "#ff7b7b" : "#8fa3bf")) + '">' +
+            (v > 0 ? "+" : "") + v + '</span>').join(" · ")
+        : "最近 10 局淨收益記錄為空";
+
+      const canAct = st.running;
+      $("bjHit").disabled = !canAct;
+      $("bjStand").disabled = !canAct;
+      const h0 = st.hands[st.active] || [];
+      $("bjDouble").disabled = !canAct || h0.length !== 2 || st.chips < st.bets[st.active];
+      $("bjSplit").disabled = !canAct || st.hands.length !== 1 || st.splitUsed || h0.length !== 2 ||
+        bjValue(h0[0]) !== bjValue(h0[1]) || st.chips < st.bets[0];
+      $("bjSurrender").disabled = !canAct || st.hands.length !== 1 || h0.length !== 2 || st.doubled;
+      $("bjDeal").disabled = st.running;
+    }
+
+    function say(text, color){
+      st.msg = text;
+      st.color = color || "#8fa3bf";
+    }
+
+    function finish(delta, net, text, color){
+      st.running = false;
+      st.hideHole = false;
+      st.chips += delta;
+      bjHistPush(net);
+      saveTokens(st.chips);
+      say(text, color);
+      paint();
+    }
+
+    function dealerPlay(){
+      st.hideHole = false;
+      while (bjTotal(st.dealer) < 17) st.dealer.push(bjDraw());
+      const dv = bjTotal(st.dealer);
+      const dBust = dv > 21;
+      let delta = 0, net = 0;
+      const parts = [];
+      st.hands.forEach((h, i) => {
+        const pv = bjTotal(h);
+        const bet = st.bets[i];
+        const natural = st.hands.length === 1 && !st.splitUsed && !st.doubled && h.length === 2 && pv === 21;
+        if (pv > 21){ net -= bet; parts.push("第" + (i + 1) + "手爆牌輸 " + bet); return; }
+        if (dBust){ delta += bet * 2; net += bet; parts.push("第" + (i + 1) + "手 " + pv + " 點勝出 +" + bet); return; }
+        if (natural && dv !== 21){
+          const pay = Math.round(bet * 1.5);
+          delta += bet + pay; net += pay;
+          parts.push("BLACKJACK，賠 1.5 倍 +" + pay);
+          return;
+        }
+        if (pv > dv){ delta += bet * 2; net += bet; parts.push("第" + (i + 1) + "手 " + pv + ":" + dv + " 勝 +" + bet); }
+        else if (pv === dv){ delta += bet; parts.push("第" + (i + 1) + "手 " + pv + ":" + dv + " 和局退回 " + bet); }
+        else { net -= bet; parts.push("第" + (i + 1) + "手 " + pv + ":" + dv + " 負 -" + bet); }
+      });
+      const head = "莊家 " + (dBust ? "爆牌" : dv + " 點") + " · ";
+      const tail = net > 0 ? "本局淨 +" + net : (net < 0 ? "本局淨 " + net : "本局和局");
+      finish(delta, net, head + parts.join("；") + " · " + tail,
+        net > 0 ? "#6be3a0" : (net < 0 ? "#ff7b7b" : "#8fa3bf"));
+    }
+
+    function nextHandOrFinish(){
+      if (st.active < st.hands.length - 1){
+        st.active++;
+        if (bjTotal(st.hands[st.active]) >= 21) { nextHandOrFinish(); return; }
+        say("第" + (st.active + 1) + "手行動中", "#8fa3bf");
+        paint();
+        return;
+      }
+      dealerPlay();
+    }
+
+    function deal(){
+      if (st.chips < st.bet){ say("代幣不足（本局需 " + st.bet + "），請先充值", "#ff7b7b"); paint(); return; }
+      st.chips -= st.bet;
+      st.hands = [[bjDraw(), bjDraw()]];
+      st.bets = [st.bet];
+      st.dealer = [bjDraw(), bjDraw()];
+      st.active = 0;
+      st.hideHole = true;
+      st.running = true;
+      st.splitUsed = false;
+      st.doubled = false;
+      if (bjTotal(st.hands[0]) === 21){
+        say("BLACKJACK！", "#6be3a0");
+        dealerPlay();
+        return;
+      }
+      say("請選擇叫牌或停牌", "#8fa3bf");
+      paint();
+    }
+
+    body.onclick = e => {
+      const t = e.target.closest("button");
+      if (!t) return;
+      if (t.dataset.bet){ st.bet = Number(t.dataset.bet); paint(); return; }
+      if (t.id === "bjRecharge"){ goGambleRecharge(); return; }
+      if (t.id === "bjDeal"){ if (!st.running) deal(); return; }
+      if (!st.running) return;
+
+      if (t.id === "bjHit"){
+        const h = st.hands[st.active];
+        h.push(bjDraw());
+        const pv = bjTotal(h);
+        if (pv > 21){
+          say("第" + (st.active + 1) + "手爆牌（" + pv + " 點）", "#ff7b7b");
+          nextHandOrFinish();
+        } else if (pv === 21){
+          say("21 點，自動停牌", "#6be3a0");
+          nextHandOrFinish();
+        } else {
+          say("第" + (st.active + 1) + "手現為 " + pv + " 點，請選擇叫牌或停牌", "#8fa3bf");
+          paint();
+        }
+        return;
+      }
+      if (t.id === "bjStand"){ nextHandOrFinish(); return; }
+      if (t.id === "bjDouble"){
+        const i = st.active;
+        if (st.chips < st.bets[i]){ say("代幣不足，無法加倍", "#ff7b7b"); paint(); return; }
+        st.chips -= st.bets[i];
+        st.bets[i] *= 2;
+        st.doubled = true;
+        st.hands[i].push(bjDraw());
+        say("加倍完成，注額 " + st.bets[i], "#6be3a0");
+        if (bjTotal(st.hands[i]) > 21) say("加倍後爆牌（" + bjTotal(st.hands[i]) + " 點）", "#ff7b7b");
+        nextHandOrFinish();
+        return;
+      }
+      if (t.id === "bjSplit"){
+        const i = st.active;
+        const h = st.hands[i];
+        if (st.chips < st.bets[i]){ say("代幣不足，無法分牌", "#ff7b7b"); paint(); return; }
+        st.chips -= st.bets[i];
+        const bet = st.bets[i];
+        const first = [h[0], bjDraw()];
+        const second = [h[1], bjDraw()];
+        st.hands = [first, second];
+        st.bets = [bet, bet];
+        st.splitUsed = true;
+        st.active = 0;
+        say("已分成兩手，先玩第 1 手", "#6be3a0");
+        if (bjTotal(first) >= 21) nextHandOrFinish(); else paint();
+        return;
+      }
+      if (t.id === "bjSurrender"){
+        const bet = st.bets[0];
+        const refund = Math.floor(bet / 2);
+        const lost = bet - refund;
+        finish(refund, -lost, "投降：退回一半注額 " + refund + "，本局淨 -" + lost, "#ffd479");
+        return;
+      }
+    };
+
+    bjShoe = [];
+    paint();
   }
 
   /* ---------- 六合彩 ---------- */
@@ -6749,10 +7097,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 </script>
 <script>
 /* ===== 版本號與防舊版快取 ===== */
-const APP_VERSION = "2026.11.01-1";
+const APP_VERSION = "2026.11.05-1";
 (function(){
   const tag = document.getElementById("verTag");
-  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 澳門輪盤/鬥地主更新版";
+  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 21點/澳門輪盤/鬥地主更新版";
   /* 版本一變就自動強制重載一次（帶時間戳繞過瀏覽器快取），之後不再重載 */
   try {
     const KEY = "tetris_web_ver";
