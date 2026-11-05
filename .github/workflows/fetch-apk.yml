@@ -1,21 +1,40 @@
 name: Fetch APK
+
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (例如 v1.0.5)'
+        required: true
+        default: 'v1.0.5'
+      asset:
+        description: 'Release 内的 APK 资产名'
+        required: true
+        default: 'app-share-universal-debug.apk'
+
 permissions:
   contents: write
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download APK from release v1.0.2
-        run: curl -sSL -o tetris-share.apk https://github.com/kalokfung29-arch/kalokfung29-arch.github.io/releases/download/v1.0.2/app-share-universal-debug.apk
+
+      - name: Download APK from release
+        run: |
+          curl -sSL -f -o tetris-share.apk \
+            "https://github.com/kalokfung29-arch/kalokfung29-arch.github.io/releases/download/${{ inputs.tag }}/${{ inputs.asset }}"
+
       - name: Verify size
-        run: ls -l tetris-share.apk
+        run: |
+          ls -l tetris-share.apk
+          test $(stat -c%s tetris-share.apk) -gt 10000000
+
       - name: Commit APK to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add tetris-share.apk
-          git commit -m "update tetris-share.apk from release v1.0.2"
+          git commit -m "update tetris-share.apk from release ${{ inputs.tag }}" || echo "no change"
           git push
