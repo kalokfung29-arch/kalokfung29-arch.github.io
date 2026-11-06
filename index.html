@@ -4718,6 +4718,15 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     if (after === "manage"){
       paintSafeState();
       if ($("safeManageSheet")) $("safeManageSheet").classList.add("show");
+    } else if (after === "off"){
+      /* 已驗證過原密碼，才准真正關閉 */
+      saveSafeMode(false);
+      if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
+      if (typeof toast === "function") toast("安全模式已關閉");
+    } else if (after === "changePwd"){
+      /* 已驗證過原密碼，才准設定新密碼 */
+      if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
+      safeCalcOpen("setupFirst", "manage");
     } else {
       paintHub();
       if ($("gamblingSheet")) $("gamblingSheet").classList.add("show");
@@ -4836,7 +4845,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     });
     if ($("btnSafeOff")) $("btnSafeOff").addEventListener("click", () => {
       if (!safeModeOn()) return;
-      if (confirm("關閉安全模式？關閉後點賭博合集會直接進入。")) saveSafeMode(false);
+      /* 關閉前必須先輸入原本的密碼（不再用 confirm 直接關） */
+      if ($("sheet")) $("sheet").classList.remove("show");
+      safeCalcOpen("unlock", "off");
     });
     if ($("safeManageClose")) $("safeManageClose").addEventListener("click", () => $("safeManageSheet").classList.remove("show"));
     if ($("safeManageSheet")) $("safeManageSheet").addEventListener("click", e => {
@@ -4844,13 +4855,15 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     });
     if ($("btnSafeChangePwd")) $("btnSafeChangePwd").addEventListener("click", () => {
       if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
-      safeCalcOpen("setupFirst", "manage");
+      /* 修改密碼前必須先輸入原本的密碼；尚未開啟安全模式則直接設定 */
+      if (safeModeOn()) safeCalcOpen("unlock", "changePwd");
+      else safeCalcOpen("setupFirst", "manage");
     });
     if ($("btnSafeTurnOff")) $("btnSafeTurnOff").addEventListener("click", () => {
-      if (confirm("關閉安全模式？關閉後點賭博合集會直接進入。")){
-        saveSafeMode(false);
-        if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
-      }
+      /* 關閉前必須先輸入原本的密碼 */
+      if (!safeModeOn()) return;
+      if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
+      safeCalcOpen("unlock", "off");
     });
   });
 
