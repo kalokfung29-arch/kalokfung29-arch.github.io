@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
@@ -230,7 +230,7 @@
 
   /* ============ 商店 / 账号面板 ============ */
   .sheet{
-    position:fixed;inset:0;z-index:12;display:none;
+    position:fixed;inset:0;z-index:2147483001;display:none;
     background:rgba(4,7,12,.72);backdrop-filter:blur(10px);
   }
   .sheet.show{display:block;animation:fade .18s ease;}
@@ -891,10 +891,27 @@
   .sc-brief .sub{font-size:9.5px;color:#8fa3bf;margin-top:1px;
     font-family:ui-monospace,Menlo,Consolas,monospace;}
   .sc-brief .st{font-size:11.5px;font-weight:800;text-align:right;}
+  /* ===== 安全模式：計算器偽裝鎖（只有開關與按鍵，外觀就是一台普通計算器） ===== */
+  .calcmask{position:fixed;inset:0;z-index:2147483003;display:none;align-items:center;justify-content:center;background:#0a0d13;}
+  .calcmask.show{display:flex;}
+  .calcbox{width:min(340px,92vw);border-radius:22px;background:#11161f;border:1px solid rgba(255,255,255,.1);padding:14px;box-shadow:0 18px 60px rgba(0,0,0,.7);}
+  .calcd{background:#0a0e14;border-radius:14px;padding:12px 16px;text-align:right;font-size:34px;font-weight:700;color:#eaf2ff;min-height:70px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;}
+  .calcd .hint{font-size:10.5px;font-weight:600;color:#4ce0ff;letter-spacing:.06em;min-height:14px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .calcd .num{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .calck{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:12px;}
+  .calck button{height:54px;border:none;border-radius:14px;font-size:20px;font-weight:700;color:#eaf2ff;background:#1b2330;cursor:pointer;transition:filter .12s;}
+  .calck button:active{filter:brightness(1.45);}
+  .calck button.op{background:#243347;color:#4ce0ff;}
+  .calck button.eq{background:linear-gradient(160deg,#4ce0ff,#1c8fb8);color:#04121a;}
+  .calck button.fn{background:#2a1c22;color:#ff8a8a;}
+  .calck button.wide{grid-column:span 3;}
+  .safe-off{opacity:.45;}
 </style>
 </head>
 <body class="atHome">
-<div id="migBar" style="position:fixed;left:0;right:0;top:0;z-index:2147483000;background:#4ce0ff;color:#070b12;font:600 13px/1.55 -apple-system,'Segoe UI',system-ui,sans-serif;padding:8px 12px;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.45);forced-color-adjust:none;">
+<!-- 2026-11-06 常駐浮動入口：開頁即見，免除「找不到設置」 -->
+<button id="safeFloat" type="button" style="position:fixed;top:70px;right:10px;z-index:2147483002;background:#ffa62b;background-image:none;color:#1a1000;-webkit-text-fill-color:#1a1000;border:2px solid #fff;-webkit-text-stroke:0;border-radius:12px;padding:10px 16px;font:900 15px -apple-system,'Segoe UI',system-ui,sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.65),0 0 0 3px rgba(255,166,43,.28);forced-color-adjust:none;-webkit-forced-color-adjust:none;cursor:pointer;">安全模式</button>
+<div id="migBar" style="display:none;position:fixed;left:0;right:0;top:0;z-index:2147483000;background:#4ce0ff;color:#070b12;font:600 13px/1.55 -apple-system,'Segoe UI',system-ui,sans-serif;padding:8px 12px;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,0,0,.45);forced-color-adjust:none;">
   <span>本站已遷移至新站 <b>kalokfung29-arch.github.io</b> · 存檔／代幣／積分會自動跟住過去 · <b id="migCnt">8</b> 秒後自動前往</span>
   <a id="migGo2" href="https://kalokfung29-arch.github.io/" style="background:#070b12;color:#4ce0ff;padding:3px 12px;border-radius:6px;text-decoration:none;font-weight:700;">立即前往</a>
   <button id="migStay" type="button" style="background:transparent;border:1px solid #070b12;color:#070b12;padding:3px 12px;border-radius:6px;cursor:pointer;font:600 13px inherit;">留在舊版</button>
@@ -909,11 +926,23 @@
   if(stay){ if(bar) bar.style.display='none'; return; }
   if(/^kalokfung29-arch\.github\.io$/.test(location.hostname)){ if(bar) bar.style.display='none'; return; }
   var n=8, cnt=document.getElementById('migCnt');
+  /* 2026-11-06 暫停自動跳轉：新站 kalokfung29-arch.github.io 尚未同步安全模式等新功能，
+     自動跳轉會令人看不到舊站已上線的功能。改為只保留提示條，由用戶自行決定何時前往。
+     ★ 新站更新完成後，把 AUTO_JUMP 改回 true 即可恢復原本 8 秒自動跳轉。 */
+  var AUTO_JUMP=false;
   window.__migStop=function(){ clearInterval(timer); if(bar) bar.style.display='none'; };
+  if(!AUTO_JUMP){
+    if(cnt) cnt.textContent='—';
+    try{
+      var _sp=bar?bar.querySelector('span'):null;
+      if(_sp) _sp.innerHTML='本站為最新版（新站 kalokfung29-arch.github.io 暫未同步）· 可繼續使用本頁，或按「立即前往」切換';
+    }catch(e){}
+  }else{
   var timer=setInterval(function(){
     n--; if(cnt) cnt.textContent=n;
     if(n<=0){ clearInterval(timer); var _done=false; try{ if(typeof window.__migExport==="function"){ window.__migExport(); _done=true; } }catch(e){} if(!_done){ try{ location.replace(NEWURL); }catch(e){ location.href=NEWURL; } } }
   },1000);
+  }
   var goA=document.getElementById('migGo2');
   if(goA) goA.addEventListener('click',function(e){ if(typeof window.__migExport==="function"){ e.preventDefault(); try{ if(window.__migStop) window.__migStop(); }catch(_e){} window.__migExport(); } });
   var btn=document.getElementById('migStay');
@@ -1086,9 +1115,34 @@
 
   <div class="home-foot">
     <button class="btn" id="homeStore">商店 / 帳號</button>
+    <button class="btn" id="homeSafe" style="background:#4ce0ff;background-image:none;color:#070b12;-webkit-text-fill-color:#070b12;font-weight:800;forced-color-adjust:none;">安全模式</button>
     <button class="btn ghost" id="homeHelp">操作說明</button>
     <button class="btn ghost full" id="homeApplyAdult" style="background:#000;background-color:#000;background-image:none;forced-color-adjust:none;-webkit-forced-color-adjust:none;">申請成年模式</button>
   </div>
+  <script>
+  /* 2026-11-06 首頁「安全模式」快捷鍵：直接開帳號面板並跳到安全模式設定 */
+  (function(){
+    function openSafe(){
+      /* 2026-11-06 改為直接彈計算器設密碼，不再連帶開帳號面板（面板會殘留且關不掉） */
+      var sb=document.getElementById('btnSafeSetup');
+      if(sb){ try{ sb.click(); return; }catch(e){} }
+      var hs=document.getElementById('homeStore');
+      if(hs){ try{ hs.click(); }catch(e){} }
+      setTimeout(function(){
+        try{
+          var s=document.getElementById('sheet');
+          if(s){ var body=s.querySelector('.sheet-body'); if(body) body.scrollTop=0; }
+          var sb2=document.getElementById('btnSafeSetup');
+          if(sb2) sb2.click();
+        }catch(e){}
+      },320);
+    }
+    ['homeSafe','safeFloat'].forEach(function(id){
+      var b=document.getElementById(id);
+      if(b) b.addEventListener('click', openSafe);
+    });
+  })();
+  </script>
   <div class="home-note">VIP 與訂單狀態與雲端同步；網頁版的代幣餘額保存在本機瀏覽器。</div>
   <div class="home-note" style="margin-top:6px;"><a id="newSiteLink" href="https://kalokfung29-arch.github.io/" target="_blank" rel="noopener" style="color:#4ce0ff;text-decoration:underline;">新站入口：kalokfung29-arch.github.io</a></div>
   <div class="ver-tag" id="verTag">版本 —</div>
@@ -1151,7 +1205,7 @@
     <h2>老虎機</h2>
     <div id="slotVipBox">
       <div class="warn">此遊戲需要 超級VIP 或 無敵VIP 會員才能進入</div>
-      <div class="tip">開通 超級VIP / 無敵VIP 後即可用魚蝦蟹代幣下注，代幣可隨時充值</div>
+      <div class="tip">開通 超級VIP / 無敵VIP 後即可用代幣下注，代幣可隨時充值</div>
       <button class="btn main" id="slotGoVip">前往開通 超級VIP</button>
     </div>
     <div id="slotMinorBox" style="display:none">
@@ -1350,6 +1404,16 @@
       <button class="close-x" id="sheetClose">✕</button>
     </div>
     <div class="sheet-body">
+      <div class="sec-title">安全模式（賭博合集偽裝鎖）</div>
+      <div class="bind-box">
+        <div class="bind-row"><span class="bind-dot off" id="safeDot"></span><span id="safeStateText">安全模式：未開啟</span></div>
+        <div class="bind-actions">
+          <button class="btn main" id="btnSafeSetup">設定 / 修改密碼</button>
+          <button class="btn ghost" id="btnSafeOff">關閉安全模式</button>
+        </div>
+        <div class="bind-tip">開啟後，首頁點「賭博合集」不會直接開面板，而是先彈一台普通計算器；<b>輸入密碼後連按兩下「＝」</b>才會進入。輸錯不會有任何提示，計算器照常計算。</div>
+      </div>
+
       <div class="sec-title">帳號綁定（與手機 App 同一帳號）</div>
       <div class="bind-box">
         <div class="bind-row"><span class="bind-dot off" id="bindDot"></span><span id="bindText">尚未綁定手機帳號</span></div>
@@ -2621,10 +2685,14 @@
      ============================================================ */
   const TOK_KEY = "tetris_web_tokens";
   const TOKEN_TIERS = [[5,10],[10,20],[15,30],[25,50],[50,100],[100,200],[150,300],[250,500],[500,1000],[1000,2000]];
-  let tokens = Math.max(0, Math.floor(+(localStorage.getItem(TOK_KEY) || 0)));
+  function lsNum(key){
+    const v = Number(localStorage.getItem(key));
+    return Number.isFinite(v) ? v : 0;
+  }
+  let tokens = Math.max(0, Math.floor(lsNum(TOK_KEY)));
 
   function saveTokens(v){
-    tokens = Math.max(0, Math.floor(+v || 0));
+    tokens = Math.max(0, Math.floor(Number.isFinite(+v) ? +v : 0));
     localStorage.setItem(TOK_KEY, String(tokens));
     paintTokens();
   }
@@ -2639,8 +2707,8 @@
 
   /* ---- 彈珠 / 積分錢包（本機，管理員審批後雲端入帳） ---- */
   const BALL_KEY = "tetris_web_balls", PTS_KEY = "tetris_web_points", CRED_KEY = "tetris_web_credited";
-  let balls = Math.max(0, Math.floor(+(localStorage.getItem(BALL_KEY) || 0)));
-  let points = Math.max(0, Math.floor(+(localStorage.getItem(PTS_KEY) || 0)));
+  let balls = Math.max(0, Math.floor(lsNum(BALL_KEY)));
+  let points = Math.max(0, Math.floor(lsNum(PTS_KEY)));
 
   function paintWallet(){
     if ($("homeBalls")) $("homeBalls").textContent = balls;
@@ -2652,12 +2720,12 @@
     if ($("rankPoints")) $("rankPoints").textContent = points;
   }
   function saveBalls(v){
-    balls = Math.max(0, Math.floor(+v || 0));
+    balls = Math.max(0, Math.floor(Number.isFinite(+v) ? +v : 0));
     localStorage.setItem(BALL_KEY, String(balls));
     paintWallet();
   }
   function savePoints(v){
-    points = Math.max(0, Math.floor(+v || 0));
+    points = Math.max(0, Math.floor(Number.isFinite(+v) ? +v : 0));
     localStorage.setItem(PTS_KEY, String(points));
     paintWallet();
   }
@@ -2870,6 +2938,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       });
       cloudVip = lv.ULTRA ? "ULTRA" : (lv.SUPER ? "SUPER" : (lv.VIP ? "VIP" : ""));
       cloudAuto = auto;
+      /* 與手機分享版一致：審批通過後把「自動拉」權益落到本機，之後離線／未綁帳號一樣可用 */
+      if (auto) slotSetAutoUnlocked(true);
+      else if (slotAuto && !slotAutoUnlocked()){ slotAuto = false; slotSaveAutoOn(); }
       cloudLuck = Math.min(30, luck);
       // 未成年申請成年：批准後本機切換成年模式
       if (adultOk && !minorAdult()){
@@ -3223,7 +3294,18 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   function slotSave(){ try{ localStorage.setItem(SLOT_STATE_KEY, JSON.stringify(slotSt)); }catch(e){} }
   /* 老虎機「自動拉」開關持久化：跨頁面 / 重開瀏覽器保留（與鬥地主託管完全獨立） */
   const SLOT_AUTO_KEY = "tetris_web_slot_auto";
-  let slotAuto = localStorage.getItem(SLOT_AUTO_KEY) === "1";
+  /* 自動拉已開通標記（與手機分享版一致：權益落地本機，離線／未綁帳號照樣可用） */
+  const SLOT_AUTO_UNLOCK_KEY = "tetris_web_slot_auto_unlocked";
+  function slotAutoUnlocked(){
+    if (cloudAuto) return true;
+    try { return localStorage.getItem(SLOT_AUTO_UNLOCK_KEY) === "1"; } catch(e){ return false; }
+  }
+  function slotSetAutoUnlocked(v){
+    try { if (v) localStorage.setItem(SLOT_AUTO_UNLOCK_KEY, "1");
+          else localStorage.removeItem(SLOT_AUTO_UNLOCK_KEY); } catch(e){}
+  }
+  /* 與手機分享版一致：初值 = 已開通自動拉權益 && 上次開關狀態 */
+  let slotAuto = slotAutoUnlocked() && localStorage.getItem(SLOT_AUTO_KEY) === "1";
   let slotSpinning = false, slotFinals = [], reelStrips = [], slotHits = [];
   function slotSaveAutoOn(){ try { localStorage.setItem(SLOT_AUTO_KEY, slotAuto ? "1" : "0"); } catch(e){} }
 
@@ -3347,9 +3429,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     const pullBtn = $("slotPull");
     pullBtn.className = "pull-btn" + (slotAuto ? " auto" : "");
     pullBtn.innerHTML = slotAuto
-      ? (slotSpinning ? "自動旋轉中…（長按停止）"
-        : "自動模式已開啟（" + slotSt.bet + " 個代幣）<br/><span style=\"font-size:11px;font-weight:600;opacity:.85\">按一下開轉 · 長按關閉自動</span>")
-      : (slotSpinning ? "轉動中…" : "拉下開轉（" + slotSt.bet + " 個代幣）<br/><span style=\"font-size:11px;font-weight:600;opacity:.85\">長按：自動拉</span>");
+      ? "自動旋轉中…（長按停止）"
+      : (slotSpinning ? "轉動中…"
+        : "拉下開轉（" + slotSt.bet + " 個代幣）<br/><span style=\"font-size:11px;font-weight:600;opacity:.85\">長按：自動拉</span>");
     $("betMinus").disabled = slotSpinning || slotSt.bet <= 5;
     $("betPlus").disabled = slotSpinning || slotSt.bet >= 500;
     Array.prototype.forEach.call(document.querySelectorAll("#slotScreen [data-bet]"), b => {
@@ -3408,7 +3490,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     if (slotReelCount() !== reelStrips.length) buildReels(slotReelCount());
     slotPaint();
 
-    if (slotAuto && cloudAuto){
+    if (slotAuto && slotAutoUnlocked()){
       if (tokens < slotSt.bet){
         slotAuto = false;
         slotSaveAutoOn();
@@ -3428,7 +3510,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     slotPressTimer = setTimeout(() => {
       slotPressTimer = null;
       slotSuppress = true;
-      if (!cloudAuto && !slotAuto){ $("ovAutoLock").classList.add("show"); return; }
+      if (!slotAutoUnlocked()){ $("ovAutoLock").classList.add("show"); return; }
       slotAuto = !slotAuto;
       slotSaveAutoOn();
       $("slotStatus").className = "slot-status";
@@ -3446,6 +3528,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     ["mouseup","mouseleave","touchend","touchcancel"].forEach(ev => pullEl.addEventListener(ev, pressEnd));
     pullEl.addEventListener("click", () => {
       if (slotSuppress){ slotSuppress = false; return; }
+      if (slotAuto) return;   /* 與手機分享版一致：自動中按一下不會再拉 */
       if (!slotSpinning) slotPull();
     });
   }
@@ -3797,6 +3880,14 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     return Math.max(0, until - Date.now());
   }
   function pinTryUnlock(){
+    /* 鎖定期內輸入正確密碼仍可放行：鎖定只限制錯誤嘗試頻率，不影響合法解鎖 */
+    if ((($("pinPwd").value || "").trim()) === PIN_PWD){
+      localStorage.setItem("web_pin_unlock", "1");
+      localStorage.setItem("web_pin_fail", "0");
+      localStorage.removeItem("web_pin_lock");
+      openPin();
+      return;
+    }
     const left = pinLockedLeft();
     if (left > 0){
       const mins = Math.ceil(left / 60000);
@@ -3815,9 +3906,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     const fail = +(localStorage.getItem("web_pin_fail") || 0) + 1;
     localStorage.setItem("web_pin_fail", String(fail));
     let lockMs = 0, tip = "";
-    if (fail === 1){ lockMs = 60 * 1000; tip = "密碼錯誤，已鎖定 1 分鐘"; }
-    else if (fail === 2){ lockMs = 24 * 3600 * 1000; tip = "再次錯誤，已鎖定 1 日"; }
-    else { lockMs = 7 * 24 * 3600 * 1000; tip = "多次錯誤，已鎖定 7 日"; }
+    if (fail === 1){ lockMs = 60 * 1000; tip = "密碼錯誤，請 1 分鐘後再試"; }
+    else if (fail === 2){ lockMs = 5 * 60 * 1000; tip = "再次錯誤，請 5 分鐘後再試"; }
+    else { lockMs = 30 * 60 * 1000; tip = "多次錯誤，請 30 分鐘後再試"; }
     localStorage.setItem("web_pin_lock", String(Date.now() + lockMs));
     const warn = document.querySelector("#pinGate .warn");
     if (warn) warn.textContent = tip;
@@ -4565,6 +4656,204 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     rlResize();
   }
 
+  /* ==================== 安全模式（賭博合集計算器偽裝鎖） ==================== */
+  const SAFE_MODE_KEY = "web_safe_mode";
+  const SAFE_PWD_KEY = "web_safe_pwd";
+  function safeModeOn(){
+    return localStorage.getItem(SAFE_MODE_KEY) === "1" && (localStorage.getItem(SAFE_PWD_KEY) || "").length > 0;
+  }
+  function safePwd(){ return localStorage.getItem(SAFE_PWD_KEY) || ""; }
+  function saveSafeMode(on){
+    if (on) localStorage.setItem(SAFE_MODE_KEY, "1");
+    else localStorage.removeItem(SAFE_MODE_KEY);
+    paintSafeState();
+  }
+  function saveSafePwd(p){ localStorage.setItem(SAFE_PWD_KEY, p); }
+
+  function paintSafeState(){
+    const on = safeModeOn();
+    const txt = on ? "安全模式：已開啟" : "安全模式：未開啟";
+    if ($("safeStateText")) $("safeStateText").textContent = txt;
+    if ($("safeStateText2")) $("safeStateText2").textContent = txt;
+    ["safeDot", "safeDot2"].forEach(id => {
+      if ($(id)) $(id).className = "bind-dot" + (on ? "" : " off");
+    });
+    if ($("btnSafeOff")) $("btnSafeOff").disabled = !on;
+  }
+
+  /* 計算器狀態機：disp=顯示 / acc=累計 / op=運算符 / fresh=重新輸入 / seq=數字序列 / eq=連按＝次數 */
+  const calcSt = { disp: "0", acc: null, op: null, fresh: true, seq: "", eq: 0, mode: "unlock", after: "hub", first: "", hintText: "" };
+
+  function calcPaint(){
+    if ($("calcDisp")) $("calcDisp").textContent = calcSt.disp;
+    if ($("calcHint")) $("calcHint").textContent = calcSt.hintText || "";
+  }
+  function calcHintFor(mode){
+    if (mode === "setupFirst") return "設定安全模式 · 輸入密碼";
+    if (mode === "setupSecond") return "設定安全模式 · 再輸入一次";
+    return "";   /* unlock 模式不顯示任何提示，維持一台普通計算器的樣子 */
+  }
+  function calcReset(){
+    calcSt.disp = "0"; calcSt.acc = null; calcSt.op = null;
+    calcSt.fresh = true; calcSt.seq = ""; calcSt.eq = 0;
+  }
+  function safeCalcOpen(mode, after){
+    calcSt.mode = mode || "unlock";
+    calcSt.after = after || "hub";
+    calcSt.first = "";
+    calcReset();
+    calcSt.hintText = calcHintFor(calcSt.mode);
+    calcPaint();
+    if ($("calcMask")) $("calcMask").classList.add("show");
+  }
+  function safeCalcClose(){
+    if ($("calcMask")) $("calcMask").classList.remove("show");
+    calcReset();
+    calcSt.hintText = "";
+    calcPaint();
+  }
+  function safeCalcSucceed(){
+    const after = calcSt.after;
+    safeCalcClose();
+    if (after === "manage"){
+      paintSafeState();
+      if ($("safeManageSheet")) $("safeManageSheet").classList.add("show");
+    } else {
+      paintHub();
+      if ($("gamblingSheet")) $("gamblingSheet").classList.add("show");
+    }
+  }
+  function calcDigit(d){
+    if (calcSt.fresh){ calcSt.disp = (d === "." ? "0." : d); calcSt.fresh = false; }
+    else {
+      if (d === "." && calcSt.disp.indexOf(".") >= 0) return;
+      if (calcSt.disp.replace(/[^0-9]/g, "").length >= 12) return;
+      calcSt.disp += d;
+    }
+    calcSt.seq += d;
+    calcSt.eq = 0;
+    calcPaint();
+  }
+  function calcApply(){
+    if (calcSt.op == null || calcSt.acc == null) return;
+    const a = calcSt.acc, b = parseFloat(calcSt.disp) || 0;
+    let r = 0;
+    if (calcSt.op === "+") r = a + b;
+    else if (calcSt.op === "-") r = a - b;
+    else if (calcSt.op === "×") r = a * b;
+    else if (calcSt.op === "÷") r = (b === 0 ? 0 : a / b);
+    calcSt.acc = r;
+    calcSt.disp = String(Math.round(r * 1e10) / 1e10);
+  }
+  function calcOperator(o){
+    const cur = parseFloat(calcSt.disp) || 0;
+    if (calcSt.op != null && !calcSt.fresh) calcApply();
+    else calcSt.acc = cur;
+    calcSt.op = o;
+    calcSt.fresh = true;
+    calcSt.eq = 0;
+    calcSt.seq = "";   /* 按了運算符代表在真算數，重設密碼序列 */
+    calcPaint();
+  }
+  function calcEquals(){
+    /* 設定密碼：按一下「＝」提交這一段 */
+    if (calcSt.mode === "setupFirst" || calcSt.mode === "setupSecond"){
+      const entered = calcSt.seq;
+      if (!entered) return;
+      if (calcSt.mode === "setupFirst"){
+        calcSt.first = entered;
+        calcSt.mode = "setupSecond";
+        calcSt.hintText = calcHintFor("setupSecond");
+        calcReset();
+        calcPaint();
+        return;
+      }
+      if (entered === calcSt.first){
+        saveSafePwd(entered);
+        saveSafeMode(true);
+        safeCalcClose();
+        if ($("sheet")) $("sheet").classList.remove("show");
+        if ($("safeManageSheet")) $("safeManageSheet").classList.add("show");
+        paintSafeState();
+      } else {
+        calcSt.mode = "setupFirst";
+        calcSt.first = "";
+        calcSt.hintText = calcHintFor("setupFirst");
+        calcReset();
+        calcPaint();
+      }
+      return;
+    }
+    /* 解鎖：連按兩下「＝」，第二下才比對；不對就靜默失敗 */
+    calcSt.eq++;
+    if (calcSt.eq >= 2){
+      const entered = calcSt.seq;
+      if (entered && entered === safePwd()){ safeCalcSucceed(); return; }
+      calcSt.eq = 0;
+      calcSt.seq = "";
+    }
+    if (calcSt.op != null){ calcApply(); calcSt.op = null; }
+    calcSt.fresh = true;
+    calcPaint();
+  }
+  function calcKey(k){
+    if (k === "C"){ calcReset(); calcPaint(); return; }
+    if (k === "D"){
+      calcSt.disp = calcSt.disp.length > 1 ? calcSt.disp.slice(0, -1) : "0";
+      if (calcSt.seq.length) calcSt.seq = calcSt.seq.slice(0, -1);
+      calcSt.eq = 0;
+      calcPaint();
+      return;
+    }
+    if (k === "="){ calcEquals(); return; }
+    if (k === "+" || k === "-" || k === "×" || k === "÷"){ calcOperator(k); return; }
+    calcDigit(k);
+  }
+
+  /* 綁定安全模式 UI（腳本比這些 DOM 先跑，故等 DOMContentLoaded） */
+  document.addEventListener("DOMContentLoaded", () => {
+    paintSafeState();
+    const mask = $("calcMask");
+    if (mask){
+      mask.addEventListener("click", e => { if (e.target === mask) safeCalcClose(); });
+    }
+    const keys = $("calcKeys");
+    if (keys){
+      keys.addEventListener("click", e => {
+        const b = e.target.closest("button[data-k]");
+        if (!b) return;
+        calcKey(b.dataset.k);
+      });
+    }
+    if ($("btnSafeSetup")) $("btnSafeSetup").addEventListener("click", () => {
+      if (safeModeOn()){
+        /* 已開啟：先驗證身份，才准改密碼或關閉 */
+        if ($("sheet")) $("sheet").classList.remove("show");
+        safeCalcOpen("unlock", "manage");
+      } else {
+        safeCalcOpen("setupFirst", "manage");
+      }
+    });
+    if ($("btnSafeOff")) $("btnSafeOff").addEventListener("click", () => {
+      if (!safeModeOn()) return;
+      if (confirm("關閉安全模式？關閉後點賭博合集會直接進入。")) saveSafeMode(false);
+    });
+    if ($("safeManageClose")) $("safeManageClose").addEventListener("click", () => $("safeManageSheet").classList.remove("show"));
+    if ($("safeManageSheet")) $("safeManageSheet").addEventListener("click", e => {
+      if (e.target === $("safeManageSheet")) $("safeManageSheet").classList.remove("show");
+    });
+    if ($("btnSafeChangePwd")) $("btnSafeChangePwd").addEventListener("click", () => {
+      if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
+      safeCalcOpen("setupFirst", "manage");
+    });
+    if ($("btnSafeTurnOff")) $("btnSafeTurnOff").addEventListener("click", () => {
+      if (confirm("關閉安全模式？關閉後點賭博合集會直接進入。")){
+        saveSafeMode(false);
+        if ($("safeManageSheet")) $("safeManageSheet").classList.remove("show");
+      }
+    });
+  });
+
   /* ===== 賭博合集：列表驅動，新增賭博遊戲只需往 GAMBLING_GAMES 加一項 ===== */
   const GAMBLING_GAMES = [
     { id: "fish", name: "魚蝦蟹", icon: "🎲", accent: "#e91e63", open: openFish },
@@ -4614,6 +4903,8 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
   buildHub();
   if ($("gamblingHub")) $("gamblingHub").addEventListener("click", () => {
+    /* 安全模式開啟：先彈計算器，輸密碼連按兩下「＝」才進 */
+    if (safeModeOn()){ safeCalcOpen("unlock", "hub"); return; }
     paintHub();
     $("gamblingSheet").classList.add("show");
   });
@@ -5392,6 +5683,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       if (t.dataset.pick){ st.pick = t.dataset.pick; paint(); return; }
       if (t.id === "bcRecharge"){ goGambleRecharge(); return; }
       if (t.id === "bcDeal"){
+        if (window.__bcDealBusy) return;
+        window.__bcDealBusy = true;
+        setTimeout(() => { window.__bcDealBusy = false; }, 500);
         if (st.chips < st.bet){ st.msg = "代幣不足（本局需 " + st.bet + "），請先充值"; paint(); return; }
         const deck = bcDeck();
         let i = 0;
@@ -7097,10 +7391,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 </script>
 <script>
 /* ===== 版本號與防舊版快取 ===== */
-const APP_VERSION = "2026.11.05-1";
+const APP_VERSION = "2026.11.06-SAFE";
 (function(){
   const tag = document.getElementById("verTag");
-  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 21點/澳門輪盤/鬥地主更新版";
+  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 已含安全模式";
   /* 版本一變就自動強制重載一次（帶時間戳繞過瀏覽器快取），之後不再重載 */
   try {
     const KEY = "tetris_web_ver";
@@ -7123,5 +7417,55 @@ const APP_VERSION = "2026.11.05-1";
   } catch (e) {}
 })();
 </script>
+<!-- ============ 安全模式：計算器偽裝鎖（解鎖賭博合集 / 設定密碼） ============ -->
+<div class="calcmask" id="calcMask">
+  <div class="calcbox">
+    <div class="calcd">
+      <div class="hint" id="calcHint"></div>
+      <div class="num" id="calcDisp">0</div>
+    </div>
+    <div class="calck" id="calcKeys">
+      <button class="fn" data-k="C">C</button>
+      <button class="fn" data-k="D">←</button>
+      <button class="op" data-k="÷">÷</button>
+      <button class="op" data-k="×">×</button>
+      <button data-k="7">7</button>
+      <button data-k="8">8</button>
+      <button data-k="9">9</button>
+      <button class="op" data-k="-">−</button>
+      <button data-k="4">4</button>
+      <button data-k="5">5</button>
+      <button data-k="6">6</button>
+      <button class="op" data-k="+">+</button>
+      <button data-k="1">1</button>
+      <button data-k="2">2</button>
+      <button data-k="3">3</button>
+      <button class="eq" data-k="=">=</button>
+      <button class="wide" data-k="0">0</button>
+      <button data-k=".">.</button>
+    </div>
+  </div>
+</div>
+
+<!-- 安全模式管理（驗證密碼後才開） -->
+<div class="sheet" id="safeManageSheet">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h3>安全模式</h3>
+      <button class="close-x" id="safeManageClose">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="bind-box">
+        <div class="bind-row"><span class="bind-dot" id="safeDot2"></span><span id="safeStateText2">安全模式：已開啟</span></div>
+        <div class="bind-tip">打開賭博合集要先在計算器輸入密碼，然後連按兩下「＝」。輸錯不會有任何提示。</div>
+        <div class="bind-actions" style="margin-top:10px">
+          <button class="btn main" id="btnSafeChangePwd">修改密碼</button>
+          <button class="btn ghost" id="btnSafeTurnOff">關閉安全模式</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
