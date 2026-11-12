@@ -906,6 +906,104 @@
   .calck button.fn{background:#2a1c22;color:#ff8a8a;}
   .calck button.wide{grid-column:span 3;}
   .safe-off{opacity:.45;}
+  /* ============ UNO 牌（網頁分享版） ============ */
+  #unoScreen{background:radial-gradient(900px 600px at 50% -10%,rgba(255,209,102,.15),transparent 62%),#0b1220;}
+  .uno-start{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:10px 4px;min-height:0;overflow:auto;}
+  .uno-logo{font:900 46px/1 inherit;letter-spacing:.14em;color:#ffd166;text-shadow:0 4px 0 rgba(233,30,99,.5),0 10px 22px rgba(0,0,0,.55);transform:rotate(-6deg);}
+  .uno-start-sub{font-size:12.5px;color:rgba(255,255,255,.76);text-align:center;line-height:1.6;}
+  .uno-pick{display:flex;gap:8px;}
+  .uno-pick-btn{width:76px;height:40px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.06);
+    color:var(--txt);font:800 13px inherit;cursor:pointer;}
+  .uno-pick-btn.on{background:linear-gradient(135deg,#ffd166,#ff8a65);border-color:transparent;color:#1a1206;}
+  .uno-rules{width:100%;max-width:360px;display:flex;flex-direction:column;gap:7px;margin-top:2px;}
+  .uno-rule{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:11px;
+    background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.09);cursor:pointer;}
+  .uno-rule .bx{width:19px;height:19px;flex:0 0 auto;border-radius:6px;border:1.5px solid rgba(255,255,255,.35);
+    display:grid;place-items:center;font-size:12px;font-weight:900;color:transparent;}
+  .uno-rule.on .bx{background:#5fffb0;border-color:#5fffb0;color:#07210f;}
+  .uno-rule .tx{flex:1;font-size:12.5px;color:rgba(255,255,255,.9);}
+  .uno-rule .tx small{display:block;font-size:10.5px;color:rgba(255,255,255,.5);margin-top:2px;line-height:1.4;}
+  .uno-note{font-size:11px;color:rgba(255,255,255,.45);text-align:center;line-height:1.6;}
+
+  .uno-table{flex:1;display:flex;flex-direction:column;min-height:0;gap:6px;}
+  .uno-opps{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto;}
+  .uno-opp{flex:1 1 0;min-width:0;padding:7px 9px;border-radius:12px;background:rgba(0,0,0,.36);
+    border:1px solid rgba(255,255,255,.09);}
+  .uno-opp.turn{border-color:#ffd166;box-shadow:0 0 0 1px rgba(255,209,102,.45),0 0 16px rgba(255,209,102,.16);}
+  .uno-opp .nm{font-size:11.5px;font-weight:800;color:#fff;display:flex;align-items:center;gap:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .uno-opp .nm .mini{display:inline-block;width:13px;height:19px;border-radius:4px;background:linear-gradient(135deg,#e94b4b,#2a5fd4);
+    border:1.5px solid #fff;flex:0 0 auto;}
+  .uno-opp .ct{font-size:11px;color:#ffd166;font-weight:800;margin-top:2px;}
+  .uno-opp .ct b{font-size:15px;}
+  .uno-opp .uno-tag{font-size:9.5px;color:#5fffb0;font-weight:900;margin-left:4px;}
+
+  .uno-mid{display:flex;gap:10px;align-items:center;justify-content:center;flex:0 0 auto;padding:4px 0;}
+  .uno-pile{display:flex;gap:12px;align-items:center;}
+  .uno-slot{width:58px;height:84px;border-radius:12px;display:grid;place-items:center;}
+  .uno-draw{width:58px;height:84px;border-radius:12px;border:2px dashed rgba(255,255,255,.4);background:rgba(255,255,255,.06);
+    color:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0;}
+  .uno-draw span{font-size:10.5px;color:rgba(255,255,255,.7);}
+  .uno-draw b{font-size:17px;font-weight:900;color:#ffd166;}
+  .uno-draw:disabled{opacity:.45;cursor:default;}
+  .uno-info{display:flex;flex-direction:column;gap:5px;align-items:flex-start;}
+  .uno-color-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+
+  .uno-card{position:relative;width:58px;height:84px;border-radius:11px;border:3px solid #fff;flex:0 0 auto;
+    display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.45);overflow:hidden;user-select:none;}
+  .uno-card .big{font:900 26px/1 inherit;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.45);}
+  .uno-card .big.sm{font-size:15px;letter-spacing:-.02em;}
+  .uno-card .cnr{position:absolute;font:900 10.5px/1 inherit;color:#fff;opacity:.95;}
+  .uno-card .cnr.tl{top:4px;left:5px;}
+  .uno-card .cnr.br{bottom:4px;right:5px;transform:rotate(180deg);}
+  .uno-card.cR{background:linear-gradient(150deg,#ef5350,#b71c1c);}
+  .uno-card.cY{background:linear-gradient(150deg,#ffd54f,#f9a825);}
+  .uno-card.cY .big,.uno-card.cY .cnr{color:#3a2600;text-shadow:none;}
+  .uno-card.cG{background:linear-gradient(150deg,#66bb6a,#1b5e20);}
+  .uno-card.cB{background:linear-gradient(150deg,#42a5f5,#0d47a1);}
+  .uno-card.cW{background:conic-gradient(from 40deg,#ef5350 0 25%,#ffd54f 25% 50%,#66bb6a 50% 75%,#42a5f5 75% 100%);}
+  .uno-card.back{background:repeating-linear-gradient(45deg,#1b2440 0 7px,#243056 7px 14px);}
+  .uno-card.back .big{font-size:13px;letter-spacing:.05em;color:#ffd166;transform:rotate(-8deg);}
+
+  .uno-handwrap{flex:1 1 auto;min-height:0;overflow-x:auto;overflow-y:hidden;display:flex;align-items:center;
+    padding:2px 0 4px;}
+  .uno-hand{display:flex;gap:7px;padding:0 2px;align-items:flex-end;}
+  .uno-hand .uno-card{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease;}
+  .uno-hand .uno-card.playable{box-shadow:0 0 0 2px #5fffb0,0 6px 16px rgba(95,255,176,.3);}
+  .uno-hand .uno-card.playable:active{transform:translateY(-10px) scale(1.04);}
+  .uno-hand .uno-card.dim{opacity:.52;filter:saturate(.7);cursor:default;}
+
+  .uno-log{flex:0 0 auto;font-size:11.5px;color:#ffe0b2;background:rgba(0,0,0,.36);border:1px solid rgba(255,255,255,.08);
+    border-radius:10px;padding:6px 10px;line-height:1.45;min-height:30px;max-height:52px;overflow:hidden;}
+  .uno-actions{display:flex;gap:8px;flex:0 0 auto;}
+  .uno-actions .gbtn{flex:1;height:38px;font-weight:800;}
+  .uno-actions .gbtn.hot{background:linear-gradient(135deg,#5fffb0,#38d9a9);border-color:transparent;color:#06231a;
+    animation:unoPulse .9s ease-in-out infinite;}
+  @keyframes unoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+  .uno-scores{flex:0 0 auto;display:flex;gap:7px;flex-wrap:wrap;font-size:11px;color:rgba(255,255,255,.72);}
+  .uno-scores span{background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.08);border-radius:9px;padding:4px 8px;}
+  .uno-scores span b{color:#ffd166;}
+
+  .uno-mask{position:fixed;inset:0;z-index:9;display:none;align-items:center;justify-content:center;padding:18px;
+    background:rgba(4,7,14,.78);backdrop-filter:blur(3px);}
+  .uno-mask.show{display:flex;animation:fade .14s ease;}
+  .uno-modal{width:100%;max-width:340px;background:linear-gradient(160deg,#16203a,#0d1526);border:1px solid rgba(255,255,255,.13);
+    border-radius:16px;padding:18px 16px;display:flex;flex-direction:column;gap:10px;box-shadow:0 18px 44px rgba(0,0,0,.6);}
+  .uno-modal-t{font-size:16px;font-weight:900;color:#ffd166;text-align:center;letter-spacing:.04em;}
+  .uno-modal-d{font-size:12.5px;color:rgba(255,255,255,.82);line-height:1.65;text-align:center;}
+  .uno-modal-row{display:flex;gap:8px;}
+  .uno-modal-row .gbtn{flex:1;height:38px;font-weight:800;}
+  .uno-colors{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+  .uno-cbtn{height:52px;border-radius:12px;border:2px solid #fff;color:#fff;font:900 15px inherit;cursor:pointer;}
+  .uno-cbtn.r{background:linear-gradient(150deg,#ef5350,#b71c1c);}
+  .uno-cbtn.y{background:linear-gradient(150deg,#ffd54f,#f9a825);color:#3a2600;}
+  .uno-cbtn.g{background:linear-gradient(150deg,#66bb6a,#1b5e20);}
+  .uno-cbtn.b{background:linear-gradient(150deg,#42a5f5,#0d47a1);}
+  .uno-cbtn:active{transform:scale(.96);}
+  .uno-help{font-size:12px;color:rgba(255,255,255,.84);line-height:1.75;max-height:46vh;overflow:auto;}
+  .uno-help b{color:#ffd166;}
+  .uno-target-row{display:flex;flex-direction:column;gap:7px;}
+  .uno-target-btn{height:40px;border-radius:11px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);
+    color:#fff;font:800 13px inherit;cursor:pointer;}
 </style>
 </head>
 <body class="atHome">
@@ -1063,7 +1161,7 @@
   <div id="minorBar" style="display:none;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:rgba(255,138,101,.14);border:1px solid rgba(255,138,101,.45);font-size:12.5px;line-height:1.55;color:#FFE0D2"></div>
 
   <div class="home-title">選擇玩法</div>
-  <div class="home-sub">與手機分享版一致的玩法與規則：俄羅斯方塊、彈珠機、抽獎、魚蝦蟹、老虎機。<br/>管理員 App 審批通過後，彈珠 / 代幣 / 積分會同步入帳。</div>
+  <div class="home-sub">與手機分享版一致的玩法與規則：俄羅斯方塊、UNO 牌、彈珠機、抽獎、魚蝦蟹、老虎機。<br/>管理員 App 審批通過後，彈珠 / 代幣 / 積分會同步入帳。</div>
 
   <div class="games">
     <button class="game wide" id="goTetris">
@@ -1079,6 +1177,20 @@
       <div>
         <b>彈珠機</b>
         <div class="d">42 顆木釘 · 5 個得分槽 · 最高 10 倍</div>
+      </div>
+    </button>
+    <button class="game wide" id="goUno">
+      <div class="ico">🃏</div>
+      <div>
+        <b>UNO 牌</b>
+        <div class="d">2–4 人 · 變色與 +4 質疑 · 四種村規可開</div>
+      </div>
+    </button>
+    <button class="game wide" id="goAutoSlot">
+      <div class="ico">🎰</div>
+      <div>
+        <b>自動拉老虎機</b>
+        <div class="d">長按或一鍵自動連續拉 · 未開通可即場購買 HK$1000</div>
       </div>
     </button>
     <button class="game" id="goLottery">
@@ -1146,6 +1258,118 @@
   <div class="home-note">VIP 與訂單狀態與雲端同步；網頁版的代幣餘額保存在本機瀏覽器。</div>
   <div class="home-note" style="margin-top:6px;"><a id="newSiteLink" href="https://kalokfung29-arch.github.io/" target="_blank" rel="noopener" style="color:#4ce0ff;text-decoration:underline;">新站入口：kalokfung29-arch.github.io</a></div>
   <div class="ver-tag" id="verTag">版本 —</div>
+</div>
+
+<!-- ============ UNO 牌（網頁分享版） ============ -->
+<div class="gscreen" id="unoScreen">
+  <div class="ghead">
+    <button class="gbtn" id="unoBack">返回</button>
+    <div class="ttl">UNO 牌</div>
+    <button class="gbtn gold" id="unoHelpBtn">規則</button>
+  </div>
+
+  <!-- 開局面板 -->
+  <div class="uno-start" id="unoStartPanel">
+    <div class="uno-logo">UNO</div>
+    <div class="uno-start-sub">2 至 4 人對戰 · 出完手牌得分 · 先滿 2500 分奪冠</div>
+    <div class="uno-pick" id="unoCounts">
+      <button class="uno-pick-btn on" data-n="2">2 人</button>
+      <button class="uno-pick-btn" data-n="3">3 人</button>
+      <button class="uno-pick-btn" data-n="4">4 人</button>
+    </div>
+    <div class="uno-rules" id="unoRuleList"></div>
+    <button class="btn main" id="unoGoBtn" style="width:100%;max-width:360px;">開始遊戲</button>
+    <div class="uno-note">手牌剩一張記得嗌 UNO，唔嗌會罰抽 2 張。<br/>網頁版進度只存在本機瀏覽器。</div>
+  </div>
+
+  <!-- 牌桌 -->
+  <div class="uno-table" id="unoTable" style="display:none">
+    <div class="uno-opps" id="unoOpps"></div>
+    <div class="uno-mid">
+      <div class="uno-pile">
+        <div id="unoDiscardSlot"></div>
+        <button class="uno-draw" id="unoDrawBtn"><span>牌庫</span><b id="unoDeckN">0</b></button>
+      </div>
+      <div class="uno-info">
+        <div class="chip-tag state" id="unoColorTag">顏色 —</div>
+        <div class="chip-tag blue" id="unoDirTag">方向 →</div>
+        <div class="chip-tag" id="unoPenTag" style="display:none">待罰 0</div>
+      </div>
+    </div>
+    <div class="uno-log" id="unoLog">開始遊戲</div>
+    <div class="uno-handwrap"><div class="uno-hand" id="unoHand"></div></div>
+    <div class="uno-actions">
+      <button class="gbtn" id="unoUnoBtn">嗌 UNO！</button>
+      <button class="gbtn" id="unoPassBtn">過</button>
+      <button class="gbtn" id="unoAutoBtn">自動玩</button>
+    </div>
+    <div class="uno-scores" id="unoScores"></div>
+  </div>
+
+  <!-- 選色 -->
+  <div class="uno-mask" id="unoColorMask">
+    <div class="uno-modal">
+      <div class="uno-modal-t">揀顏色</div>
+      <div class="uno-colors">
+        <button class="uno-cbtn r" data-c="R">紅</button>
+        <button class="uno-cbtn y" data-c="Y">黃</button>
+        <button class="uno-cbtn g" data-c="G">綠</button>
+        <button class="uno-cbtn b" data-c="B">藍</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- +4 質疑 -->
+  <div class="uno-mask" id="unoSuspectMask">
+    <div class="uno-modal">
+      <div class="uno-modal-t">對手出咗 +4</div>
+      <div class="uno-modal-d">接受就抽 4 張並停一輪；<br/>質疑成立（對手手上確有同色牌）對手自抽 4 張，質疑失敗你抽 6 張。</div>
+      <div class="uno-modal-row">
+        <button class="gbtn" id="unoAcceptBtn">接受罰 4 張</button>
+        <button class="gbtn gold" id="unoSuspectBtn">質疑！</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 出七換牌：揀對象 -->
+  <div class="uno-mask" id="unoSwapMask">
+    <div class="uno-modal">
+      <div class="uno-modal-t">出七換牌</div>
+      <div class="uno-modal-d">揀一位對手交換手牌</div>
+      <div class="uno-target-row" id="unoSwapTargets"></div>
+    </div>
+  </div>
+
+  <!-- 本局結算 -->
+  <div class="uno-mask" id="unoOverMask">
+    <div class="uno-modal">
+      <div class="uno-modal-t" id="unoOverTitle">本局結束</div>
+      <div class="uno-modal-d" id="unoOverDesc"></div>
+      <div class="uno-modal-row">
+        <button class="gbtn gold" id="unoNextBtn">下一局</button>
+        <button class="gbtn" id="unoOverExit">返回首頁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 規則 -->
+  <div class="uno-mask" id="unoHelpMask">
+    <div class="uno-modal">
+      <div class="uno-modal-t">UNO 規則</div>
+      <div class="uno-help">
+        <b>基本</b>：每人 7 張（二人局 14 張），先出完手牌為勝。<br/>
+        <b>出牌</b>：同色或同數字／同功能牌即可出。<br/>
+        <b>停</b>：下家停一輪。二人局反轉等同停。<br/>
+        <b>+2</b>：下家抽 2 張並停一輪。<br/>
+        <b>變色</b>：任意時候可出，出牌後指定顏色。<br/>
+        <b>+4</b>：手上無當前顏色牌才可出；下家可質疑。<br/>
+        <b>嗌 UNO</b>：手牌剩 1 張要嗌，漏嗌罰抽 2 張。<br/>
+        <b>計分</b>：出完者得分 = 其他人手牌點數（數字牌面值、功能牌 20、黑牌 50），先滿 2500 分奪冠。<br/>
+        <b>村規</b>：疊加（+2／+4 可累積反擊）、搶出（同色同數字可搶先出）、出七換牌、出零傳牌。
+      </div>
+      <button class="gbtn" id="unoHelpClose">明白</button>
+    </div>
+  </div>
 </div>
 
 <!-- ============ 魚蝦蟹（三骰骰寶） ============ -->
@@ -1241,6 +1465,7 @@
       </div>
     </div>
     <button class="pull-btn" id="slotPull">拉下開轉（5 個代幣）<br/><span style="font-size:11px;font-weight:600;opacity:.85">長按：自動拉</span></button>
+    <button class="mini-btn" id="slotAutoBtn" style="margin-top:10px;height:44px">自動拉：關</button>
     <button class="mini-btn" id="slotRecharge2" style="margin-top:10px;height:44px">充值代幣</button>
     <div class="paytable">賠率（由左起連續相同，含本金）：連 3 環 8 倍、連 4 環 40 倍、連 5 環 150 倍、連 6 環 600 倍</div>
   </div>
@@ -1318,11 +1543,12 @@
     <div class="rank-bar"><i id="rankBar" style="width:0%"></i></div>
   </div>
   <div class="rank-card">
-    <div class="sub" style="margin:0 0 8px">段位階梯 · 共 20 級（以歷史最高分晉級）</div>
+    <div class="sub" style="margin:0 0 8px">段位階梯 · 共 20 級（以積分晉級）</div>
     <div class="tier-grid" id="rankTiers"></div>
   </div>
   <div class="rank-card">
-    <div class="rank-row"><span class="k">最高分</span><span class="v" id="rankBest">0</span></div>
+    <div class="rank-row"><span class="k">段位分（＝積分）</span><span class="v" id="rankBest">0</span></div>
+    <div class="rank-row"><span class="k">遊戲最高分</span><span class="v" id="rankGameBest">0</span></div>
     <div class="rank-row"><span class="k">本機彈珠</span><span class="v" id="rankBalls">0</span></div>
     <div class="rank-row"><span class="k">本機代幣</span><span class="v" id="rankTokens">0</span></div>
     <div class="rank-row"><span class="k">本機積分</span><span class="v" id="rankPoints">0</span></div>
@@ -1333,7 +1559,7 @@
     <div class="sub" style="margin:0 0 6px">本機最近戰績</div>
     <div id="rankScores"><div class="sub">暫無記錄，先去玩一局俄羅斯方塊</div></div>
   </div>
-  <div class="paytable">分享版段位以「歷史最高分」計算，達到門檻自動晉級</div>
+  <div class="paytable">段位以「積分」計算（遊戲最高分只作保底），積分到帳後排行榜即時反映</div>
 </div>
 
 <!-- ============ 幸運派發 ============ -->
@@ -1448,6 +1674,10 @@
 
       <div class="sec-title">我的訂單</div>
       <div class="orders" id="ordersBox"><div class="empty">暫無訂單</div></div>
+
+      <!-- 商店最底部：自動拉老虎機購買（永久解鎖長按 / 一鍵自動連續拉） -->
+      <div class="sec-title">自動拉老虎機（永久解鎖 · HK$1000）</div>
+      <div class="grid2" id="autoSlotGrid"></div>
     </div>
   </div>
 </div>
@@ -2445,6 +2675,28 @@
         payload: { kind:"recharge", device_id: deviceFor(), nickname: nickFor(), balls: t[0], price: -t[1], status: "pending" }
       });
     });
+
+    /* 商店最底：自動拉老虎機購買（與老虎機頁「前往購買」同一訂單流程） */
+    const asg = $("autoSlotGrid");
+    if (asg){
+      const owned = slotAutoUnlocked();
+      asg.innerHTML =
+        '<div class="tier' + (owned ? "" : " best") + '" data-autoslot="1">' +
+          (owned ? '<span class="tag">已開通</span>' : '<span class="tag">HK$1000</span>') +
+          "<b>自動拉老虎機</b>" +
+          '<div class="p">HK$ 1000</div>' +
+          '<div class="d">' + (owned ? "已開通：老虎機長按「拉下」即可自動連續旋轉" : "永久解鎖長按自動拉（一次付費）") + "</div>" +
+        "</div>";
+      asg.addEventListener("click", e => {
+        const el = e.target.closest("[data-autoslot]"); if (!el) return;
+        if (slotAutoUnlocked()){ toast("自動拉已開通，可直接長按「拉下」使用"); return; }
+        openPay({
+          kind: "vip", title: "自動拉老虎機",
+          item: "自動拉老虎機（永久）", amount: "HK$ 1000",
+          payload: { kind:"vip", device_id: deviceFor(), nickname: nickFor(), level: "AUTO_SLOT", status: "pending" }
+        });
+      });
+    }
   }
 
   function openPay(o){
@@ -3437,6 +3689,14 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     Array.prototype.forEach.call(document.querySelectorAll("#slotScreen [data-bet]"), b => {
       b.disabled = slotSpinning;
     });
+    const ab = $("slotAutoBtn");
+    if (ab){
+      const owned = slotAutoUnlocked();
+      ab.textContent = slotAuto ? "自動拉：開（點擊停止）" : (owned ? "自動拉：關（點擊開啟）" : "自動拉：未開通（點擊購買）");
+      ab.style.background = slotAuto ? "#2e7d32" : (owned ? "" : "#b71c1c");
+      ab.style.borderColor = slotAuto ? "#2e7d32" : (owned ? "" : "#b71c1c");
+      ab.style.fontWeight = "800";
+    }
     paintTokens();
     paintVip();
     const reels = document.querySelectorAll("#slotReels .reel");
@@ -3503,6 +3763,16 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   }
 
   let slotPressTimer = null, slotSuppress = false;
+  /* 自動拉開關（長按「拉下」與「自動拉」按鈕共用同一份狀態） */
+  function slotToggleAuto(){
+    if (!slotAutoUnlocked()){ $("ovAutoLock").classList.add("show"); return; }
+    slotAuto = !slotAuto;
+    slotSaveAutoOn();
+    $("slotStatus").className = "slot-status";
+    $("slotStatus").textContent = slotAuto ? "自動模式已開啟：再點一次或長按可停止" : "自動模式已關閉";
+    slotPaint();
+    if (slotAuto) slotPull();
+  }
   const pullEl = $("slotPull");
   function pressStart(e){
     if (e.type === "mousedown" && e.cancelable) e.preventDefault();
@@ -3510,13 +3780,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     slotPressTimer = setTimeout(() => {
       slotPressTimer = null;
       slotSuppress = true;
-      if (!slotAutoUnlocked()){ $("ovAutoLock").classList.add("show"); return; }
-      slotAuto = !slotAuto;
-      slotSaveAutoOn();
-      $("slotStatus").className = "slot-status";
-      $("slotStatus").textContent = slotAuto ? "自動模式已開啟：長按可停止" : "自動模式已關閉";
-      slotPaint();
-      if (slotAuto) slotPull();
+      slotToggleAuto();
     }, 600);
   }
   function pressEnd(){
@@ -3547,6 +3811,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     slotPull(true);
   });
   $("autoCancel").addEventListener("click", () => $("ovAutoLock").classList.remove("show"));
+  if ($("slotAutoBtn")) $("slotAutoBtn").addEventListener("click", slotToggleAuto);
   $("autoBuy").addEventListener("click", () => {
     $("ovAutoLock").classList.remove("show");
     openPay({
@@ -3972,22 +4237,24 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
   function paintRank(){
     if (!$("rankTitle")) return;
-    const s = best;
+    /* 段位分數 = 積分（與手機版 rankNameFor(rankScore) 同一口徑）；遊戲最高分只作保底，避免純玩不買積分的人掉段 */
+    const s = Math.max(best, points);
     let title = "普通會員", prev = 0, next = null, curIdx = 0;
     RANK_TIERS.forEach((t, i) => { if (s >= t[0]){ title = t[1]; prev = t[0]; curIdx = i + 1; } });
     for (let i = 0; i < RANK_TIERS.length; i++){
       if (s < RANK_TIERS[i][0]){ next = RANK_TIERS[i][0]; break; }
     }
     $("rankTitle").textContent = title;
-    $("rankBest").textContent = best;
+    $("rankBest").textContent = s;
+    if ($("rankGameBest")) $("rankGameBest").textContent = best;
     if (next === null){
-      $("rankProg").textContent = s + " 分｜已達最高段位";
+      $("rankProg").textContent = s + " 分（積分 " + points + "）｜已達最高段位";
       $("rankBar").style.width = "100%";
     }else{
       const span = next - prev;
       const pct = span > 0 ? Math.max(0, Math.min(100, (s - prev) / span * 100)) : 0;
       const nextName = RANK_TIERS.filter(t => t[0] === next)[0][1];
-      $("rankProg").textContent = s + " / " + next + "（還差 " + (next - s) + " 分升" + nextName + "）";
+      $("rankProg").textContent = s + " / " + next + "（積分 " + points + "，還差 " + (next - s) + " 分升" + nextName + "）";
       $("rankBar").style.width = pct.toFixed(1) + "%";
     }
     // 段位階梯（普通會員 + 19 段位 = 20 級）
@@ -4053,7 +4320,8 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   /* ---------- 頁面切換 ---------- */
   function goHome(){
     document.body.classList.add("atHome");
-    ["fishScreen","slotScreen","pinScreen","lotScreen","rankScreen"].forEach(id => {
+    if (window.__unoPause) { try { window.__unoPause(); } catch(e){} }
+    ["fishScreen","slotScreen","pinScreen","lotScreen","rankScreen","unoScreen"].forEach(id => {
       if ($(id)) $(id).classList.remove("show");
     });
     ["ovStart","ovPause","ovOver"].forEach(id => $(id).classList.remove("show"));
@@ -4941,7 +5209,16 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   // 首頁已改為「賭博合集」入口，舊的獨立按鈕若存在仍保留綁定（向後相容）
   if ($("goFish")) $("goFish").addEventListener("click", openFish);
   if ($("goSlot")) $("goSlot").addEventListener("click", openSlot);
+  /* 首頁「自動拉老虎機」直達：進老虎機頁，未開通會彈購買引導 */
+  if ($("goAutoSlot")) $("goAutoSlot").addEventListener("click", function(){
+    if (safeModeOn()){ safeCalcOpen("unlock", "autoslot"); return; }
+    openSlot();
+    setTimeout(function(){
+      if (isSuper() && !slotAutoUnlocked()){ if ($("ovAutoLock")) $("ovAutoLock").classList.add("show"); }
+    }, 300);
+  });
   $("goPin").addEventListener("click", openPin);
+  $("goUno").addEventListener("click", function(){ if (window.__unoOpen) window.__unoOpen(); });
   $("goLottery").addEventListener("click", openLottery);
   $("goRank").addEventListener("click", openRank);
   ["pinBack","pinGateBack"].forEach(id => $(id).addEventListener("click", goHome));
@@ -7404,10 +7681,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 </script>
 <script>
 /* ===== 版本號與防舊版快取 ===== */
-const APP_VERSION = "2026.11.06-SAFE";
+const APP_VERSION = "2026.11.12-AUTOSLOT";
 (function(){
   const tag = document.getElementById("verTag");
-  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 已含安全模式";
+  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 已含 UNO 牌 · 自動拉入口";
   /* 版本一變就自動強制重載一次（帶時間戳繞過瀏覽器快取），之後不再重載 */
   try {
     const KEY = "tetris_web_ver";
@@ -7480,5 +7757,685 @@ const APP_VERSION = "2026.11.06-SAFE";
   </div>
 </div>
 
+<script>
+/* ===== UNO 牌（網頁分享版引擎，規則與手機分享版 App 一致） ===== */
+(function(){
+  var q = function(id){ return document.getElementById(id); };
+  var COLORS = ['R','Y','G','B'];
+  var CLAB = { R:'紅', Y:'黃', G:'綠', B:'藍' };
+  var CHEX = { R:'#ef5350', Y:'#ffd54f', G:'#66bb6a', B:'#42a5f5' };
+  var K = { NUM:'NUM', SKIP:'SKIP', REVERSE:'REVERSE', DRAW2:'DRAW2', WILD:'WILD', WILD4:'WILD4' };
+  var KLAB = { NUM:'', SKIP:'停', REVERSE:'反', DRAW2:'+2', WILD:'變色', WILD4:'+4' };
+  var TARGET = 2500;
+  var UID = 1;
+  var S = null;              /* 遊戲狀態 */
+  var aiTimer = null;
+  var cfg = {
+    count: 2,
+    rules: { stack:false, jumpIn:false, sevenSwap:false, zeroPass:false }
+  };
+  var RULE_DEF = [
+    ['stack','疊加罰牌','+2 可疊 +2／+4，累積到下家一次抽'],
+    ['jumpIn','搶出','手上有同色同數字牌可隨時搶先出'],
+    ['sevenSwap','出七換牌','出 7 時可同一位對手交換手牌'],
+    ['zeroPass','出零傳牌','出 0 時全部人按方向傳手牌']
+  ];
+
+  /* ---------- 牌庫與工具 ---------- */
+  function mkDeck(){
+    var d = [], i, n, c;
+    for (var ci=0; ci<COLORS.length; ci++){
+      c = COLORS[ci];
+      d.push({ u:UID++, c:c, k:K.NUM, n:0 });
+      for (n=1; n<=9; n++){
+        d.push({ u:UID++, c:c, k:K.NUM, n:n });
+        d.push({ u:UID++, c:c, k:K.NUM, n:n });
+      }
+      for (i=0; i<2; i++){
+        d.push({ u:UID++, c:c, k:K.SKIP });
+        d.push({ u:UID++, c:c, k:K.REVERSE });
+        d.push({ u:UID++, c:c, k:K.DRAW2 });
+      }
+    }
+    for (i=0; i<4; i++){
+      d.push({ u:UID++, c:null, k:K.WILD });
+      d.push({ u:UID++, c:null, k:K.WILD4 });
+    }
+    return d;
+  }
+  function shuffle(a){
+    for (var i=a.length-1; i>0; i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function top(){ return S.discard[S.discard.length-1]; }
+  function pts(c){ return c.k===K.NUM ? c.n : ((c.k===K.WILD||c.k===K.WILD4) ? 50 : 20); }
+  function lab(c){ return c.k===K.NUM ? String(c.n) : KLAB[c.k]; }
+  function fullName(c){ return (c.c ? CLAB[c.c] : '黑') + lab(c); }
+  function playable(card, activeColor, t){
+    if (card.c === null) return true;
+    if (card.c === activeColor) return true;
+    if (t.c !== null && card.k === t.k) return card.k !== K.NUM || card.n === t.n;
+    return false;
+  }
+
+  /* ---------- 狀態操作 ---------- */
+  function advance(steps){
+    var n = S.players.length, t = S.turn;
+    for (var i=0; i<steps; i++) t = ((t + S.dir) % n + n) % n;
+    S.turn = t; S.drawnThisTurn = false;
+  }
+  function peekNext(steps){
+    var n = S.players.length, t = S.turn;
+    for (var i=0; i<steps; i++) t = ((t + S.dir) % n + n) % n;
+    return t;
+  }
+  function refill(){
+    if (S.deck.length) return;
+    if (S.discard.length <= 1) return;
+    var t = S.discard.pop();
+    S.deck = shuffle(S.discard.slice());
+    S.discard = [t];
+    S.log += '｜牌庫耗盡，棄牌重洗成新牌庫';
+  }
+  function give(pi, n){
+    var got = [];
+    for (var i=0; i<n; i++){
+      refill();
+      if (S.deck.length) got.push(S.deck.shift());
+    }
+    if (!got.length) return;
+    S.players[pi].hand = S.players[pi].hand.concat(got);
+  }
+  function newGame(count, names, scores, roundNo){
+    var deck = shuffle(mkDeck());
+    var deal = count === 2 ? 14 : 7;
+    var hands = [], i, k;
+    for (i=0; i<count; i++) hands.push([]);
+    for (k=0; k<deal; k++){
+      for (i=0; i<count; i++){ if (deck.length) hands[i].push(deck.shift()); }
+    }
+    var start = deck.shift(), guard = 0;
+    while (start.c === null && guard < 500){ deck.push(start); shuffle(deck); start = deck.shift(); guard++; }
+    var sc = (scores || []).slice();
+    while (sc.length < count) sc.push(0);
+    S = {
+      players: names.map(function(nm, idx){ return { name:nm, isAI: idx !== 0, hand: hands[idx] }; }),
+      deck: deck, discard: [start], turn: 0, dir: 1, activeColor: start.c || 'R',
+      pending: 0, pendingKind: null,
+      unoShout: [], scores: sc, roundNo: roundNo || 1,
+      phase: 'PLAY', log: '起始牌：' + fullName(start),
+      lastPlayer: -1, drawnThisTurn: false, rules: cfg.rules,
+      win: null, champion: null, suspectFrom: null, suspectValid: false,
+      sevenSwapBy: null, cont: null
+    };
+    for (i=0; i<count; i++){ S.unoShout.push(false); }
+    if (start.k === K.SKIP){
+      S.log += '｜先手停一輪（起始牌為停）'; advance(1);
+    } else if (start.k === K.REVERSE){
+      if (count === 2){ S.log += '｜二人局起始反轉等同停，先手停一輪'; advance(1); }
+      else { S.dir = -1; S.log += '｜起始反轉，方向改為逆時針'; }
+    } else if (start.k === K.DRAW2){
+      give(0, 2); S.log += '｜起始 +2，先手抽 2 張並停一輪'; advance(1);
+    }
+  }
+  function penaltyCheck(){
+    var lp = S.lastPlayer;
+    if (lp < 0 || lp >= S.players.length) return;
+    if (S.players[lp].hand.length === 1 && !S.unoShout[lp]){
+      give(lp, 2);
+      S.unoShout[lp] = true;
+      S.log += '｜' + S.players[lp].name + ' 未嗌 UNO，罰抽 2 張';
+    }
+  }
+  function finishRound(winner){
+    var gain = 0;
+    S.players.forEach(function(p, i){
+      if (i !== winner) gain += p.hand.reduce(function(a, c){ return a + pts(c); }, 0);
+    });
+    S.scores[winner] += gain;
+    S.win = winner;
+    S.log = S.players[winner].name + ' 出完手牌，本局得 ' + gain + ' 分';
+    if (S.scores[winner] >= TARGET){ S.champion = winner; S.phase = 'CHAMPION'; }
+    else { S.phase = 'ROUND_OVER'; }
+  }
+  function legalIdx(pi){
+    var hand = S.players[pi].hand, t = top(), res = [];
+    hand.forEach(function(c, i){
+      var ok;
+      if (S.pending > 0 && S.rules.stack){
+        ok = (S.pendingKind === K.DRAW2 && c.k === K.DRAW2) || c.k === K.WILD4;
+      } else if (S.pending > 0){
+        ok = false;
+      } else {
+        ok = playable(c, S.activeColor, t);
+      }
+      if (ok) res.push(i);
+    });
+    return res;
+  }
+  function aiPickColor(pi){
+    var hand = S.players[pi].hand;
+    if (!hand.length) return 'R';
+    var counts = { R:0, Y:0, G:0, B:0 };
+    hand.forEach(function(c){ if (c.c) counts[c.c]++; });
+    var best = 'R';
+    COLORS.forEach(function(c){ if (counts[c] > counts[best]) best = c; });
+    return best;
+  }
+  function aiChoose(pi){
+    var hand = S.players[pi].hand, idxs = legalIdx(pi);
+    if (!idxs.length) return -1;
+    var colored = idxs.filter(function(i){ return hand[i].c !== null; });
+    if (colored.length){
+      var colorCounts = { R:0, Y:0, G:0, B:0 };
+      hand.forEach(function(c){ if (c.c) colorCounts[c.c]++; });
+      var bestIdx = colored[0], bestP = -1, bestC = -1;
+      colored.forEach(function(i){
+        var p = pts(hand[i]), cc = colorCounts[hand[i].c] || 0;
+        if (p > bestP || (p === bestP && cc > bestC)){ bestIdx = i; bestP = p; bestC = cc; }
+      });
+      return bestIdx;
+    }
+    if (hand.length > 3) return -2;
+    return idxs[0];
+  }
+  function swapHands(a, b){
+    var ha = S.players[a].hand, hb = S.players[b].hand;
+    S.players[a].hand = hb; S.players[b].hand = ha;
+    S.log += '｜村規：' + S.players[a].name + ' 與 ' + S.players[b].name + ' 交換手牌';
+  }
+  function passAllHands(){
+    var n = S.players.length;
+    if (n < 2) return;
+    var hands = S.players.map(function(p){ return p.hand; });
+    var np = S.players.map(function(p, i){
+      var src = ((i - S.dir) % n + n) % n;
+      return { name:p.name, isAI:p.isAI, hand: hands[src] };
+    });
+    S.players = np;
+    S.log += '｜村規：出零，全部手牌按方向傳給下家';
+  }
+  function resolveWild4(victim, offenderHadColor, doSuspectIn){
+    var offender = S.lastPlayer;
+    var doSuspect;
+    if (S.players[victim].isAI){
+      doSuspect = offenderHadColor ? doSuspectIn : (doSuspectIn && Math.random() < 0.5);
+    } else {
+      doSuspect = doSuspectIn;
+    }
+    if (!doSuspect){
+      give(victim, 4);
+      S.phase = 'PLAY'; S.suspectFrom = null;
+      S.log += '｜' + S.players[victim].name + ' 接受罰牌，抽 4 張並停一輪';
+      advance(2);
+      return;
+    }
+    if (offenderHadColor){
+      give(offender, 4);
+      S.turn = victim; S.phase = 'PLAY'; S.suspectFrom = null; S.drawnThisTurn = false;
+      S.log += '｜質疑成立！' + S.players[offender].name + ' 手上確有' + CLAB[S.activeColor] + '色，自抽 4 張，出牌權退回 ' + S.players[victim].name;
+    } else {
+      give(victim, 6);
+      S.phase = 'PLAY'; S.suspectFrom = null;
+      S.log += '｜質疑失敗，' + S.players[victim].name + ' 抽 6 張並停一輪';
+      advance(2);
+    }
+  }
+  function finishCardEffect(pi, card, newColor, colorBefore, offenderHadColor){
+    if (S.rules.zeroPass && card.k === K.NUM && card.n === 0) passAllHands();
+    switch (card.k){
+      case K.NUM:
+        advance(1);
+        break;
+      case K.SKIP:
+        S.log += '｜下家停一輪'; advance(2);
+        break;
+      case K.REVERSE:
+        if (S.players.length === 2){ S.log += '｜二人局反轉等同停，下家停一輪'; advance(2); }
+        else { S.dir = -S.dir; S.log += '｜方向反轉'; advance(1); }
+        break;
+      case K.DRAW2:
+        if (S.rules.stack){
+          S.pending += 2; S.pendingKind = K.DRAW2;
+          S.log += '｜罰牌累積至 ' + S.pending + ' 張';
+          advance(1);
+        } else {
+          var v2 = peekNext(1);
+          give(v2, 2);
+          S.log += '｜下家抽 2 張並停一輪';
+          advance(2);
+        }
+        break;
+      case K.WILD:
+        S.log += '｜變色為' + CLAB[newColor];
+        advance(1);
+        break;
+      case K.WILD4:
+        if (S.rules.stack){
+          S.pending += 4; S.pendingKind = K.WILD4;
+          S.log += '｜罰牌累積至 ' + S.pending + ' 張';
+          advance(1);
+        } else {
+          var victim = peekNext(1);
+          if (S.players[victim].isAI){
+            resolveWild4(victim, offenderHadColor, true);
+          } else {
+            S.phase = 'SUSPECT';
+            S.suspectFrom = victim;
+            S.suspectValid = offenderHadColor;
+            S.log += '｜' + S.players[victim].name + ' 被罰四張，可選擇接受或質疑';
+          }
+        }
+        break;
+    }
+  }
+  function playCard(pi, idx, chosen, jumpIn){
+    if (!S || S.phase !== 'PLAY') return;
+    if (!jumpIn && S.turn !== pi) return;
+    var pl = S.players[pi];
+    if (!pl) return;
+    var card = pl.hand[idx];
+    if (!card) return;
+    var colorBefore = S.activeColor;
+    var inPenalty = S.pending > 0;
+    var t = top();
+    var legal;
+    if (inPenalty && S.rules.stack){
+      legal = (S.pendingKind === K.DRAW2 && card.k === K.DRAW2) || card.k === K.WILD4;
+    } else if (inPenalty){
+      legal = false;
+    } else if (jumpIn){
+      legal = card.c !== null && card.c === colorBefore && card.k === t.k && (card.k !== K.NUM || card.n === t.n);
+    } else {
+      legal = playable(card, colorBefore, t);
+    }
+    if (!legal){ S.log = '這張牌現在出不了（需同色、同數字或同功能）'; return; }
+    var offenderHadColor = pl.hand.some(function(x){ return x.c === colorBefore; });
+    if (card.k === K.WILD4 && !inPenalty && offenderHadColor){
+      S.log = '手上有' + CLAB[colorBefore] + '色牌，不能出 +4'; return;
+    }
+    if (card.c === null && !chosen) return;
+    var newColor = chosen || card.c || colorBefore;
+
+    pl.hand = pl.hand.filter(function(_, i){ return i !== idx; });
+    S.discard.push(card);
+    S.lastPlayer = pi;
+    S.unoShout[pi] = false;
+    S.drawnThisTurn = false;
+    S.activeColor = newColor;
+    S.phase = 'PLAY';
+    S.log = pl.name + ' 出 ' + fullName(card);
+
+    if (pl.hand.length === 0){ finishRound(pi); return; }
+
+    /* 村規：出七換牌 */
+    if (S.rules.sevenSwap && card.k === K.NUM && card.n === 7 && S.players.length > 1){
+      if (pl.isAI){
+        var target = -1, min = 1e9;
+        S.players.forEach(function(p, i){ if (i !== pi && p.hand.length < min){ min = p.hand.length; target = i; } });
+        if (target >= 0) swapHands(pi, target);
+      } else {
+        S.sevenSwapBy = pi;
+        S.cont = { pi:pi, card:card, newColor:newColor, colorBefore:colorBefore, offenderHadColor:offenderHadColor };
+        return;
+      }
+    }
+    finishCardEffect(pi, card, newColor, colorBefore, offenderHadColor);
+  }
+  function drawFor(pi){
+    if (!S || S.phase !== 'PLAY' || S.turn !== pi) return;
+    if (S.pending > 0){
+      var n = S.pending;
+      give(pi, n);
+      S.pending = 0; S.pendingKind = null;
+      S.log += '｜' + S.players[pi].name + ' 抽 ' + n + ' 張並停一輪';
+      advance(1);
+      return;
+    }
+    if (S.drawnThisTurn){ S.log = '本回合已抽過牌，只能出牌或按「過」'; return; }
+    var before = S.players[pi].hand.length;
+    give(pi, 1);
+    if (S.players[pi].hand.length === before){ S.log = '牌庫已空，無法抽牌'; return; }
+    S.drawnThisTurn = true;
+    S.log += '｜' + S.players[pi].name + ' 抽一張牌';
+  }
+  function passTurn(pi){
+    if (!S || S.phase !== 'PLAY' || S.turn !== pi) return;
+    if (!S.drawnThisTurn){ S.log = '尚未抽牌，不能過'; return; }
+    S.log += '｜' + S.players[pi].name + ' 抽牌後選擇過';
+    advance(1);
+  }
+  function callUno(pi){
+    if (S.players[pi].hand.length > 2){ S.log = '手牌還多，暫不用嗌 UNO'; return; }
+    S.unoShout[pi] = true;
+    S.log = S.players[pi].name + '：UNO！';
+  }
+  function aiStep(){
+    penaltyCheck();
+    if (S.phase !== 'PLAY') return;
+    var pi = S.turn, p = S.players[pi];
+    if (!p || !p.isAI) return;
+    if (p.hand.length === 1 && !S.unoShout[pi]) callUno(pi);
+    var idx = aiChoose(pi);
+    if (idx === -2 && S.drawnThisTurn){
+      var picks = legalIdx(pi);
+      if (!picks.length){ passTurn(pi); return; }
+      var pick = picks[0], pc = p.hand[pick];
+      playCard(pi, pick, pc.c === null ? aiPickColor(pi) : null, false);
+      return;
+    }
+    if (idx === -2){ drawFor(pi); return; }
+    if (idx < 0){
+      if (S.pending > 0){ drawFor(pi); return; }
+      if (S.drawnThisTurn){ passTurn(pi); return; }
+      drawFor(pi);
+      if (S.phase !== 'PLAY') return;
+      var idx2 = aiChoose(pi);
+      if (idx2 < 0 || idx2 === -2){ passTurn(pi); return; }
+      var c2 = p.hand[idx2];
+      playCard(pi, idx2, c2.c === null ? aiPickColor(pi) : null, false);
+      return;
+    }
+    var card = p.hand[idx];
+    playCard(pi, idx, card.c === null ? aiPickColor(pi) : null, false);
+    var lp = S.lastPlayer;
+    if (S.phase === 'PLAY' && lp >= 0 && S.players[lp] && S.players[lp].hand.length === 1 && !S.unoShout[lp]) callUno(lp);
+  }
+  function tick(){
+    clearTimeout(aiTimer);
+    if (!S || S.phase !== 'PLAY') return;
+    if (!S.players[S.turn] || !S.players[S.turn].isAI) return;
+    aiTimer = setTimeout(function(){
+      if (!S || S.phase !== 'PLAY') return;
+      aiStep();
+      paint();
+      tick();
+    }, 620);
+  }
+
+  /* ---------- 渲染 ---------- */
+  function cardHTML(c, extraCls){
+    var cls = 'uno-card ' + (c.c ? 'c' + c.c : 'cW') + (extraCls ? ' ' + extraCls : '');
+    var l = lab(c);
+    var bigCls = l.length > 1 ? 'big sm' : 'big';
+    return '<div class="' + cls + '">' +
+      '<span class="cnr tl">' + l + '</span>' +
+      '<span class="' + bigCls + '">' + l + '</span>' +
+      '<span class="cnr br">' + l + '</span></div>';
+  }
+  function backHTML(){
+    return '<div class="uno-card back"><span class="big">UNO</span></div>';
+  }
+  function paint(){
+    if (!S) return;
+    /* 對手區 */
+    var ops = '';
+    S.players.forEach(function(p, i){
+      if (i === 0) return;
+      ops += '<div class="uno-opp' + (S.turn === i && S.phase === 'PLAY' ? ' turn' : '') + '">' +
+        '<div class="nm"><span class="mini"></span>' + p.name +
+        (p.hand.length === 1 && S.unoShout[i] ? '<span class="uno-tag">UNO</span>' : '') + '</div>' +
+        '<div class="ct"><b>' + p.hand.length + '</b> 張</div></div>';
+    });
+    q('unoOpps').innerHTML = ops || '<div class="uno-opp"><div class="nm">單人練習</div></div>';
+
+    /* 棄牌堆 + 牌庫 */
+    q('unoDiscardSlot').innerHTML = cardHTML(top());
+    q('unoDeckN').textContent = S.deck.length;
+
+    /* 資訊列 */
+    var dot = '<span class="uno-color-dot" style="background:' + (CHEX[S.activeColor] || '#888') + '"></span>';
+    q('unoColorTag').innerHTML = dot + '顏色 ' + (CLAB[S.activeColor] || '—');
+    q('unoDirTag').textContent = '方向 ' + (S.dir === 1 ? '順時針 →' : '逆時針 ←');
+    var penTag = q('unoPenTag');
+    if (S.pending > 0){ penTag.style.display = 'inline-block'; penTag.textContent = '待罰 ' + S.pending + ' 張'; }
+    else { penTag.style.display = 'none'; }
+
+    /* 手牌 */
+    var hand = S.players[0].hand;
+    var legalSet = {};
+    if (S.phase === 'PLAY'){
+      if (S.turn === 0){
+        legalIdx(0).forEach(function(i){ legalSet[i] = 1; });
+        if (S.pending > 0 && !S.rules.stack) legalSet = {};
+      } else if (S.rules.jumpIn && S.pending === 0){
+        var t = top();
+        hand.forEach(function(c, i){
+          if (c.c !== null && c.c === S.activeColor && c.k === t.k && (c.k !== K.NUM || c.n === t.n)) legalSet[i] = 1;
+        });
+      }
+    }
+    var hh = '';
+    hand.forEach(function(c, i){
+      var cls = legalSet[i] ? 'playable' : (S.phase === 'PLAY' && S.turn === 0 ? 'dim' : '');
+      hh += cardHTML(c, cls).replace('<div class="uno-card', '<div data-idx="' + i + '" class="uno-card');
+    });
+    q('unoHand').innerHTML = hh || '<div class="uno-note">手上冇牌</div>';
+
+    /* 日誌與按鈕 */
+    q('unoLog').textContent = S.log;
+    var unoBtn = q('unoUnoBtn');
+    var hot = (hand.length <= 2 && !S.unoShout[0] && S.phase === 'PLAY');
+    unoBtn.className = 'gbtn' + (hot ? ' hot' : '');
+    var drawBtn = q('unoDrawBtn');
+    drawBtn.disabled = !(S.phase === 'PLAY' && S.turn === 0);
+    q('unoPassBtn').disabled = !(S.phase === 'PLAY' && S.turn === 0 && S.drawnThisTurn);
+
+    /* 分數 */
+    var sc = '';
+    S.players.forEach(function(p, i){
+      sc += '<span>' + (i === 0 ? '你' : p.name) + ' <b>' + S.scores[i] + '</b></span>';
+    });
+    q('unoScores').innerHTML = sc + '<span>第 ' + S.roundNo + ' 局 · 目標 ' + TARGET + '</span>';
+
+    /* 彈層 */
+    q('unoSuspectMask').classList.toggle('show', S.phase === 'SUSPECT');
+    var swapMask = q('unoSwapMask');
+    if (S.sevenSwapBy !== null && S.sevenSwapBy !== undefined){
+      var tb = '';
+      S.players.forEach(function(p, i){
+        if (i === S.sevenSwapBy) return;
+        tb += '<button class="uno-target-btn" data-swap="' + i + '">' + p.name + '（' + p.hand.length + ' 張）</button>';
+      });
+      q('unoSwapTargets').innerHTML = tb;
+      swapMask.classList.add('show');
+    } else {
+      swapMask.classList.remove('show');
+    }
+    var overMask = q('unoOverMask');
+    if (S.phase === 'ROUND_OVER' || S.phase === 'CHAMPION'){
+      var win = S.win;
+      var isMe = win === 0;
+      q('unoOverTitle').textContent = S.phase === 'CHAMPION' ? (isMe ? '你奪冠！' : S.players[win].name + ' 奪冠') : (isMe ? '你贏咗今局！' : S.players[win].name + ' 贏咗今局');
+      var lines = S.players.map(function(p, i){ return (i === 0 ? '你' : p.name) + '：' + S.scores[i] + ' 分'; }).join('　');
+      q('unoOverDesc').innerHTML = S.players[win].name + ' 出完手牌。' + (S.phase === 'CHAMPION' ? '<br/>已達 ' + TARGET + ' 分，賽事結束。' : '') + '<br/>' + lines;
+      q('unoNextBtn').textContent = S.phase === 'CHAMPION' ? '再開新賽事' : '下一局';
+      overMask.classList.add('show');
+    } else {
+      overMask.classList.remove('show');
+    }
+  }
+
+  /* ---------- 開局面板 ---------- */
+  function renderRules(){
+    var box = q('unoRuleList');
+    if (!box) return;
+    box.innerHTML = RULE_DEF.map(function(r){
+      return '<div class="uno-rule' + (cfg.rules[r[0]] ? ' on' : '') + '" data-rule="' + r[0] + '">' +
+        '<span class="bx">✓</span><span class="tx">' + r[1] + '<small>' + r[2] + '</small></span></div>';
+    }).join('');
+    box.querySelectorAll('.uno-rule').forEach(function(el){
+      el.addEventListener('click', function(){
+        var kk = el.getAttribute('data-rule');
+        cfg.rules[kk] = !cfg.rules[kk];
+        el.classList.toggle('on', cfg.rules[kk]);
+      });
+    });
+  }
+  function startGame(){
+    var names = ['你'];
+    var aiNames = ['阿寶', '小美', '阿強'];
+    for (var i=1; i<cfg.count; i++) names.push(aiNames[i-1]);
+    newGame(cfg.count, names, null, 1);
+    q('unoStartPanel').style.display = 'none';
+    q('unoTable').style.display = 'flex';
+    paint();
+    tick();
+  }
+
+  /* ---------- 事件 ---------- */
+  function bind(){
+    if (!q('unoScreen')) return;
+    q('unoBack').addEventListener('click', function(){
+      if (typeof window.goHome === 'function') window.goHome();
+      else { document.body.classList.add('atHome'); q('unoScreen').classList.remove('show'); }
+    });
+    q('unoCounts').querySelectorAll('.uno-pick-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        cfg.count = parseInt(b.getAttribute('data-n'), 10) || 2;
+        q('unoCounts').querySelectorAll('.uno-pick-btn').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+      });
+    });
+    renderRules();
+    q('unoGoBtn').addEventListener('click', startGame);
+    q('unoHand').addEventListener('click', function(e){
+      var el = e.target.closest('[data-idx]');
+      if (!el) return;
+      onHandTap(parseInt(el.getAttribute('data-idx'), 10));
+    });
+    q('unoDrawBtn').addEventListener('click', function(){
+      drawFor(0); paint(); tick();
+    });
+    q('unoPassBtn').addEventListener('click', function(){
+      passTurn(0); paint(); tick();
+    });
+    q('unoUnoBtn').addEventListener('click', function(){
+      if (!S) return;
+      callUno(0); paint(); tick();
+    });
+    q('unoAutoBtn').addEventListener('click', function(){
+      if (!S) return;
+      S.log = '自動玩係 App 專屬功能：請下載 App，喺首頁「自動玩」中心解鎖後使用。';
+      paint();
+    });
+    q('unoColorMask').querySelectorAll('.uno-cbtn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var c = b.getAttribute('data-c');
+        var p = window.__unoChosen;
+        q('unoColorMask').classList.remove('show');
+        if (!p) return;
+        playCard(p.pi, p.idx, c, p.jumpIn);
+        paint(); tick();
+      });
+    });
+    q('unoAcceptBtn').addEventListener('click', function(){
+      if (!S || S.phase !== 'SUSPECT') return;
+      resolveWild4(S.suspectFrom, S.suspectValid, false);
+      paint(); tick();
+    });
+    q('unoSuspectBtn').addEventListener('click', function(){
+      if (!S || S.phase !== 'SUSPECT') return;
+      resolveWild4(S.suspectFrom, S.suspectValid, true);
+      paint(); tick();
+    });
+    q('unoSwapTargets').addEventListener('click', function(e){
+      var el = e.target.closest('[data-swap]');
+      if (!el) return;
+      var tgt = parseInt(el.getAttribute('data-swap'), 10);
+      var cont = S.cont;
+      swapHands(S.sevenSwapBy, tgt);
+      S.sevenSwapBy = null; S.cont = null;
+      q('unoSwapMask').classList.remove('show');
+      if (cont) finishCardEffect(cont.pi, cont.card, cont.newColor, cont.colorBefore, cont.offenderHadColor);
+      paint(); tick();
+    });
+    q('unoNextBtn').addEventListener('click', function(){
+      if (!S) return;
+      if (S.phase === 'CHAMPION'){
+        var names = ['你'], ai = ['阿寶', '小美', '阿強'];
+        for (var i=1; i<cfg.count; i++) names.push(ai[i-1]);
+        newGame(cfg.count, names, null, 1);
+      } else {
+        var nm = S.players.map(function(p){ return p.name; });
+        var sc = S.scores.slice(), rn = S.roundNo + 1;
+        newGame(S.players.length, nm, sc, rn);
+      }
+      paint(); tick();
+    });
+    q('unoOverExit').addEventListener('click', function(){
+      q('unoOverMask').classList.remove('show');
+      q('unoStartPanel').style.display = 'flex';
+      q('unoTable').style.display = 'none';
+      if (typeof window.goHome === 'function') window.goHome();
+    });
+    q('unoHelpBtn').addEventListener('click', function(){ q('unoHelpMask').classList.add('show'); });
+    q('unoHelpClose').addEventListener('click', function(){ q('unoHelpMask').classList.remove('show'); });
+  }
+  function onHandTap(i){
+    if (!S || S.phase !== 'PLAY') return;
+    var hand = S.players[0].hand, card = hand[i];
+    if (!card) return;
+    var t = top();
+    var mine = S.turn === 0;
+    var jumpIn = !mine && S.rules.jumpIn && S.pending === 0 &&
+      card.c !== null && card.c === S.activeColor && card.k === t.k && (card.k !== K.NUM || card.n === t.n);
+    if (!mine && !jumpIn){ S.log = '現在不是你的回合' + (S.rules.jumpIn ? '（開啟搶出時可出同色同數字牌）' : ''); paint(); return; }
+    var ok;
+    if (S.pending > 0 && S.rules.stack){
+      ok = (S.pendingKind === K.DRAW2 && card.k === K.DRAW2) || card.k === K.WILD4;
+    } else if (S.pending > 0){
+      ok = false;
+    } else {
+      ok = playable(card, S.activeColor, t);
+    }
+    if (!ok){
+      S.log = S.pending > 0 ? '有待罰牌，先抽牌或出 +2／+4 反擊' : '這張牌現在出不了（需同色、同數字或同功能）';
+      paint(); return;
+    }
+    if (card.k === K.WILD4 && S.pending === 0 && hand.some(function(x){ return x.c === S.activeColor; })){
+      S.log = '手上有' + CLAB[S.activeColor] + '色牌，不能出 +4';
+      paint(); return;
+    }
+    if (card.c === null){
+      window.__unoChosen = { pi:0, idx:i, jumpIn: jumpIn };
+      q('unoColorMask').classList.add('show');
+      return;
+    }
+    playCard(0, i, null, jumpIn);
+    paint(); tick();
+  }
+
+  window.__unoOpen = function(){
+    document.body.classList.remove('atHome');
+    document.querySelectorAll('.gscreen').forEach(function(el){ el.classList.remove('show'); });
+    q('unoScreen').classList.add('show');
+    if (!S){
+      q('unoStartPanel').style.display = 'flex';
+      q('unoTable').style.display = 'none';
+    } else {
+      q('unoStartPanel').style.display = 'none';
+      q('unoTable').style.display = 'flex';
+      paint();
+      tick();
+    }
+  };
+  window.__unoPause = function(){ clearTimeout(aiTimer); };
+  window.__unoReset = function(){
+    S = null; clearTimeout(aiTimer);
+    q('unoStartPanel').style.display = 'flex';
+    q('unoTable').style.display = 'none';
+  };
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bind);
+  } else {
+    bind();
+  }
+})();
+
+</script>
 </body>
 </html>
