@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
@@ -1590,6 +1590,16 @@
   </div>
 </div>
 
+<!-- ============ 自動託管（鬥地主）未開通 ============ -->
+<div class="overlay" id="ovDzAutoLock">
+  <div class="dialog">
+    <h2>自動託管未開通</h2>
+    <p>自動託管為付費功能，售價 HK$1000（一次購買永久）。開通後系統代你叫地主、出牌與跟牌，直至本局結束。</p>
+    <button class="btn main" id="dzAutoBuy">前往購買</button>
+    <button class="btn ghost" id="dzAutoCancel">取消</button>
+  </div>
+</div>
+
 <div class="overlay" id="ovStart">
   <div class="dialog">
     <h2>俄罗斯方块 · 分享版</h2>
@@ -1651,6 +1661,17 @@
           <button class="btn ghost" id="btnUnbind">解除綁定</button>
         </div>
         <div class="bind-tip">手機 App（分享版／完整版）→「排行榜」頁最下方可複製自己的<b>設備碼</b>；貼到上面按「綁定並同步」，手機已送出的積分、代幣、彈珠與 VIP 等級會立即入帳到網頁版。</div>
+      </div>
+
+      <div class="sec-title">雲端存檔（換電腦、清快取都不會歸零）</div>
+      <div class="bind-box">
+        <div class="bind-row"><span class="bind-dot" id="saveDot"></span><span id="saveState">雲端存檔：等待綁定</span></div>
+        <div class="bind-actions">
+          <button class="btn main" id="btnSaveUp">上傳存檔到雲端</button>
+          <button class="btn ghost" id="btnSaveDown">從雲端還原（合併）</button>
+          <button class="btn ghost" id="btnSaveForce">強制覆蓋還原</button>
+        </div>
+        <div class="bind-tip">網頁版所有進度（最高分、代幣、彈珠、積分、老虎機、刮刮樂、賓果、UNO、安全模式密碼…）原本只存在這一台電腦的瀏覽器裡，換電腦或清快取就沒了。<b>綁定手機設備碼後</b>，這裡會自動把存檔上傳到雲端，並在每次開頁時自動合併回來（數值取大、缺的補上，不會把本機資料蓋細）。</div>
       </div>
 
       <div class="sec-title">VIP 會員</div>
@@ -1733,21 +1754,50 @@
     </div>
     <div class="sheet-body">
       <div class="bind-tip" style="text-align:left">
-        需上傳證件照並填寫年齡，由管理員審核；批准後本機切換為成年模式，可玩老虎機與魚蝦蟹。
+        需上傳打碼後的證件照並填寫出生年份（系統自動算歲數），由管理員審核；批准後本機切換為成年模式，可玩老虎機與魚蝦蟹。
       </div>
-      <div class="sec-title">年齡</div>
-      <input class="inp" id="minorAge" type="number" inputmode="numeric" placeholder="請輸入年齡（歲）"
-        style="width:100%;font-family:inherit" />
-      <div class="sec-title">證件照（拍攝或上傳，最多 2 張）</div>
+      <div class="sec-title">出生年份（只填出生年，系統自動算歲數）</div>
+      <input class="inp" id="minorBirthYear" type="number" inputmode="numeric" maxlength="4"
+        placeholder="例：2009" style="width:100%;font-family:inherit" />
+      <div class="bind-tip" id="minorAgeInfo" style="text-align:left;min-height:18px"></div>
+      <div class="sec-title">證件照（拍攝或上傳，最多 2 張 · 自動打碼）</div>
       <label class="uploader" for="minorCam">📷 拍攝證件照</label>
       <input id="minorCam" type="file" accept="image/*" capture="environment" style="display:none" />
       <label class="uploader" for="minorFile" style="margin-top:8px">＋ 從相簿選擇</label>
       <input id="minorFile" type="file" accept="image/*" multiple style="display:none" />
+      <div class="bind-tip" style="text-align:left">選好照片會自動進入「打碼」畫面：一鍵遮住姓名、頭像、證件號，用手指補塗；只留出生年份。上傳的只有打碼後的圖，原圖不會離開手機。</div>
       <div class="thumbs" id="minorThumbs"></div>
       <div style="height:14px"></div>
       <button class="btn main" id="minorSubmit">提交申請</button>
       <div class="bind-tip" id="minorNotice" style="text-align:center;min-height:18px;margin-top:10px"></div>
       <div class="bind-tip" style="text-align:center">提交後狀態為「待審批」，批准後自動切換成年模式。</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 證件打碼編輯器 ============ -->
+<div class="sheet" id="maskSheet">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h3>證件打碼</h3>
+      <button class="close-x" id="maskClose">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="bind-tip" style="text-align:left">
+        已自動遮住姓名／性別／住址／頭像／證件號，只留出生年份；位置不對可按「清除」後用手指重新塗白。
+      </div>
+      <div style="position:relative;margin-top:10px;border-radius:12px;overflow:hidden;background:#000">
+        <canvas id="maskCanvas" style="display:block;width:100%;height:auto;touch-action:none"></canvas>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <button class="btn" id="maskAuto" style="flex:1;min-width:calc(50% - 4px)">一鍵遮三區</button>
+        <button class="btn" id="maskUndo" style="flex:1;min-width:calc(50% - 4px)">↶ 復原</button>
+        <button class="btn" id="maskClear" style="flex:1;min-width:calc(50% - 4px)">清除</button>
+        <button class="btn" id="maskBrush" style="flex:1;min-width:calc(50% - 4px)">筆刷：中</button>
+      </div>
+      <button class="btn main" id="maskDone" style="margin-top:12px">完成打碼</button>
+      <div class="bind-tip" id="maskNotice" style="text-align:center;min-height:18px;margin-top:10px"></div>
+      <div class="bind-tip" style="text-align:center">只會上傳這張打碼後的圖，原圖留在本機、不會上傳。</div>
     </div>
   </div>
 </div>
@@ -2615,6 +2665,135 @@
     return added;
   }
 
+  /* ================= 雲端存檔：換電腦 / 清快取 / iOS 七天清理都救得回 ================= */
+  const CLOUD_TABLE = "web_saves";
+  const SAVE_SKIP = [KEY_DEV, KEY_NICK, "tetris_web_tmpdev"];
+  const SAVE_NUM  = ["tetris_best", "tetris_web_tokens", "tetris_web_balls", "tetris_web_points"];
+  let saveTimer = 0, saveLastBody = "", savePushing = false;
+  const _lsNativeSet = Storage.prototype.setItem;
+
+  function lsPut(k, v){ try{ _lsNativeSet.call(localStorage, k, v); }catch(e){} }
+
+  function saveCollect(){
+    const o = {};
+    try{
+      for (let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if (!k || SAVE_SKIP.indexOf(k) >= 0) continue;
+        const v = localStorage.getItem(k);
+        if (v !== null) o[k] = v;
+      }
+    }catch(e){}
+    return o;
+  }
+  function saveNumOf(v){ const n = parseInt(v, 10); return isFinite(n) ? n : 0; }
+  function saveMark(txt, off){
+    const t = $("saveState"), d = $("saveDot");
+    if (t) t.textContent = "雲端存檔：" + txt;
+    if (d){ if (off) d.classList.add("off"); else d.classList.remove("off"); }
+  }
+
+  async function savePush(silent){
+    if (savePushing) return;
+    const dev = deviceFor();
+    const data = saveCollect();
+    const body = JSON.stringify(data);
+    if (body === saveLastBody && saveLastBody){ if (!silent) toast("雲端存檔已是最新"); return; }
+    savePushing = true;
+    try{
+      const rows = await sb("/rest/v1/" + CLOUD_TABLE + "?select=device_id&device_id=eq." + encodeURIComponent(dev) + "&limit=1");
+      const nowIso = new Date().toISOString();
+      if (rows && rows.length){
+        await sb("/rest/v1/" + CLOUD_TABLE + "?device_id=eq." + encodeURIComponent(dev),
+          { method: "PATCH", json: { payload: data, updated_at: nowIso } });
+      }else{
+        await sb("/rest/v1/" + CLOUD_TABLE,
+          { method: "POST", json: { device_id: dev, payload: data, updated_at: nowIso } });
+      }
+      saveLastBody = body;
+      saveMark("已上傳 · " + Object.keys(data).length + " 項 · " + nowIso.replace("T", " ").slice(0, 16));
+      if (!silent) toast("已上傳雲端存檔（" + Object.keys(data).length + " 項）");
+    }catch(e){
+      saveMark("上傳失敗（web_saves 表未建立或無寫入權限）", true);
+      if (!silent) toast("雲端存檔上傳失敗：" + (e && e.message ? e.message : e));
+    }finally{ savePushing = false; }
+  }
+
+  async function savePull(force){
+    const dev = deviceFor();
+    let rows;
+    try{
+      rows = await sb("/rest/v1/" + CLOUD_TABLE + "?select=payload,updated_at&device_id=eq." + encodeURIComponent(dev) + "&limit=1");
+    }catch(e){
+      saveMark("讀取失敗（web_saves 表未建立或無讀取權限）", true);
+      toast("讀不到雲端存檔，請先建立 web_saves 表");
+      return 0;
+    }
+    if (!rows || !rows.length){ saveMark("雲端暫無存檔", true); if (!force) toast("雲端暫無存檔"); return 0; }
+    const data = rows[0].payload || {};
+    let filled = 0, raised = 0;
+    for (const k in data){
+      if (SAVE_SKIP.indexOf(k) >= 0) continue;
+      const cv = String(data[k] == null ? "" : data[k]);
+      const lv = localStorage.getItem(k);
+      if (lv === null){ lsPut(k, cv); filled++; continue; }
+      if (SAVE_NUM.indexOf(k) >= 0 && saveNumOf(cv) > saveNumOf(lv)){ lsPut(k, cv); raised++; continue; }
+      if (force && cv !== lv){ lsPut(k, cv); raised++; }
+    }
+    saveLastBody = JSON.stringify(saveCollect());
+    const when = String(rows[0].updated_at || "").replace("T", " ").slice(0, 16);
+    saveMark("已合併 · 補 " + filled + " 項 / 提升 " + raised + " 項 · 雲端時間 " + when);
+    if (force) location.reload();
+    return filled + raised;
+  }
+
+  function saveRefreshUI(){
+    if (typeof paintWallet === "function"){ try{ paintWallet(); }catch(e){} }
+    if (typeof paintTokens === "function"){ try{ paintTokens(); }catch(e){} }
+    if (typeof paintRank === "function"){ try{ paintRank(); }catch(e){} }
+  }
+
+  // 任何存檔寫入 → 4 秒防抖自動上傳
+  try{
+    Storage.prototype.setItem = function(k, v){
+      _lsNativeSet.call(this, k, v);
+      if (this === localStorage && myDevice && SAVE_SKIP.indexOf(k) < 0){
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => { savePush(true); }, 4000);
+      }
+    };
+  }catch(e){}
+
+  (function saveCloudInit(){
+    if ($("btnSaveUp")) $("btnSaveUp").addEventListener("click", () => savePush(false));
+    if ($("btnSaveDown")) $("btnSaveDown").addEventListener("click", () => {
+      saveMark("讀取中…");
+      savePull(false).then(n => {
+        if (!n) return;
+        saveRefreshUI();
+        toast("已從雲端補回 " + n + " 項存檔");
+      });
+    });
+    if ($("btnSaveForce")) $("btnSaveForce").addEventListener("click", () => {
+      if (!confirm("強制覆蓋還原：會用雲端存檔蓋掉本機目前的代幣、積分、最高分等進度。確定要覆蓋？")) return;
+      saveMark("覆蓋還原中…");
+      savePull(true);
+    });
+    saveMark(myDevice ? ("已啟用 · 綁定 " + myDevice.slice(0, 8) + "…") : "未綁定手機設備碼 · 目前只存本機", !myDevice);
+    setTimeout(() => {
+      if (myDevice){
+        savePull(false).then(n => { if (n){ saveRefreshUI(); toast("已從雲端合併 " + n + " 項存檔"); } });
+      }else{
+        saveMark("未綁定手機設備碼 · 目前只存本機", true);
+      }
+    }, 1600);
+  })();
+
+  if ($("btnBind")) $("btnBind").addEventListener("click", () => {
+    saveMark("綁定後同步雲端存檔中…");
+    setTimeout(() => { savePull(false).then(n => { saveRefreshUI(); savePush(true); }); }, 2600);
+  });
+
   if ($("btnBind")) $("btnBind").addEventListener("click", doBind);
   if ($("btnSyncNow")) $("btnSyncNow").addEventListener("click", syncNow);
   if ($("btnUnbind")) $("btnUnbind").addEventListener("click", () => {
@@ -2890,6 +3069,7 @@
         let label = "VIP 申請 · " + (v.level || "-");
         if (v.level === "SLOT_LUCK") label = "老虎機幸運值";
         if (v.level === "AUTO_SLOT") label = "自動拉解鎖";
+        if (v.level === "AUTO_DIZHU") label = "自動託管解鎖";
         if (v.level === "NONE") label = "VIP 取消";
         rows.push({ t: v.created_at, label, sub: v.remark || "", st: v.status });
       });
@@ -3092,44 +3272,250 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       : "未成年模式：賭博遊戲（合集內八款）現時鎖定。開放時段：週一至五 早上7:00–晚上8:00；週六日 下午2:00–下午3:00。俄羅斯方塊、彈珠機、抽獎不受限制。");
   }
 
-  /* ---- 未成年申請成年模式：表單 / 提交 ---- */
+  /* ---- 未成年申請成年模式：表單 / 證件打碼 / 出生年自動算歲數 ---- */
   const minorSheet = $("minorSheet");
-  let minorFiles = [];
+  const MINOR_BIRTH_KEY = "web_minor_birth";
+  let minorFiles = [];   // [{ file(打碼後), url, state{strokes,rects}, srcFile(原圖，只留本機) }]
+  let minorQueue = [];   // 待打碼的原圖 File 佇列
+
+  function minorYearNow(){ return new Date().getFullYear(); }
+  function minorAgeRange(y){
+    const n = minorYearNow();
+    return { min: Math.max(0, n - y - 1), max: Math.max(0, n - y) };
+  }
+  function minorBirthYear(){
+    const y = parseInt(($("minorBirthYear").value || "").trim(), 10);
+    return (y >= 1900 && y <= minorYearNow()) ? y : 0;
+  }
+  function minorAgeInfo(){
+    const box = $("minorAgeInfo");
+    if (!box) return null;
+    const y = minorBirthYear();
+    if (!y){
+      box.textContent = "請填 4 位出生年份（例：2009）";
+      box.style.color = "";
+      return null;
+    }
+    const r = minorAgeRange(y);
+    const adult = r.min >= 18;
+    box.textContent = y + " 年出生 → 今年約 " + r.min + "–" + r.max + " 歲（" + (adult ? "已滿 18 歲" : "未滿 18 歲") + "）";
+    box.style.color = adult ? "#8bc34a" : "#ffc107";
+    return r;
+  }
 
   function minorOpen(){
     if (minorAdult()){ toast("已為成年模式，可玩全部玩法"); return; }
-    $("minorAge").value = localStorage.getItem(MINOR_AGE_KEY) || "";
+    $("minorBirthYear").value = localStorage.getItem(MINOR_BIRTH_KEY) || "";
+    minorAgeInfo();
     minorFiles = [];
+    minorQueue = [];
     $("minorThumbs").innerHTML = "";
     $("minorNotice").textContent = minorPending() ? "已提交申請，等待管理員審批中…" : "";
     minorSheet.classList.add("show");
   }
+
+  function paintMinorThumbs(){
+    $("minorThumbs").innerHTML = minorFiles.map((it, i) =>
+      '<img class="thumb" data-idx="' + i + '" src="' + it.url + '" alt="已打碼證件照" title="點擊可重新打碼" />').join("");
+  }
+
   function minorAddFiles(list){
     const arr = Array.prototype.slice.call(list || []);
-    arr.forEach(f => { if (minorFiles.length < 2) minorFiles.push(f); });
-    $("minorThumbs").innerHTML = minorFiles.map(f =>
-      '<img src="' + URL.createObjectURL(f) + '" alt="證件照" />').join("");
-    if (arr.length && minorFiles.length >= 2) toast("證件照最多 2 張");
+    if (!arr.length) return;
+    const room = 2 - (minorFiles.length + minorQueue.length);
+    if (room <= 0){ toast("證件照最多 2 張"); return; }
+    const take = arr.slice(0, room);
+    if (arr.length > room) toast("證件照最多 2 張");
+    minorQueue = minorQueue.concat(take);
+    maskNext();
   }
+
+  /* ---- 打碼編輯器 ---- */
+  const mask = {
+    img: null, canvas: null, ctx: null, editIdx: -1, srcFile: null,
+    strokes: [], rects: [], brushIdx: 1,
+    brushes: [0.020, 0.035, 0.055], brushNames: ["細", "中", "粗"]
+  };
+  // 常見證件版式預設遮罩（歸一化座標）：姓名／性別／民族、出生「月·日」、住址、頭像、證件號碼
+  const MASK_PRESET = [
+    { x: 0.10, y: 0.06, w: 0.60, h: 0.09 },
+    { x: 0.42, y: 0.17, w: 0.34, h: 0.09 },
+    { x: 0.10, y: 0.27, w: 0.62, h: 0.30 },
+    { x: 0.70, y: 0.08, w: 0.28, h: 0.42 },
+    { x: 0.03, y: 0.86, w: 0.94, h: 0.11 }
+  ];
+
+  function maskNext(){
+    if (!minorQueue.length) return;
+    if ($("maskSheet").classList.contains("show") && mask.img) return;
+    const f = minorQueue.shift();
+    openMaskFor(f, -1);
+  }
+
+  function openMaskFor(file, editIdx){
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const maxSide = 1280;
+      const sc = Math.min(1, maxSide / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+      const cvs = $("maskCanvas");
+      cvs.width = Math.max(1, Math.round((img.naturalWidth || 1) * sc));
+      cvs.height = Math.max(1, Math.round((img.naturalHeight || 1) * sc));
+      mask.img = img;
+      mask.canvas = cvs;
+      mask.ctx = cvs.getContext("2d");
+      mask.editIdx = (typeof editIdx === "number") ? editIdx : -1;
+      mask.srcFile = file;
+      const prev = (mask.editIdx >= 0) ? minorFiles[mask.editIdx] : null;
+      mask.strokes = prev && prev.state ? prev.state.strokes.slice() : [];
+      mask.rects = prev && prev.state ? prev.state.rects.slice() : [];
+      if (!mask.rects.length && !mask.strokes.length) maskAutoRegions();
+      $("maskBrush").textContent = "筆刷：" + mask.brushNames[mask.brushIdx];
+      $("maskNotice").textContent = "";
+      $("maskSheet").classList.add("show");
+      maskLayout();
+      maskRedraw();
+      setTimeout(() => { if (mask.img) maskLayout(); }, 80);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      toast("圖片讀取失敗，請重新選擇");
+      setTimeout(maskNext, 120);
+    };
+    img.src = url;
+  }
+
+  function maskLayout(){
+    const cvs = $("maskCanvas");
+    const inner = document.querySelector("#maskSheet .sheet-inner");
+    if (!cvs || !inner) return;
+    const availW = Math.max(160, inner.clientWidth - 40);
+    const availH = Math.max(180, Math.round(window.innerHeight * 0.44));
+    const ar = cvs.width / Math.max(1, cvs.height);
+    let w = availW, h = w / ar;
+    if (h > availH){ h = availH; w = h * ar; }
+    cvs.style.width = Math.round(w) + "px";
+    cvs.style.height = Math.round(h) + "px";
+    cvs.style.margin = "0 auto";
+  }
+
+  function maskAutoRegions(){
+    MASK_PRESET.forEach(r => mask.rects.push({ x: r.x, y: r.y, w: r.w, h: r.h }));
+  }
+
+  function maskRedraw(){
+    const c = mask.canvas, ctx = mask.ctx;
+    if (!c || !ctx || !mask.img) return;
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.drawImage(mask.img, 0, 0, c.width, c.height);
+    ctx.fillStyle = "#ffffff";
+    mask.rects.forEach(r => {
+      ctx.fillRect(r.x * c.width, r.y * c.height, r.w * c.width, r.h * c.height);
+    });
+    ctx.strokeStyle = "#ffffff";
+    ctx.fillStyle = "#ffffff";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    mask.strokes.forEach(s => {
+      const pts = s.pts || [];
+      if (!pts.length) return;
+      ctx.lineWidth = Math.max(2, s.w * c.width);
+      if (pts.length === 1){
+        ctx.beginPath();
+        ctx.arc(pts[0].x * c.width, pts[0].y * c.height, ctx.lineWidth / 2, 0, Math.PI * 2);
+        ctx.fill();
+        return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x * c.width, pts[0].y * c.height);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x * c.width, pts[i].y * c.height);
+      ctx.stroke();
+    });
+  }
+
+  let maskDrawing = null;
+  function maskPos(e){
+    const rect = mask.canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / Math.max(1, rect.width);
+    const y = (e.clientY - rect.top) / Math.max(1, rect.height);
+    return { x: Math.min(1, Math.max(0, x)), y: Math.min(1, Math.max(0, y)) };
+  }
+  function maskStrokeIncrement(){
+    const c = mask.canvas, ctx = mask.ctx, s = maskDrawing;
+    if (!c || !ctx || !s) return;
+    const pts = s.pts;
+    const w = Math.max(2, s.w * c.width);
+    ctx.strokeStyle = "#ffffff";
+    ctx.fillStyle = "#ffffff";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = w;
+    if (pts.length === 1){
+      ctx.beginPath();
+      ctx.arc(pts[0].x * c.width, pts[0].y * c.height, w / 2, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+    const a = pts[pts.length - 2], b = pts[pts.length - 1];
+    ctx.beginPath();
+    ctx.moveTo(a.x * c.width, a.y * c.height);
+    ctx.lineTo(b.x * c.width, b.y * c.height);
+    ctx.stroke();
+  }
+
+  async function maskDone(){
+    if (!mask.img || !mask.canvas) return;
+    const btn = $("maskDone");
+    btn.disabled = true;
+    try{
+      const blob = await new Promise(res => mask.canvas.toBlob(res, "image/jpeg", 0.88));
+      if (!blob) throw new Error("生成失敗");
+      const fileName = "masked_" + Date.now() + "_" + Math.floor(Math.random() * 10000) + ".jpg";
+      const file = new File([blob], fileName, { type: "image/jpeg" });
+      const url = URL.createObjectURL(blob);
+      const state = { strokes: mask.strokes.slice(), rects: mask.rects.slice() };
+      if (mask.editIdx >= 0 && minorFiles[mask.editIdx]){
+        const old = minorFiles[mask.editIdx];
+        if (old.url) URL.revokeObjectURL(old.url);
+        minorFiles[mask.editIdx] = { file: file, url: url, state: state, srcFile: old.srcFile || mask.srcFile || null };
+      }else if (minorFiles.length < 2){
+        minorFiles.push({ file: file, url: url, state: state, srcFile: mask.srcFile || null });
+      }
+      paintMinorThumbs();
+      $("maskSheet").classList.remove("show");
+      mask.img = null;
+      toast("已打碼，只保留出生年份");
+      setTimeout(maskNext, 150);
+    }catch(e){
+      $("maskNotice").textContent = "打碼失敗：" + (e && e.message ? e.message : "請重試");
+    }
+    btn.disabled = false;
+  }
+
   async function minorSubmit(){
-    const age = parseInt(($("minorAge").value || "").trim(), 10);
-    if (!(age >= 1 && age <= 99)){ toast("請輸入有效年齡（1–99）"); return; }
+    const y = minorBirthYear();
+    if (!y || y > minorYearNow() - 1){ toast("請輸入有效出生年份（例：2009）"); return; }
+    if (minorQueue.length && !minorFiles.length){ toast("請先完成證件照打碼"); return; }
     if (!minorFiles.length){ toast("請先拍攝或選擇證件照"); return; }
+    const r = minorAgeRange(y);
     $("minorSubmit").disabled = true;
     $("minorNotice").textContent = "正在提交…";
     try{
-      const urls = await uploadProofs(minorFiles);
+      const urls = await uploadProofs(minorFiles.map(it => it.file));
       if (!urls || !urls.length) throw new Error("證件照上傳失敗");
       await sb("/rest/v1/vip_applications", { method: "POST", json: {
         device_id: deviceFor(),
         nickname: nickFor(),
         level: "MINOR_ADULT",
         status: "pending",
-        remark: "網頁版 未成年申請成年模式｜年齡:" + age,
+        remark: "網頁版 未成年申請成年模式｜出生年:" + y + "｜約" + r.min + "-" + r.max + "歲｜年齡:" + r.min,
         proofs: urls
       }});
       localStorage.setItem(MINOR_PEND_KEY, "1");
-      localStorage.setItem(MINOR_AGE_KEY, String(age));
+      localStorage.setItem(MINOR_AGE_KEY, String(r.min));
+      localStorage.setItem(MINOR_BIRTH_KEY, String(y));
       $("minorNotice").textContent = "已提交，等待管理員審批（批准後自動切換成年模式）";
       toast("申請已提交，請等待後台審批");
     }catch(e){
@@ -3138,8 +3524,8 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     $("minorSubmit").disabled = false;
   }
 
-  /* ---- 雲端權益：VIP / 自動拉 / 幸運值 / 變回三環 ---- */
-  let cloudVip = "", cloudAuto = false, cloudLuck = 0;
+  /* ---- 雲端權益：VIP / 自動拉 / 自動託管 / 幸運值 / 變回三環 ---- */
+  let cloudVip = "", cloudAuto = false, cloudLuck = 0, cloudDzAuto = false;
 
   function isSuper(){ return cloudVip === "SUPER" || cloudVip === "ULTRA"; }
 
@@ -3174,13 +3560,14 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       const rows = await sb("/rest/v1/vip_applications?select=level,status,remark,created_at&" + acctFilter() + "&status=eq.approved&order=created_at.asc&limit=300");
       const lv = { VIP:0, SUPER:0, ULTRA:0 };
       const webLv = { VIP:0, SUPER:0, ULTRA:0 };   // 僅網頁端自己提交的 VIP（remark=WEB…）才發首開禮，避免與手機版重複
-      let luck = 0, resets = 0, auto = false, adultOk = false;
+      let luck = 0, resets = 0, auto = false, dzAuto = false, adultOk = false;
       (rows || []).forEach(r => {
         if (r.level === "VIP" || r.level === "SUPER" || r.level === "ULTRA"){
           lv[r.level]++;
           if (String(r.remark || "").indexOf("WEB") === 0) webLv[r.level]++;
         }
         else if (r.level === "AUTO_SLOT") auto = true;
+        else if (r.level === "AUTO_DIZHU") dzAuto = true;
         else if (r.level === "MINOR_ADULT") adultOk = true;
         else if (r.level === "SLOT_RESET") resets++;
         else if (r.level === "SLOT_LUCK"){
@@ -3193,6 +3580,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       /* 與手機分享版一致：審批通過後把「自動拉」權益落到本機，之後離線／未綁帳號一樣可用 */
       if (auto) slotSetAutoUnlocked(true);
       else if (slotAuto && !slotAutoUnlocked()){ slotAuto = false; slotSaveAutoOn(); }
+      /* 鬥地主「自動託管」同一規則：AUTO_DIZHU 審批通過即永久解鎖本機 */
+      cloudDzAuto = dzAuto;
+      if (dzAuto) dzSetAutoUnlocked(true);
       cloudLuck = Math.min(30, luck);
       // 未成年申請成年：批准後本機切換成年模式
       if (adultOk && !minorAdult()){
@@ -3558,6 +3948,8 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   }
   /* 與手機分享版一致：初值 = 已開通自動拉權益 && 上次開關狀態 */
   let slotAuto = slotAutoUnlocked() && localStorage.getItem(SLOT_AUTO_KEY) === "1";
+  /* 與手機分享版一致：從持久狀態還原的「自動開啟」不自動開轉，需玩家再按一次／長按一次（armed）才會續轉 */
+  let slotArmed = false;
   let slotSpinning = false, slotFinals = [], reelStrips = [], slotHits = [];
   function slotSaveAutoOn(){ try { localStorage.setItem(SLOT_AUTO_KEY, slotAuto ? "1" : "0"); } catch(e){} }
 
@@ -3750,15 +4142,16 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     if (slotReelCount() !== reelStrips.length) buildReels(slotReelCount());
     slotPaint();
 
-    if (slotAuto && slotAutoUnlocked()){
+    if (slotAuto && slotArmed && slotAutoUnlocked()){
       if (tokens < slotSt.bet){
         slotAuto = false;
+        slotArmed = false;
         slotSaveAutoOn();
         $("slotStatus").textContent = "代幣不足，自動模式已停止";
         slotPaint();
         return;
       }
-      setTimeout(() => { if (slotAuto) slotPull(); }, 700);
+      setTimeout(() => { if (slotAuto && slotArmed && slotAutoUnlocked()) slotPull(); }, 700);
     }
   }
 
@@ -3767,9 +4160,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   function slotToggleAuto(){
     if (!slotAutoUnlocked()){ $("ovAutoLock").classList.add("show"); return; }
     slotAuto = !slotAuto;
+    slotArmed = slotAuto;
     slotSaveAutoOn();
     $("slotStatus").className = "slot-status";
-    $("slotStatus").textContent = slotAuto ? "自動模式已開啟：再點一次或長按可停止" : "自動模式已關閉";
+    $("slotStatus").textContent = slotAuto ? "自動模式已開啟：長按可停止" : "自動模式已關閉";
     slotPaint();
     if (slotAuto) slotPull();
   }
@@ -3781,7 +4175,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       slotPressTimer = null;
       slotSuppress = true;
       slotToggleAuto();
-    }, 600);
+    }, 500);   /* 手機分享版：長按 500ms 觸發自動拉開關 */
   }
   function pressEnd(){
     if (slotPressTimer){ clearTimeout(slotPressTimer); slotPressTimer = null; }
@@ -3818,6 +4212,16 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       kind: "vip", title: "自動拉老虎機",
       item: "自動拉老虎機（永久）", amount: "HK$ 1000",
       payload: { kind:"vip", device_id: deviceFor(), nickname: nickFor(), level: "AUTO_SLOT", status: "pending" }
+    });
+  });
+  /* 鬥地主自動託管：同一套審批流程，level=AUTO_DIZHU（與手機分享版後台同一權益碼） */
+  if ($("dzAutoCancel")) $("dzAutoCancel").addEventListener("click", () => $("ovDzAutoLock").classList.remove("show"));
+  if ($("dzAutoBuy")) $("dzAutoBuy").addEventListener("click", () => {
+    $("ovDzAutoLock").classList.remove("show");
+    openPay({
+      kind: "vip", title: "自動託管（鬥地主）",
+      item: "自動託管（永久）", amount: "HK$ 1000",
+      payload: { kind:"vip", device_id: deviceFor(), nickname: nickFor(), level: "AUTO_DIZHU", status: "pending" }
     });
   });
 
@@ -4361,7 +4765,9 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     $("slotMain").style.display = ok ? "flex" : "none";
     if (slotReels.childElementCount !== slotReelCount()) buildReels(slotReelCount());
     $("slotStatus").className = "slot-status";
-    if (!slotSpinning) $("slotStatus").textContent = "設定注碼，按「拉下開轉」開始";
+    if (!slotSpinning) $("slotStatus").textContent = (slotAuto && !slotArmed)
+      ? "自動拉已開啟：按一下「拉下」即會連續開轉"
+      : "設定注碼，按「拉下開轉」開始";
     slotPaint();
     syncGrants();
   }
@@ -5463,6 +5869,69 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   $("minorClose").addEventListener("click", () => minorSheet.classList.remove("show"));
   $("minorCam").addEventListener("change", e => { minorAddFiles(e.target.files); e.target.value = ""; });
   $("minorFile").addEventListener("change", e => { minorAddFiles(e.target.files); e.target.value = ""; });
+  $("minorBirthYear").addEventListener("input", minorAgeInfo);
+  $("minorBirthYear").addEventListener("blur", minorAgeInfo);
+  $("minorThumbs").addEventListener("click", e => {
+    const img = e.target && e.target.closest ? e.target.closest("img[data-idx]") : null;
+    if (!img) return;
+    const idx = parseInt(img.getAttribute("data-idx"), 10);
+    const it = minorFiles[idx];
+    if (!it) return;
+    openMaskFor(it.srcFile || it.file, idx);
+  });
+
+  /* 打碼編輯器事件 */
+  (function bindMaskEditor(){
+    const cvs = $("maskCanvas");
+    cvs.addEventListener("pointerdown", e => {
+      if (!mask.img) return;
+      if (e.preventDefault) e.preventDefault();
+      if (cvs.setPointerCapture && e.pointerId !== undefined){ try { cvs.setPointerCapture(e.pointerId); } catch(err){} }
+      maskDrawing = { w: mask.brushes[mask.brushIdx], pts: [maskPos(e)] };
+      mask.strokes.push(maskDrawing);
+      maskStrokeIncrement();
+    });
+    cvs.addEventListener("pointermove", e => {
+      if (!maskDrawing) return;
+      if (e.preventDefault) e.preventDefault();
+      maskDrawing.pts.push(maskPos(e));
+      maskStrokeIncrement();
+    });
+    ["pointerup", "pointercancel", "pointerout"].forEach(ev =>
+      cvs.addEventListener(ev, () => { maskDrawing = null; }));
+    $("maskAuto").addEventListener("click", () => {
+      if (!mask.img) return;
+      maskAutoRegions();
+      maskRedraw();
+      $("maskNotice").textContent = "已重新套用預設遮罩，可再用手塗補";
+    });
+    $("maskUndo").addEventListener("click", () => {
+      if (!mask.img) return;
+      if (mask.strokes.length) mask.strokes.pop();
+      else if (mask.rects.length) mask.rects.pop();
+      maskRedraw();
+    });
+    $("maskClear").addEventListener("click", () => {
+      if (!mask.img) return;
+      mask.strokes = [];
+      mask.rects = [];
+      maskRedraw();
+      $("maskNotice").textContent = "已清除，請自行塗白不需要的部分（保留出生年份）";
+    });
+    $("maskBrush").addEventListener("click", () => {
+      mask.brushIdx = (mask.brushIdx + 1) % mask.brushes.length;
+      $("maskBrush").textContent = "筆刷：" + mask.brushNames[mask.brushIdx];
+    });
+    $("maskDone").addEventListener("click", maskDone);
+    $("maskClose").addEventListener("click", () => {
+      $("maskSheet").classList.remove("show");
+      mask.img = null;
+      maskDrawing = null;
+      setTimeout(maskNext, 150);
+    });
+    window.addEventListener("resize", () => { if (mask.img) maskLayout(); });
+  })();
+
   $("minorSubmit").addEventListener("click", minorSubmit);
   ["fishApplyAdult","slotApplyAdult","homeApplyAdult"].forEach(id => {
     const el = $(id);
@@ -5612,120 +6081,42 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 莊家勝率略高但需抽水，閒家不抽水但勝率略低，兩者長期期望值接近。和局賭場優勢遠高於莊閒的基本投注。`,
     dizhu: `鬥地主 詳細玩法說明
 
-一、基本構成
+一、人數與發牌（與手機分享版同一套）
 
-鬥地主是三人撲克牌遊戲。使用一副五十四張撲克牌，含大王、小王。三人中一人當地主，兩人當農民，農民為同一陣營。
+・2 人局：每人 26 張，底牌 2 張，地主 28 張。
+・3 人局：每人 17 張，底牌 3 張，地主 20 張。
+・4 人局：每人 13 張，底牌 2 張，地主 15 張。
+・每局開局都用 Fisher-Yates 演算法把整副 54 張牌徹底洗亂，再從牌堆隨機位置抽出底牌。
 
-二、發牌與身份確定
+二、地主與出牌順序
 
-洗牌後，每人先發十七張，剩下三張扣在桌面作為底牌。發牌完成後進入叫地主環節。
+・本版不設叫分環節，地主由系統隨機產生（開通自動託管即等同自動叫地主）。
+・底牌歸入地主手牌並公開顯示，由地主先出牌，之後按座位順序輪流。
+・輪到你先出時，先點選手牌再按「出牌」；壓不過或不想出時按「不出」。
+・若其餘各家一輪內全部不出，則由最後出牌者自由出牌；自由出牌回合不能選「不出」。
 
-叫地主方式：玩家按固定順序輪流叫分，可選叫一分、二分、三分，或選擇不叫。叫分最高者成為地主。若有人叫三分，通常直接定為地主。若所有人都沒叫，則重新洗牌發牌。
+三、牌型（本版實際支援）
 
-地主確定後，三張底牌公開亮出，歸入地主手牌。此時地主共有二十張牌，兩名農民各持十七張牌。
+・單張、對子、三張、三帶一（三張＋一張單牌）、炸彈（四張同點）、王炸（大王＋小王）。
+・大小順序：大王 ＞ 小王 ＞ 2 ＞ A ＞ K ＞ Q ＞ J ＞ 10 ＞ 9 ＞ 8 ＞ 7 ＞ 6 ＞ 5 ＞ 4 ＞ 3，花色不參與比較。
+・炸彈可壓任意非炸彈牌型，王炸最大。
+・注意：順子、連對、飛機等連牌牌型本版暫不支援。
 
-三、牌面大小順序
+四、注金與派彩
 
-單牌點數從大到小：
+・注金檔位：100／500／1000／2000 代幣，每局開局時先扣一注；牌局進行中不能改注金。
+・炸彈或王炸每出現一次，本局倍數翻倍，封頂 ×16。
+・你贏（你是地主且地主出完牌，或你是農民且農民陣營出完牌）：派彩 ＝ 注金 × 2 × 倍數。
+・你輸：只損失本局注金。
+・代幣不足一注時無法開局，請先儲值。
 
-大王 ＞ 小王 ＞ 2 ＞ A ＞ K ＞ Q ＞ J ＞ 10 ＞ 9 ＞ 8 ＞ 7 ＞ 6 ＞ 5 ＞ 4 ＞ 3
+五、自動託管（付費功能 HK$1000，一次購買永久）
 
-花色不參與大小比較。
-
-四、牌型分類
-
-1. 單張：任意一張牌。例如單張 5、單張 2、單張大王。
-2. 對子：兩張點數相同的牌。例如 55、KK。大小按點數比較。
-3. 三張：三張點數相同的牌。例如 777、AAA。部分規則允許單獨出，通常實戰中多帶牌。
-4. 三帶一：三張相同點數牌，加一張單牌。例如 888 加 3。大小只看三張部分，不看附帶單牌。
-5. 三帶二：三張相同點數牌，加一對。例如 999 加 44。大小只看三張部分，不看附帶對子。
-6. 順子：五張或五張以上連續單牌。例如 34567、8910JQKA。限制：2、大王、小王不能加入順子。順子比較時，牌數必須相同，再比最大牌點數。
-7. 連對：三對或三對以上連續對子。例如 334455、7788991010JJ。限制：2 和王不能加入連對。比較時牌數必須相同。
-8. 飛機：兩組或兩組以上連續三張。例如 333444、555666777。飛機可帶翅膀，即每組三張搭配一張單牌或一對牌：單帶示例 333444 加 5 加 7；雙帶示例 333444 加 55 加 77。比較大小時只看連續三張部分，帶的牌不影響大小。
-9. 四帶二：四張相同點數牌，加兩張單牌，或加兩對牌。例如 6666 加 3 加 9，或 6666 加 33 加 99。注意：四帶二不是炸彈，只能由更大的同結構四帶二壓制。
-10. 炸彈：四張點數完全相同的牌。例如 4444、AAAA。炸彈可以壓除火箭外任何普通牌型。炸彈之間按點數比較，點數大者大。
-11. 火箭（王炸）：大王加小王同時打出。火箭是全局最大牌型，可以壓任何牌型，包括炸彈。
-
-五、出牌順序
-
-地主先出第一手牌。之後按固定方向輪流，通常逆時針。輪到玩家時，有三種選擇：
-
-1. 不出，也叫過牌。
-2. 出同牌型且更大的牌，接住上家。
-3. 出炸彈或火箭，可強行壓住當前牌型。
-
-普通牌型必須牌型相同、張數相同才能比較。例如上家出五張順子，只能接更大的五張順子；上家出三帶一，只能接更大的三帶一。
-
-若一圈中其餘兩家都選擇不出，最後出牌者獲得新一輪出牌權，可自由出任意合法牌型。
-
-六、勝負判定
-
-・地主先把手牌全部出完，地主獲勝。
-・任意一名農民先把手牌全部出完，農民陣營獲勝。
-
-七、常見特殊規則
-
-・春天：地主出完所有牌，而兩名農民整局未出過一張牌，通常計分倍數提高。
-・反春天：農民出完牌，而地主只出過第一手牌，之後未再出牌，通常也提高倍數。
-・炸彈與火箭：每出現一次炸彈或火箭，常見規則中倍數翻倍。
-
-八、基本計分邏輯
-
-底分由叫地主分數決定，通常為一分、二分或三分。最終得分等於底分乘以本局倍數。
-
-地主獲勝，兩名農民分別按倍數輸分；農民獲勝，地主按倍數輸分，兩名農民分別得分。
-
-不同平台或線下約定可能有細微差別，但核心規則一致：先出完牌者所在陣營獲勝。`,
-    mark6: `六合彩 詳細玩法說明
-
-一、基本構成
-
-六合彩為選號型彩票遊戲。香港六合彩共四十九個號碼，由 1 至 49。每期開出七個號碼，前六個為正碼，又稱攪出號碼，第七個為特別號碼。
-
-二、開獎方式
-
-每期由攪珠機隨機攪出七個號碼。前六個號碼為正碼，最後一個為特別號碼。所有投注以這七個號碼為準核對。
-
-三、基本投注方式
-
-1. 單式投注：自選六個號碼組成一注。中獎要求所選六個號碼全部落在當期七個開出號碼之內。
-2. 複式投注：選七個或以上號碼，系統自動組合出所有可能的六號組合。選號越多，注數越多，成本越高。
-3. 膽拖投注：先選定若干個膽碼，膽碼必須全部選中；再選若干個拖碼，由膽碼加拖碼組合出各注。
-4. 機選投注：由系統隨機產生號碼組合。
-
-四、獎項與中獎條件
-
-以單式六個號碼為一注計算：
-
-・頭獎：六個號碼全部為正碼，即六個號碼全中，且不包含特別號碼。
-・二獎：五個號碼為正碼，另一個號碼為特別號碼。即五個正碼加特別號碼。
-・三獎：五個號碼為正碼，另一個號碼未開出。
-・四獎：四個號碼為正碼，另加特別號碼。
-・五獎：四個號碼為正碼，其餘未開出。
-・六獎：三個號碼為正碼，另加特別號碼。
-・七獎：三個號碼為正碼，其餘未開出。
-
-未達上述條件者為不中獎。
-
-五、其他常見玩法
-
-1. 特別號碼投注：只投注一個號碼，猜中當期特別號碼即中獎。
-2. 生肖投注：四十九個號碼按當年農曆生肖分配，每個生肖對應若幹號碼。開獎後依規則比較，投注生肖與開出結果相符即中獎。
-3. 波色投注：號碼分為紅波、藍波、綠波三色。投注某一顏色，若開出號碼中有指定數量屬於該色，即按規則派彩。
-4. 大小投注：以25為界，1至24為小，25至49為大。投注大或小，依開出號碼判定。
-5. 單雙投注：號碼分單數與雙數。投注單或雙，依開出號碼判定。
-6. 尾數投注：以號碼個位數字分類，0至9共十個尾數。投注某一尾數，依開出號碼判定。
-
-六、派彩說明
-
-各獎項派彩金額依當期投注總額與中獎注數分配。頭獎、二獎多為浮動獎金，其餘獎項多為固定獎金。不同地區或平台派彩比例不同，實際以官方公佈為準。
-
-七、注意事項
-
-・開獎號碼順序不影響中獎判定，只比較號碼是否在開出集合內。
-・特別號碼與正碼地位不同，多數獎項區分是否包含特別號碼。
-・複式與膽拖投注成本按組合數計算，注數為組合數乘以每注金額。
-・未成年人不得參與投注。`,
+・開通後按「自動託管」，系統代你叫地主、出牌與跟牌，直至本局結束。
+・託管期間你的回合約 0.5 秒自動出牌；電腦回合每手約 0.45～0.7 秒推進。
+・關閉託管不會中斷牌局：電腦照常推進，輪到你時才停下等你手動操作。
+・託管開關會被記住；下次進入時若仍在開啟狀態，會自動開一局。
+・開通需經後台審批，通過後權益永久寫入本機，離線或未綁帳號同樣可用。`,
     scratch: `刮刮樂 詳細玩法說明
 
 一、遊戲形式
@@ -7338,9 +7729,20 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     return null;
   }
 
-  /* ---------- 鬥地主（2/3/4 人 · 自動託管 · 共用代幣庫扣注派彩） ---------- */
+  /* ---------- 鬥地主（整套對齊手機分享版：2/3/4 人 · 注金 4 檔 · 自動託管付費解鎖 · 炸彈倍數派彩） ---------- */
   const DZ_KEY = "web_dizhu_v1";
-  const DZ_STAKES = [100, 500, 1000];
+  const DZ_STAKES = [100, 500, 1000, 2000];
+  /* 自動託管權益落地本機（手機分享版同一規則：後台 AUTO_DIZHU 審批後永久解鎖，離線／未綁帳號照樣可用） */
+  const DZ_AUTO_UNLOCK_KEY = "tetris_web_dizhu_auto_unlocked";
+  const DZ_AUTO_PRICE = 1000;
+  function dzSetAutoUnlocked(v){
+    try { if (v) localStorage.setItem(DZ_AUTO_UNLOCK_KEY, "1");
+          else localStorage.removeItem(DZ_AUTO_UNLOCK_KEY); } catch(e){}
+  }
+  function dzAutoUnlocked(){
+    if (cloudDzAuto) return true;
+    try { return localStorage.getItem(DZ_AUTO_UNLOCK_KEY) === "1"; } catch(e){ return false; }
+  }
   function dzLoadCfg(){
     try {
       const o = JSON.parse(localStorage.getItem(DZ_KEY) || "{}") || {};
@@ -7349,18 +7751,18 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       return {
         players: [2, 3, 4].indexOf(pc) >= 0 ? pc : 3,
         stake: DZ_STAKES.indexOf(stk) >= 0 ? stk : DZ_STAKES[0],
-        auto: !!o.auto
+        /* 與手機分享版一致：上次開啟的託管狀態會被還原，權益不存在時自動歸零 */
+        auto: dzAutoUnlocked() && !!o.auto
       };
     } catch(e){ return { players: 3, stake: DZ_STAKES[0], auto: false }; }
   }
   function dzSaveCfg(cfg){
     try { localStorage.setItem(DZ_KEY, JSON.stringify({ players: cfg.players, stake: cfg.stake, auto: cfg.auto })); } catch(e){}
   }
-  /* 人數 → 每家張數與底牌張數（54 張單副牌：2 人 26+2 / 3 人 17+3 / 4 人 12+6） */
+  /* 人數 → 每家張數與底牌張數（手機分享版同式：底牌 = 54 − 每家張數 × 人數 → 2 人 26+2 / 3 人 17+3 / 4 人 13+2） */
   function dzSeatRule(players){
-    if (players === 2) return { per: 26, bottom: 2 };
-    if (players === 4) return { per: 12, bottom: 6 };
-    return { per: 17, bottom: 3 };
+    const per = players === 2 ? 26 : (players === 4 ? 13 : 17);
+    return { per: per, bottom: 54 - per * players };
   }
 
   function openDizhu(){
@@ -7369,87 +7771,29 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     const cfg = dzLoadCfg();
     const st = {
       hands: [], selected: new Set(), last: null, lastOwner: -1, turn: 0,
-      finished: true, msg: "", timer: null, animT: null,
-      shuffling: false, landlord: 0, bottom: []
+      phase: "idle", landlord: -1, bottom: [], mult: 1, delta: 0,
+      msg: "", timer: null, animT: null, humanWon: false
     };
+    st.msg = "按「新的一局」發牌 · " + cfg.players + " 人局 · 注金 " + cfg.stake;
 
-    /* 供自檢讀取底層發牌資料（洗亂後的順序、地主、回合） */
+    /* 供自檢讀取底層發牌資料（洗亂後的順序、地主、回合、倍數） */
     window.__dzSnapshot = () => ({
-      landlord: st.landlord,
-      turn: st.turn,
-      shuffling: st.shuffling,
-      finished: st.finished,
+      phase: st.phase, landlord: st.landlord, turn: st.turn, mult: st.mult,
       bottom: st.bottom.map(c => c.rank + "#" + c.id),
       hands: st.hands.map(h => h.map(c => c.rank + "#" + c.id))
     });
 
-    function seatName(i){ return i === 0 ? "你" : ["電腦甲", "電腦乙", "電腦丙"][i - 1]; }
+    function seatName(i){ return i === 0 ? "你" : (["電腦甲", "電腦乙", "電腦丙"][i - 1] || ("電腦" + i)); }
     function alive(){ return !!$("dzHand"); }
     function clearTimer(){
       if (st.timer){ clearTimeout(st.timer); st.timer = null; }
       if (st.animT){ clearTimeout(st.animT); st.animT = null; }
     }
 
-    function start(){
-      clearTimer();
-      if (tokens < cfg.stake){
-        st.finished = true;
-        st.shuffling = false;
-        st.msg = "代幣不足：本局注金 " + cfg.stake + "，代幣庫只有 " + tokens + "，請先充值";
-        paint(); return;
-      }
-      tokens -= cfg.stake;
-      saveTokens(tokens);
-      const n = cfg.players;
-      const rule = dzSeatRule(n);
-      /* ① 先播洗牌動畫，動畫結束才真正發牌 */
-      st.hands = [];
-      for (let i = 0; i < n; i++) st.hands.push([]);
-      st.selected = new Set();
-      st.last = null; st.lastOwner = -1; st.turn = 0;
-      st.finished = true;
-      st.shuffling = true;
-      st.bottom = [];
-      st.msg = "洗牌中…（Fisher-Yates 真隨機洗牌）";
-      paint();
-      st.animT = setTimeout(() => {
-        st.animT = null;
-        if (!alive()) return;
-        /* ① Fisher-Yates 把 54 張牌徹底打亂（每次開局只呼叫一次） */
-        const deck = dzShuffle(ddzDeck());
-        /* ② 從洗亂的牌堆隨機位置抽出地主底牌 */
-        const bottom = [];
-        for (let k = 0; k < rule.bottom && deck.length > 0; k++){
-          bottom.push(deck.splice(dzRandInt(deck.length), 1)[0]);
-        }
-        /* ③ 隨機決定地主，不再固定為玩家 */
-        const landlord = dzRandInt(n);
-        /* ④ 逐張輪流發牌，手牌全部來自洗亂後的牌堆 */
-        const hands = [];
-        for (let i = 0; i < n; i++) hands.push([]);
-        let seq = 0;
-        while (deck.length > 0){ hands[seq % n].push(deck.pop()); seq++; }
-        hands[landlord] = hands[landlord].concat(bottom);
-        st.hands = hands;               /* 底層保持洗亂後的發牌順序 */
-        st.landlord = landlord;
-        st.bottom = bottom;
-        st.selected = new Set();
-        st.last = null; st.lastOwner = -1;
-        st.turn = landlord;             /* 地主先出牌 */
-        st.finished = false;
-        st.shuffling = false;
-        const who = landlord === 0 ? "你" : seatName(landlord);
-        const btm = bottom.map(c => ddzLabel(c.rank)).join(" ");
-        st.msg = n + " 人局 · 地主 " + who + "（" + st.hands[landlord].length + " 張，底牌 " + btm +
-          "）· 你 " + st.hands[0].length + " 張 · 注金 " + cfg.stake + " · " + who + "先出牌";
-        paint();
-        schedule();
-      }, 860);
-    }
-
     body.innerHTML =
       '<div class="mini-row" id="dzCounts" style="flex-wrap:wrap"></div>' +
       '<div class="mini-row" id="dzCfg" style="flex-wrap:wrap;margin-top:6px"></div>' +
+      '<div class="mini-note" id="dzBottom"></div>' +
       '<div class="mini-note" id="dzLast"></div>' +
       '<div class="mini-note" id="dzMsg"></div>' +
       '<div class="ddz-hand" id="dzHand" style="flex:1;align-content:flex-start;overflow-y:auto;margin-top:8px"></div>' +
@@ -7461,22 +7805,26 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       if (!alive()) return;
       let chips = '<span class="chip-tag">代幣 ' + tokens + '</span>';
       for (let i = 1; i < cfg.players; i++){
-        const isL = !st.shuffling && st.landlord === i;
+        const isL = st.landlord === i;
         chips += '<span class="chip-tag blue">' + seatName(i) + (isL ? "★地主 " : " ") +
           (st.hands[i] ? st.hands[i].length : 0) + ' 張</span>';
       }
-      chips += '<span class="chip-tag">你 ' + (st.landlord === 0 && !st.shuffling ? "★地主 " : "") +
+      chips += '<span class="chip-tag">你 ' + (st.landlord === 0 ? "★地主 " : "") +
         (st.hands[0] ? st.hands[0].length : 0) + ' 張</span>';
+      chips += '<span class="chip-tag blue">注金 ' + cfg.stake + ' · 倍數 ×' + st.mult + '</span>';
       $("dzCounts").innerHTML = chips;
 
+      const owned = dzAutoUnlocked();
       let c = '<span class="mini-note" style="margin-right:4px">人數</span>';
       [2, 3, 4].forEach(n => {
         c += '<button class="mini-btn ' + (cfg.players === n ? "" : "ghost") +
           '" data-pc="' + n + '" style="height:28px;padding:0 10px;font-size:12px">' + n + ' 人</button>';
       });
-      c += '<button class="mini-btn ' + (cfg.auto ? "pink" : "ghost") +
-        '" data-dzauto="1" style="height:28px;padding:0 12px;font-size:12px">' +
-        (cfg.auto ? "託管中" : "自動託管") + '</button>';
+      const autoStyle = owned
+        ? 'style="height:28px;padding:0 12px;font-size:12px"'
+        : 'style="height:28px;padding:0 12px;font-size:12px;background:#b71c1c;border-color:#b71c1c;color:#fff"';
+      c += '<button class="mini-btn ' + (cfg.auto && owned ? "pink" : "ghost") + '" data-dzauto="1" ' + autoStyle + '>' +
+        (owned ? (cfg.auto ? "託管中" : "自動託管") : "自動託管 · 鎖") + '</button>';
       c += '<span class="mini-note" style="margin-left:8px;margin-right:4px">注金</span>';
       DZ_STAKES.forEach(v => {
         c += '<button class="mini-btn ' + (cfg.stake === v ? "" : "ghost") +
@@ -7484,27 +7832,48 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
       });
       $("dzCfg").innerHTML = c;
 
+      $("dzBottom").textContent = st.bottom.length
+        ? "底牌：" + st.bottom.map(cd => ddzLabel(cd.rank)).join(" ") + "（已歸地主）"
+        : "底牌：—";
       $("dzLast").textContent = st.last
-        ? "上一手：" + st.last.type + " " + ddzLabel(st.last.rank)
+        ? "上一手：" + st.last.type + " " + ddzLabel(st.last.rank) +
+          (st.lastOwner >= 0 ? "（" + seatName(st.lastOwner) + "）" : "")
         : "上一手：無（自由出牌）";
       $("dzMsg").textContent = st.msg;
-      $("dzMsg").style.color = st.finished ? "#6be3a0" : "#8fa3bf";
+      $("dzMsg").style.color = st.phase === "over" ? (st.humanWon ? "#6be3a0" : "#ff8a8a") : "#8fa3bf";
+
       const handEl = $("dzHand");
-      /* 洗牌動畫：牌背快速飛掠，讓玩家看見本局牌已重洗 */
-      if (st.shuffling){
+      if (st.phase === "dealing"){
+        /* 洗牌動畫：牌背快速飛掠，讓玩家看見本局牌已重洗 */
         let sf = '<div class="ddz-shuffle">';
         for (let i = 0; i < 9; i++){
           sf += '<div class="sf" style="--i:' + i + '"></div>';
         }
         sf += '<div class="sh-tip">洗 牌 中 …</div></div>';
         handEl.innerHTML = sf;
-        return;
+      } else {
+        /* 介面只按點數排序顯示，底層 st.hands 保留洗亂後的發牌順序 */
+        const shown = (st.hands[0] || []).slice().sort((a, b) => (a.rank - b.rank) || (a.id - b.id));
+        handEl.innerHTML = shown.map(cd =>
+          '<div class="ddz-card' + (st.selected.has(cd.id) ? " on" : "") + '" data-cid="' + cd.id + '">' +
+          ddzLabel(cd.rank) + '</div>').join("");
       }
-      /* 介面只按點數排序顯示，底層 st.hands 保留洗亂後的發牌順序 */
-      const shown = (st.hands[0] || []).slice().sort((a, b) => (a.rank - b.rank) || (a.id - b.id));
-      handEl.innerHTML = shown.map(cd =>
-        '<div class="ddz-card' + (st.selected.has(cd.id) ? " on" : "") + '" data-cid="' + cd.id + '">' +
-        ddzLabel(cd.rank) + '</div>').join("");
+
+      const myTurn = st.phase === "play" && st.turn === 0 && !cfg.auto;
+      const pb = $("dzPlay"), sb = $("dzPass"), nb = $("dzNew");
+      if (pb){
+        pb.textContent = st.phase === "dealing" ? "洗牌中…" : (cfg.auto ? "託管中" : "出牌");
+        pb.disabled = !myTurn;
+      }
+      if (sb){
+        sb.textContent = cfg.auto ? "託管中" : "不出";
+        sb.disabled = !myTurn;
+      }
+      if (nb){
+        nb.textContent = st.phase === "over" ? ("再來一局（-" + cfg.stake + "）")
+          : (st.phase === "play" ? "重開" : ("新的一局（-" + cfg.stake + "）"));
+        nb.disabled = st.phase === "dealing";
+      }
     }
 
     function nextTurn(from){
@@ -7516,37 +7885,44 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
     function finish(winner){
       clearTimer();
-      st.finished = true;
-      if (winner === 0){
-        const gain = cfg.stake * (cfg.players - 1);
-        tokens += gain;
+      st.phase = "over";
+      const lordWon = winner === st.landlord;
+      /* 手機分享版同一判定：地主出完牌＝地主陣營贏，否則農民陣營贏 */
+      st.humanWon = st.landlord === 0 ? lordWon : !lordWon;
+      if (st.humanWon){
+        const pay = cfg.stake * 2 * st.mult;
+        tokens += pay;
         saveTokens(tokens);
-        st.msg = "你已出完牌，贏了本局 · 入帳 " + gain + "（代幣庫 " + tokens + "）";
+        st.delta = pay - cfg.stake;
+        st.msg = seatName(winner) + " 出完牌 · " + (lordWon ? "地主勝" : "農民勝") + " · 你贏了本局 · 派彩 " + pay +
+          "（注金 " + cfg.stake + " × 2 × 倍數 " + st.mult + "）· 本局淨 " + (st.delta >= 0 ? "+" : "") + st.delta +
+          " · 代幣庫 " + tokens;
       } else {
-        st.msg = seatName(winner) + " 已出完牌，本局輸了 · 損失 " + cfg.stake + " 代幣";
+        st.delta = -cfg.stake;
+        st.msg = seatName(winner) + " 出完牌 · " + (lordWon ? "地主勝" : "農民勝") + " · 你輸了本局 · 損失 " +
+          cfg.stake + " 代幣（倍數 ×" + st.mult + "）";
       }
       paint();
-      if (cfg.auto){
-        st.timer = setTimeout(() => {
-          st.timer = null;
-          if (!alive() || !st.finished) return;
-          start();
-        }, 1600);
-      }
     }
 
     function playSeat(who, cards){
+      const combo = ddzDetect(cards.map(x => x.rank));
+      if (!combo) return false;
+      if (!ddzBeats(st.lastOwner === who ? null : st.last, combo)) return false;
       const ids = cards.map(x => x.id);
       st.hands[who] = st.hands[who].filter(x => ids.indexOf(x.id) < 0);
-      st.last = ddzDetect(cards.map(x => x.rank));
+      /* 手機分享版：炸彈／王炸把本局倍數翻倍，封頂 ×16 */
+      if (combo.type === "bomb" || combo.type === "rocket") st.mult = Math.min(st.mult * 2, 16);
+      st.last = combo;
       st.lastOwner = who;
-      st.msg = seatName(who) + " 出 " + cards.map(x => ddzLabel(x.rank)).join(" ");
+      st.msg = seatName(who) + " 出 " + cards.map(x => ddzLabel(x.rank)).join(" ") +
+        (combo.type === "bomb" || combo.type === "rocket" ? "（倍數翻倍 ×" + st.mult + "）" : "");
       paint();
-      if (st.hands[who].length === 0){ finish(who); return; }
+      if (st.hands[who].length === 0){ finish(who); return true; }
       nextTurn(who);
       paint();
-      if (who === 0 && cfg.auto && st.last){ /* 託管時連續推進 */ }
       schedule();
+      return true;
     }
 
     function passSeat(who, why){
@@ -7558,83 +7934,169 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     }
 
     function aiMove(who){
-      if (st.finished || st.turn !== who) return;
+      if (st.phase !== "play" || st.turn !== who) return;
       const free = !st.last || st.lastOwner === who;
       const play = ddzPick(st.hands[who], free ? null : st.last);
-      if (!play) { passSeat(who); return; }
+      if (!play){ passSeat(who); return; }
       playSeat(who, play);
     }
 
     function autoPlay(){
-      if (st.finished || st.turn !== 0) return;
+      if (!cfg.auto || st.phase !== "play" || st.turn !== 0) return;
       const free = !st.last || st.lastOwner === 0;
       const play = ddzPick(st.hands[0], free ? null : st.last);
-      if (!play) { passSeat(0, "（託管）選擇不出"); return; }
+      if (!play){ passSeat(0, "（託管）選擇不出"); return; }
       playSeat(0, play);
     }
 
     function schedule(){
       clearTimer();
-      if (st.finished || !alive()) return;
+      if (st.phase !== "play" || !alive()) return;
       if (st.turn === 0){
         if (!cfg.auto) return;
-        st.timer = setTimeout(() => { st.timer = null; if (alive()) autoPlay(); }, 700);
+        st.timer = setTimeout(() => { st.timer = null; if (alive()) autoPlay(); }, 500);
         return;
       }
       const who = st.turn;
       st.timer = setTimeout(() => {
         st.timer = null;
-        if (!alive() || st.finished || st.turn !== who) return;
+        if (!alive() || st.phase !== "play" || st.turn !== who) return;
         aiMove(who);
-      }, 600);
+      }, cfg.auto ? 450 : 700);
+    }
+
+    function start(pay){
+      if (st.phase === "dealing") return;
+      if (pay){
+        if (tokens < cfg.stake){
+          st.msg = "代幣不足：本局注金 " + cfg.stake + "，代幣庫只有 " + tokens + "，請先充值";
+          paint(); return;
+        }
+        tokens -= cfg.stake;
+        saveTokens(tokens);
+        st.delta = -cfg.stake;
+      }
+      const n = cfg.players, rule = dzSeatRule(n);
+      clearTimer();
+      st.phase = "dealing";
+      st.hands = [];
+      for (let i = 0; i < n; i++) st.hands.push([]);
+      st.selected = new Set();
+      st.last = null; st.lastOwner = -1; st.turn = 0;
+      st.landlord = -1; st.bottom = []; st.mult = 1; st.humanWon = false;
+      st.msg = "洗牌中…（" + n + " 人局 · 每人 " + rule.per + " 張 · 底牌 " + rule.bottom + " 張）";
+      paint();
+      st.animT = setTimeout(() => {
+        st.animT = null;
+        if (!alive()) return;
+        /* ① Fisher-Yates 把 54 張牌徹底打亂 */
+        const deck = dzShuffle(ddzDeck());
+        /* ② 從洗亂的牌堆隨機位置抽出底牌 */
+        const bottom = [];
+        for (let k = 0; k < rule.bottom && deck.length > 0; k++){
+          bottom.push(deck.splice(dzRandInt(deck.length), 1)[0]);
+        }
+        /* ③ 隨機地主（手機分享版無叫分流程，地主直接隨機產生，託管即自動叫地主） */
+        const landlord = dzRandInt(n);
+        /* ④ 由地主起順序輪流發牌 */
+        const hands = [];
+        for (let i = 0; i < n; i++) hands.push([]);
+        let seat = landlord;
+        deck.forEach(card => { hands[seat % n].push(card); seat++; });
+        hands[landlord] = hands[landlord].concat(bottom);
+        st.hands = hands;
+        st.landlord = landlord;
+        st.bottom = bottom;
+        st.selected = new Set();
+        st.last = null; st.lastOwner = -1;
+        st.turn = landlord;
+        st.mult = 1;
+        st.phase = "play";
+        st.msg = n + " 人局 · 地主 " + seatName(landlord) + "（" + hands[landlord].length + " 張）· 你 " +
+          hands[0].length + " 張 · 注金 " + cfg.stake + " · " + seatName(landlord) + "先出牌";
+        paint();
+        schedule();
+      }, 860);
     }
 
     body.onclick = e => {
       const card = e.target.closest(".ddz-card");
       if (card){
-        if (st.shuffling || st.finished || st.turn !== 0 || cfg.auto) return;
+        if (st.phase !== "play" || st.turn !== 0 || cfg.auto) return;
         const cid = Number(card.dataset.cid);
         if (st.selected.has(cid)) st.selected.delete(cid); else st.selected.add(cid);
         paint();
         return;
       }
-      const pcBtn = e.target.closest("[data-pc]");
-      if (pcBtn){
-        const n = Number(pcBtn.dataset.pc);
+      const t = e.target.closest("button");
+      if (!t) return;
+
+      /* 人數切換：與手機分享版一致，只改配置並回到待開局狀態，不自動扣注發牌 */
+      const pcAttr = t.getAttribute("data-pc");
+      if (pcAttr !== null && pcAttr !== undefined && pcAttr !== ""){
+        if (st.phase === "dealing"){ st.msg = "洗牌中，請稍候"; paint(); return; }
+        const n = Number(pcAttr);
+        if (n === cfg.players) return;
         cfg.players = n;
         dzSaveCfg(cfg);
-        start();
+        clearTimer();
+        st.phase = "idle"; st.hands = []; st.bottom = []; st.landlord = -1; st.mult = 1;
+        st.selected = new Set(); st.last = null; st.lastOwner = -1; st.turn = 0;
+        const r = dzSeatRule(n);
+        st.msg = "已切換 " + n + " 人局（每人 " + r.per + " 張 · 底牌 " + r.bottom + " 張），按「新的一局」發牌";
+        paint();
         return;
       }
-      const stBtn = e.target.closest("[data-dzstake]");
-      if (stBtn){
-        cfg.stake = Number(stBtn.dataset.dzstake);
+
+      /* 注金切換：牌局進行中不可改（與手機分享版一致，避免注金與已扣款不符） */
+      const stkAttr = t.getAttribute("data-dzstake");
+      if (stkAttr !== null && stkAttr !== undefined && stkAttr !== ""){
+        if (st.phase === "play" || st.phase === "dealing"){
+          st.msg = "牌局進行中，不能改注金";
+          paint(); return;
+        }
+        cfg.stake = Number(stkAttr);
         dzSaveCfg(cfg);
-        start();
+        st.msg = "注金已設為 " + cfg.stake + " 代幣";
+        paint();
         return;
       }
-      const autoBtn = e.target.closest("[data-dzauto]");
-      if (autoBtn){
+
+      /* 自動託管：未開通一律導向開通頁（HK$1000 一次購買永久） */
+      if (t.getAttribute("data-dzauto") !== null){
+        if (!dzAutoUnlocked()){
+          const ov = $("ovDzAutoLock");
+          if (ov) ov.classList.add("show");
+          return;
+        }
         cfg.auto = !cfg.auto;
         dzSaveCfg(cfg);
         if (cfg.auto){
-          if (st.finished) start();
+          st.msg = "自動託管已開啟：自動叫地主、自動出牌與跟牌，直至本局結束";
+          if (st.phase === "idle" || st.phase === "over"){ paint(); start(true); }
           else { paint(); schedule(); }
         } else {
-          clearTimer();
+          /* 手機分享版：關閉託管不清掉排程，電腦照常推進，你的回合停下等手動操作 */
+          st.msg = "自動託管已關閉";
           paint();
+          schedule();
         }
         return;
       }
-      const t = e.target.closest("button");
-      if (!t) return;
-      if (t.id === "dzNew"){ if (st.shuffling) return; start(); return; }
+
+      if (t.id === "dzNew"){
+        if (st.phase === "dealing") return;
+        start(true);
+        return;
+      }
+
       if (t.id === "dzPlay"){
-        if (st.shuffling){ st.msg = "洗牌中，請稍候"; paint(); return; }
-        if (st.finished){ st.msg = "本局已結束，按「新的一局」重新開始"; paint(); return; }
+        if (st.phase === "dealing"){ st.msg = "洗牌中，請稍候"; paint(); return; }
+        if (st.phase !== "play"){ st.msg = "本局已結束，按「再來一局」重新開始"; paint(); return; }
         if (cfg.auto){ st.msg = "託管中，系統會自動出牌；如需手動請先關閉託管"; paint(); return; }
         if (st.turn !== 0){ st.msg = "現在不是你的回合"; paint(); return; }
         const picked = st.hands[0].filter(x => st.selected.has(x.id));
+        if (!picked.length){ st.msg = "請先點選要出的牌"; paint(); return; }
         const combo = ddzDetect(picked.map(x => x.rank));
         if (!combo){ st.msg = "牌型不合法（單張 / 對子 / 三張 / 三帶一 / 炸彈 / 王炸）"; paint(); return; }
         if (!ddzBeats(st.lastOwner === 0 ? null : st.last, combo)){ st.msg = "壓不過上一手，請換牌或選擇不出"; paint(); return; }
@@ -7642,15 +8104,24 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
         playSeat(0, picked);
         return;
       }
+
       if (t.id === "dzPass"){
-        if (st.finished){ st.msg = "本局已結束，按「新的一局」重新開始"; paint(); return; }
+        if (st.phase !== "play" || cfg.auto) return;
         if (st.turn !== 0){ st.msg = "現在不是你的回合"; paint(); return; }
         if (!st.last || st.lastOwner === 0){ st.msg = "自由出牌回合不能不出"; paint(); return; }
+        st.selected = new Set();
         passSeat(0);
       }
     };
 
-    start();
+    paint();
+    /* 手機分享版：進頁時若託管仍在開啟狀態，直接自動開一局 */
+    if (cfg.auto && dzAutoUnlocked()){
+      st.timer = setTimeout(() => {
+        st.timer = null;
+        if (alive() && cfg.auto && st.phase === "idle") start(true);
+      }, 300);
+    }
   }
 
   /* 启动：開頁即拉一次雲端贈送／儲值，之後每 60 秒自動同步 */
@@ -7681,10 +8152,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 </script>
 <script>
 /* ===== 版本號與防舊版快取 ===== */
-const APP_VERSION = "2026.11.12-AUTOSLOT";
+const APP_VERSION = "2026.11.13-MINORMASK";
 (function(){
   const tag = document.getElementById("verTag");
-  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 已含 UNO 牌 · 自動拉入口";
+  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 證件打碼 + 出生年自動算歲數";
   /* 版本一變就自動強制重載一次（帶時間戳繞過瀏覽器快取），之後不再重載 */
   try {
     const KEY = "tetris_web_ver";
