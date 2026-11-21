@@ -64,11 +64,13 @@
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;margin:0;}
+  /* 静态深空底：单一静态渐变 + 静态网格底纹（已移除全部背景动态层） */
   body{
     background:
-      radial-gradient(1200px 700px at 12% -10%, rgba(76,224,255,.13), transparent 62%),
-      radial-gradient(900px 600px at 92% 8%, rgba(164,107,255,.14), transparent 60%),
-      radial-gradient(700px 500px at 50% 110%, rgba(88,224,176,.10), transparent 60%),
+      radial-gradient(1200px 700px at 12% -10%, rgba(53,230,255,.13), transparent 62%),
+      radial-gradient(900px 600px at 92% 8%, rgba(61,123,255,.15), transparent 60%),
+      radial-gradient(700px 500px at 50% 110%, rgba(139,92,246,.13), transparent 60%),
+      linear-gradient(180deg,#02040A 0%,#061827 38%,#08131F 72%,#01060C 100%),
       var(--bg);
     color:var(--txt);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
@@ -76,14 +78,14 @@
     user-select:none;
     -webkit-user-select:none;
   }
-  /* 网格底纹 */
+  /* 電路網格底紋（靜態層，44px 網格、中心亮四周漸隱） */
   body::before{
-    content:"";position:fixed;inset:0;pointer-events:none;opacity:.20;
-    background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
-                     linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
-    background-size:38px 38px;
-    mask-image:radial-gradient(circle at 50% 40%,#000 0%,transparent 78%);
-    -webkit-mask-image:radial-gradient(circle at 50% 40%,#000 0%,transparent 78%);
+    content:"";position:fixed;inset:0;pointer-events:none;
+    background-image:linear-gradient(rgba(53,230,255,.055) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(53,230,255,.055) 1px,transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(circle at 50% 42%,#000 0%,transparent 82%);
+    -webkit-mask-image:radial-gradient(circle at 50% 42%,#000 0%,transparent 82%);
   }
 
   #app{
@@ -163,6 +165,19 @@
   }
   .overlay.show{display:grid;animation:fade .18s ease;}
   @keyframes fade{from{opacity:0}to{opacity:1}}
+  /* 下載密碼門（完整版 / 管理端） */
+  .dl-pass-inp{
+    width:100%;height:48px;text-align:center;letter-spacing:.34em;font-size:18px;
+    border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.45);
+    color:#eaf6ff;outline:none;padding:0 14px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .dl-pass-inp::placeholder{letter-spacing:.22em;color:rgba(234,246,255,.32)}
+  .dl-pass-inp:focus{border-color:rgba(76,224,255,.62);box-shadow:0 0 0 3px rgba(76,224,255,.12)}
+  .dl-pass-err{min-height:16px;margin:8px 0 2px;font-size:12px;color:#ff8a8a;letter-spacing:.04em}
+  .dl-pass-row{display:flex;gap:9px;margin-top:6px}
+  .dl-pass-row .btn{flex:1;margin-bottom:0}
+  #ovDlPass .dialog.shake{animation:dieShake .13s linear 2}
   .dialog{
     width:100%;max-width:330px;text-align:center;padding:24px 20px;border-radius:22px;
     background:linear-gradient(180deg,rgba(20,28,44,.96),rgba(11,16,26,.98));
@@ -484,6 +499,90 @@
   .rl-res .win{color:#6be3a0;font-weight:700;}
   .rl-res .lose{color:#ff8f9c;}
 
+
+  /* ============ 大富翁（40 格標準版圖） ============ */
+  .mp-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;}
+  .mp-start{display:flex;flex-direction:column;gap:10px;padding:2px 0 6px;}
+  .mp-card-box{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:14px;padding:11px 12px;}
+  .mp-card-box .cap{font-size:12px;font-weight:800;color:#ffd166;margin-bottom:7px;letter-spacing:.04em;}
+  .mp-chips{display:flex;gap:7px;flex-wrap:wrap;}
+  .mp-chip{min-width:44px;height:32px;padding:0 12px;border-radius:10px;background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);color:var(--txt);font-size:12.5px;font-weight:700;cursor:pointer;}
+  .mp-chip.on{background:rgba(76,224,255,.18);border-color:#4ce0ff;color:#9fefff;}
+  .mp-chip:active{transform:scale(.96);}
+  .mp-sw{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;}
+  .mp-sw .lab{font-size:12.5px;color:var(--txt);}
+  .mp-sw .lab small{display:block;font-size:10.5px;color:#8a9bb2;font-weight:400;margin-top:2px;}
+  .mp-tg{width:52px;height:28px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);
+    position:relative;cursor:pointer;flex:0 0 auto;transition:background .15s;}
+  .mp-tg::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+    background:#cfd9e6;transition:transform .15s,background .15s;}
+  .mp-tg.on{background:rgba(107,227,160,.32);border-color:#6be3a0;}
+  .mp-tg.on::after{transform:translateX(24px);background:#6be3a0;}
+  .mp-go{height:44px;border-radius:13px;border:0;background:linear-gradient(135deg,#ffd166,#f0a500);
+    color:#241800;font-size:15px;font-weight:900;letter-spacing:.05em;cursor:pointer;}
+  .mp-go:active{transform:scale(.98);}
+
+  /* 棋盤 */
+  .mp-board-wrap{width:100%;}
+  .mp-board{display:grid;grid-template-columns:repeat(11,1fr);grid-template-rows:repeat(11,1fr);
+    width:100%;aspect-ratio:1/1;gap:1.5px;background:rgba(255,255,255,.06);padding:2px;border-radius:12px;}
+  .mp-cell{position:relative;background:#0f1b2b;border:1px solid rgba(255,255,255,.07);border-radius:3px;
+    display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;cursor:pointer;
+    font-size:5.6px;line-height:1.15;color:#b9c8dc;padding:1px;}
+  .mp-cell .nm{font-weight:700;word-break:break-all;}
+  .mp-cell .pr{opacity:.72;font-size:5px;}
+  .mp-cell .grp{position:absolute;top:0;left:0;right:0;height:3px;}
+  .mp-cell.houses{box-shadow:inset 0 0 0 1px rgba(255,209,102,.55);}
+  .mp-cell .hs{position:absolute;bottom:0;right:1px;font-size:5px;color:#ffd166;font-weight:800;}
+  .mp-cell .pins{position:absolute;bottom:0;left:0;display:flex;gap:1px;flex-wrap:wrap;padding:1px;}
+  .mp-cell .pin{width:5px;height:5px;border-radius:50%;border:1px solid rgba(0,0,0,.45);}
+  .mp-cell.special{background:#12202f;color:#9fb4d0;}
+  .mp-center{grid-area:2/2/11/11;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:5px;background:radial-gradient(circle at 50% 35%,rgba(76,224,255,.10),transparent 70%);border-radius:10px;}
+  .mp-center .logo{font-size:15px;font-weight:900;letter-spacing:.14em;color:#4ce0ff;}
+  .mp-center .dice{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;}
+  .mp-center .die{width:26px;height:26px;border-radius:6px;background:#fff;color:#0d1b2a;font-size:14px;
+    font-weight:900;display:grid;place-items:center;}
+  .mp-center .fn{font-size:10px;color:#ffd166;font-weight:700;}
+  .mp-center .rd{font-size:10px;color:#9fb4d0;}
+
+  /* 玩家 / 操作 */
+  .mp-players{display:flex;flex-direction:column;gap:4px;}
+  .mp-prow{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+    border-radius:9px;padding:5px 8px;font-size:11.5px;}
+  .mp-prow.act{border-color:#4ce0ff;background:rgba(76,224,255,.12);}
+  .mp-prow .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
+  .mp-prow .nm{flex:1;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mp-prow .cash{color:#6be3a0;font-weight:800;}
+  .mp-prow .tag{font-size:9.5px;color:#ffd166;}
+  .mp-actions{display:flex;gap:7px;flex-wrap:wrap;}
+  .mp-btn{flex:1 1 auto;min-width:86px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.08);color:var(--txt);font-size:13px;font-weight:800;cursor:pointer;}
+  .mp-btn.main{background:linear-gradient(135deg,#4ce0ff,#1a9fd4);border:0;color:#04121c;}
+  .mp-btn.gold{background:rgba(255,209,102,.14);border-color:rgba(255,209,102,.5);color:#ffd166;}
+  .mp-btn:disabled{opacity:.4;}
+  .mp-btn:active{transform:scale(.97);}
+  .mp-status{font-size:11.5px;color:#cfd9e6;min-height:30px;line-height:1.45;
+    background:rgba(0,0,0,.28);border-radius:9px;padding:5px 9px;}
+  .mp-log{font-size:10.5px;color:#8fa3bb;line-height:1.5;max-height:92px;overflow-y:auto;
+    background:rgba(0,0,0,.22);border-radius:9px;padding:5px 9px;}
+  .mp-log div{padding:1px 0;border-bottom:1px dashed rgba(255,255,255,.05);}
+
+  /* 彈窗 */
+  .mp-mask{position:fixed;inset:0;z-index:2147483200;display:none;align-items:center;justify-content:center;
+    background:rgba(3,7,14,.84);padding:18px;}
+  .mp-mask.show{display:flex;}
+  .mp-dlg{width:100%;max-width:420px;max-height:86vh;overflow-y:auto;background:#0e1826;border:1px solid #24314a;
+    border-radius:16px;padding:16px;color:#dbe7f5;}
+  .mp-dlg .hd{font-size:15px;font-weight:900;color:#ffd166;margin-bottom:8px;letter-spacing:.04em;}
+  .mp-dlg .bd{font-size:13px;line-height:1.65;color:#cfe0f2;}
+  .mp-dlg .bd b{color:#4ce0ff;}
+  .mp-dlg .ft{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;}
+  .mp-dlg .ft .mp-btn{min-width:96px;}
+  .mp-rule{font-size:12px;line-height:1.72;color:#c5d5e8;white-space:pre-wrap;}
+  .mp-build-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(255,255,255,.07);font-size:12px;}
+  .mp-build-row .nm{flex:1;}
   /* ============ 小遊戲通用頁面 ============ */
   .gscreen{
     position:fixed;inset:0;z-index:6;display:none;flex-direction:column;
@@ -1004,6 +1103,33 @@
   .uno-target-row{display:flex;flex-direction:column;gap:7px;}
   .uno-target-btn{height:40px;border-radius:11px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);
     color:#fff;font:800 13px inherit;cursor:pointer;}
+
+/* ===== 免費玩面板 + 轉盤抽獎（2026-11-18 v3.4 大更新） ===== */
+.free-hub-btn .hub-glyph{color:#04121a}
+.free-hub-btn{background:linear-gradient(150deg,#4ce0ffdd,#0e1522)}
+.wheel-entry{display:flex;align-items:center;gap:12px;width:100%;margin:14px 0 12px;padding:14px 16px;border-radius:16px;border:1px solid rgba(76,224,255,.35);background:linear-gradient(135deg,rgba(76,224,255,.16),rgba(14,21,34,.92));color:#eaf6ff;text-align:left;cursor:pointer}
+.wheel-entry .we-ico{font-size:26px;line-height:1}
+.wheel-entry .we-txt{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
+.wheel-entry .we-txt b{font-size:17px;font-weight:800;color:#4ce0ff}
+.wheel-entry .we-txt i{font-style:normal;font-size:12px;color:#9fb2c8}
+.wheel-entry .we-go{font-size:24px;color:#4ce0ff;line-height:1}
+.wheel-mask{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,7,14,.78)}
+.wheel-mask.show{display:flex}
+.wheel-panel{width:100%;max-width:420px;max-height:92vh;overflow:auto;padding:18px 16px 16px;border-radius:22px;border:1px solid rgba(76,224,255,.28);background:linear-gradient(170deg,#111b2b,#0a1018);box-shadow:0 24px 60px rgba(0,0,0,.6);text-align:center}
+.wheel-panel-title{font-size:20px;font-weight:900;letter-spacing:.06em;color:#eaf6ff}
+.wheel-tabs{display:flex;gap:8px;margin:12px 0 8px}
+.wheel-tab{flex:1;padding:9px 6px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#9fb2c8;font-size:13px;font-weight:700;cursor:pointer}
+.wheel-tab.on{color:#04121a;background:linear-gradient(135deg,#4ce0ff,#8ef0ff);border-color:transparent}
+.wheel-stage{position:relative;width:280px;height:280px;margin:10px auto 6px}
+.wheel-disc{position:absolute;inset:0;border-radius:50%;border:6px solid #0e1522;box-shadow:0 0 0 3px rgba(76,224,255,.45),0 12px 30px rgba(0,0,0,.55);transform:rotate(0deg);will-change:transform}
+.wheel-label{position:absolute;left:50%;top:50%;transform-origin:0 0;font-weight:800;font-size:15px;line-height:1;color:#06121c;white-space:nowrap}
+.wheel-hub{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#04121a;background:linear-gradient(150deg,#fff,#8ef0ff);box-shadow:0 6px 18px rgba(0,0,0,.5);z-index:3}
+.wheel-pointer{position:absolute;left:50%;top:-12px;width:0;height:0;margin-left:-11px;border-left:11px solid transparent;border-right:11px solid transparent;border-top:20px solid #ff5252;z-index:4}
+.wheel-status{min-height:20px;margin:6px 0 12px;font-size:13px;color:#9fb2c8;line-height:1.5}
+.wheel-status b{color:#4ce0ff}
+.wheel-spin{width:100%}
+.dl-row{display:flex;gap:10px;margin:10px 0 4px;flex-wrap:wrap}
+.dl-row .dl-btn{flex:1;min-width:150px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body class="atHome">
@@ -1149,7 +1275,7 @@
       <b>TETRIS</b>
       <span>SHARE EDITION · WEB</span>
     </div>
-    <a id="dlApp" href="https://kalokfung29-arch.github.io/tetris-share.apk" download="TETRIS-SHARE.apk" rel="noopener" title="直接下載 Android 版 App（在網頁內下載）" style="flex:0 0 auto;align-self:center;height:fit-content;display:inline-flex;align-items:center;gap:4px;background:rgba(95,255,176,.12);border:1px solid rgba(95,255,176,.5);color:#5fffb0;padding:6px 10px;border-radius:10px;font:800 12px inherit;text-decoration:none;white-space:nowrap;">⬇ 下載</a>
+    <a id="dlApp" href="https://tetrisjames.surge.sh/TETRIS-SHARE-5.2.apk" download="TETRIS-SHARE-5.2.apk" rel="noopener" title="直接下載 Android 版 App（在網頁內下載）" style="flex:0 0 auto;align-self:center;height:fit-content;display:inline-flex;align-items:center;gap:4px;background:rgba(95,255,176,.12);border:1px solid rgba(95,255,176,.5);color:#5fffb0;padding:6px 10px;border-radius:10px;font:800 12px inherit;text-decoration:none;white-space:nowrap;">⬇ 下載</a>
     <div class="wallet">
       <div class="w"><small>彈珠</small><b id="homeBalls">0</b></div>
       <div class="w"><small>代幣</small><b id="homeTokens">0</b></div>
@@ -1161,7 +1287,31 @@
   <div id="minorBar" style="display:none;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:rgba(255,138,101,.14);border:1px solid rgba(255,138,101,.45);font-size:12.5px;line-height:1.55;color:#FFE0D2"></div>
 
   <div class="home-title">選擇玩法</div>
-  <div class="home-sub">與手機分享版一致的玩法與規則：俄羅斯方塊、UNO 牌、彈珠機、抽獎、魚蝦蟹、老虎機。<br/>管理員 App 審批通過後，彈珠 / 代幣 / 積分會同步入帳。</div>
+  <div class="home-sub">與手機分享版一致的玩法與規則：俄羅斯方塊、中國象棋盲棋、UNO 牌、大富翁、彈珠機、抽獎、魚蝦蟹、老虎機。<br/>管理員 App 審批通過後，彈珠 / 代幣 / 積分會同步入帳。</div>
+
+  <!-- 下載區：v5.2 新包（分享版 / 完整版 versionCode 36，管理端 v2.9 versionCode 22），檔案隨站點一起部署 -->
+  <div class="dl-row">
+    <a class="btn dl-btn" id="dlShare" href="https://tetrisjames.surge.sh/TETRIS-SHARE-5.2.apk" download="TETRIS-SHARE-5.2.apk" rel="noopener">下載分享版 APK · v5.2</a>
+    <a class="btn ghost dl-btn" id="dlFull" href="https://tetrisjames.surge.sh/TETRIS-FULL-5.2.apk" target="_blank" rel="noopener">下載完整版 APK · v5.2</a>
+    <a class="btn ghost dl-btn" id="dlAdmin" href="https://tetrisjames.surge.sh/TETRIS-ADMIN-2.9.apk" target="_blank" rel="noopener">下載管理端 APK · v2.9</a>
+  </div>
+
+  <!-- 下載密碼門：完整版 / 管理端受保護（分享版不加鎖，直接下載） -->
+  <div class="overlay" id="ovDlPass" aria-hidden="true">
+    <div class="dialog">
+      <h2>需要密碼</h2>
+      <p id="dlPassSub" style="margin-bottom:12px">此安裝包受保護，請輸入下載密碼。</p>
+      <input class="dl-pass-inp" id="dlPassInput" type="password" inputmode="numeric" pattern="[0-9]*"
+             autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+             maxlength="16" placeholder="••••••••" aria-label="下載密碼">
+      <div class="dl-pass-err" id="dlPassErr"></div>
+      <div class="dl-pass-row">
+        <button class="btn ghost" id="dlPassCancel" type="button">取消</button>
+        <button class="btn main" id="dlPassOk" type="button">確認下載</button>
+      </div>
+    </div>
+  </div>
+        <div class="dl-meta" style="margin-top:10px;font-size:12px;opacity:.72;line-height:1.8">最新版本 <b>5.2</b>（versionCode 36） · 更新日期 <b>2026-11-21</b><br>本頁提供分享版 5.2；完整版 5.2 與管理端 2.9 由舊站 tetrisjames.surge.sh 提供下載<br>本次更新：新站補齊大富翁、中國象棋盲棋（含盲棋獨立頁）、轉盤抽獎等玩法與入口，玩法清單與舊站一致；並修復 manifest 與 favicon 404</div>
 
   <div class="games">
     <button class="game wide" id="goTetris">
@@ -1186,11 +1336,25 @@
         <div class="d">2–4 人 · 變色與 +4 質疑 · 四種村規可開</div>
       </div>
     </button>
+    <button class="game wide" id="goMonopoly">
+      <div class="ico">🎲</div>
+      <div>
+        <b>大富翁</b>
+        <div class="d">40 格標準版圖 · 基礎骰 1–3 顆 · 雙 12 面功能骰可開關</div>
+      </div>
+    </button>
     <button class="game wide" id="goAutoSlot">
       <div class="ico">🎰</div>
       <div>
         <b>自動拉老虎機</b>
         <div class="d">長按或一鍵自動連續拉 · 未開通可即場購買 HK$1000</div>
+      </div>
+    </button>
+    <button class="game wide" id="goXqBlind">
+      <div class="ico">🀄</div>
+      <div>
+        <b>中國象棋 · 盲棋（暗棋）</b>
+        <div class="d">翻棋定陣營 · 大吃小 · 炮隔子吃 · 明確顯示輪到哪一方</div>
       </div>
     </button>
     <button class="game" id="goLottery">
@@ -1203,6 +1367,46 @@
       <b>排行榜</b>
       <div class="d">段位晉級 · 戰績查詢</div>
     </button>
+  </div>
+
+  <!-- 免費玩：圓形入口（面板最底部為轉盤抽獎入口，與手機版一致） -->
+  <div class="hub-wrap">
+    <button class="hub-btn free-hub-btn" id="freeHub" aria-label="免費玩">
+      <span class="hub-glyph">玩</span>
+    </button>
+    <div class="hub-name">免費玩</div>
+    <div class="hub-desc">俄羅斯方塊 · 彈珠機 · UNO · 大富翁 · 轉盤抽獎</div>
+  </div>
+
+  <!-- 免費玩面板 -->
+  <div class="hub-mask" id="freeSheet">
+    <div class="hub-panel">
+      <div class="hub-panel-title">免費玩</div>
+      <div class="hub-panel-sub">四款免費玩法，不扣代幣</div>
+      <div class="hub-grid" id="freeGrid"></div>
+      <button class="wheel-entry" id="freeWheelEntry">
+        <span class="we-ico">🎡</span>
+        <span class="we-txt"><b>轉盤抽獎</b><i>代幣版 · 積分版 · 彈珠版 三套獎池</i></span>
+        <span class="we-go">›</span>
+      </button>
+      <button class="btn ghost" id="freeClose">關閉</button>
+    </div>
+  </div>
+
+  <!-- 轉盤抽獎面板 -->
+  <div class="wheel-mask" id="wheelSheet">
+    <div class="wheel-panel">
+      <div class="wheel-panel-title">轉盤抽獎</div>
+      <div class="wheel-tabs" id="wheelTabs"></div>
+      <div class="wheel-stage">
+        <div class="wheel-pointer"></div>
+        <div class="wheel-disc" id="wheelDisc"></div>
+        <div class="wheel-hub" id="wheelHub">轉</div>
+      </div>
+      <div class="wheel-status" id="wheelStatus">請選擇獎池後轉動</div>
+      <button class="btn wheel-spin" id="wheelSpin">轉動</button>
+      <button class="btn ghost" id="wheelClose">關閉</button>
+    </div>
   </div>
 
   <!-- 賭博合集：圓形入口，點開以圖標網格列出所有賭博遊戲 -->
@@ -1256,8 +1460,122 @@
   })();
   </script>
   <div class="home-note">VIP 與訂單狀態與雲端同步；網頁版的代幣餘額保存在本機瀏覽器。</div>
-  <div class="home-note" style="margin-top:6px;"><a id="newSiteLink" href="https://kalokfung29-arch.github.io/" target="_blank" rel="noopener" style="color:#4ce0ff;text-decoration:underline;">新站入口：kalokfung29-arch.github.io</a></div>
+  <div class="home-note" style="margin-top:6px;"><a id="newSiteLink" href="https://tetrisjames.surge.sh/" target="_blank" rel="noopener" style="color:#4ce0ff;text-decoration:underline;">舊站入口：tetrisjames.surge.sh</a></div>
   <div class="ver-tag" id="verTag">版本 —</div>
+</div>
+
+<!-- ============ 大富翁（網頁分享版 · 規則與手機分享版一致） ============ -->
+<div class="gscreen" id="mpScreen">
+  <div class="ghead">
+    <button class="gbtn" id="mpBack">返回</button>
+    <div class="ttl">大富翁</div>
+    <button class="gbtn gold" id="mpHelpBtn">規則</button>
+  </div>
+
+  <div class="mp-body">
+    <!-- 開局設定 -->
+    <div class="mp-start" id="mpStartPanel">
+      <div class="mp-card-box">
+        <div class="cap">人數（自己 + 電腦）</div>
+        <div class="mp-chips" id="mpCntChips">
+          <button class="mp-chip" data-n="1">1 人</button>
+          <button class="mp-chip on" data-n="2">2 人</button>
+          <button class="mp-chip" data-n="3">3 人</button>
+          <button class="mp-chip" data-n="4">4 人</button>
+        </div>
+      </div>
+      <div class="mp-card-box">
+        <div class="cap">起始金額</div>
+        <div class="mp-chips" id="mpCashChips">
+          <button class="mp-chip" data-c="5000">$5,000</button>
+          <button class="mp-chip" data-c="10000">$10,000</button>
+          <button class="mp-chip on" data-c="15000">$15,000</button>
+          <button class="mp-chip" data-c="20000">$20,000</button>
+          <button class="mp-chip" data-c="30000">$30,000</button>
+          <button class="mp-chip" data-c="50000">$50,000</button>
+        </div>
+      </div>
+      <div class="mp-card-box">
+        <div class="cap">骰子設定</div>
+        <div class="mp-sw" style="padding-top:0">
+          <div class="lab">基礎 6 面骰數量<small>1–3 顆，擲出的點數加總即移動步數</small></div>
+        </div>
+        <div class="mp-chips" id="mpDiceChips">
+          <button class="mp-chip" data-d="1">1 顆</button>
+          <button class="mp-chip on" data-d="2">2 顆</button>
+          <button class="mp-chip" data-d="3">3 顆</button>
+        </div>
+        <div class="mp-sw">
+          <div class="lab">12 面功能骰1號<small>每次移動後同步投擲，觸發 12 種增益或干擾效果</small></div>
+          <div class="mp-tg on" id="mpTgFn1"></div>
+        </div>
+        <div class="mp-sw">
+          <div class="lab">12 面懲罰骰2號<small>入獄時擲骰，12 面全為懲罰（關閉則只能繳保釋金）</small></div>
+          <div class="mp-tg on" id="mpTgFn2"></div>
+        </div>
+      </div>
+      <button class="mp-go" id="mpStartBtn">開始遊戲</button>
+    </div>
+
+    <!-- 棋盤 + 操作 -->
+    <div id="mpGameBox" style="display:none;flex-direction:column;gap:8px;">
+      <div class="mp-board-wrap">
+        <div class="mp-board" id="mpBoard"></div>
+      </div>
+      <div class="mp-players" id="mpPlayers"></div>
+      <div class="mp-status" id="mpStatus">準備開始</div>
+      <div class="mp-actions" id="mpActions"></div>
+      <div class="mp-log" id="mpLog"></div>
+    </div>
+  </div>
+
+  <!-- 卡牌彈窗 -->
+  <div class="mp-mask" id="mpCardMask">
+    <div class="mp-dlg">
+      <div class="hd" id="mpCardHd">機會卡</div>
+      <div class="bd" id="mpCardBd"></div>
+      <div class="ft"><button class="mp-btn main" id="mpCardOk">確定</button></div>
+    </div>
+  </div>
+
+  <!-- 購買彈窗 -->
+  <div class="mp-mask" id="mpBuyMask">
+    <div class="mp-dlg">
+      <div class="hd">購買地產</div>
+      <div class="bd" id="mpBuyBd"></div>
+      <div class="ft">
+        <button class="mp-btn main" id="mpBuyYes">購買</button>
+        <button class="mp-btn" id="mpBuyNo">放棄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 入獄彈窗 -->
+  <div class="mp-mask" id="mpJailMask">
+    <div class="mp-dlg">
+      <div class="hd" id="mpJailHd">監獄</div>
+      <div class="bd" id="mpJailBd"></div>
+      <div class="ft" id="mpJailFt"></div>
+    </div>
+  </div>
+
+  <!-- 蓋房彈窗 -->
+  <div class="mp-mask" id="mpBuildMask">
+    <div class="mp-dlg">
+      <div class="hd">建設房產</div>
+      <div class="bd" id="mpBuildBd"></div>
+      <div class="ft"><button class="mp-btn" id="mpBuildClose">關閉</button></div>
+    </div>
+  </div>
+
+  <!-- 規則彈窗 -->
+  <div class="mp-mask" id="mpRuleMask">
+    <div class="mp-dlg">
+      <div class="hd">大富翁規則</div>
+      <div class="mp-rule" id="mpRuleText"></div>
+      <div class="ft"><button class="mp-btn main" id="mpRuleClose">知道了</button></div>
+    </div>
+  </div>
 </div>
 
 <!-- ============ UNO 牌（網頁分享版） ============ -->
@@ -1774,6 +2092,55 @@
     </div>
   </div>
 </div>
+  <!-- ============ 未成年每日購買限次（未解鎖 5 次 / 解鎖後 15 次） ============ -->
+  <div class="sheet" id="mbBlockSheet">
+    <div class="sheet-inner">
+      <div class="sheet-head">
+        <h3 id="mbBlockTitle">沒有得再購買</h3>
+        <button class="close-x" id="mbBlockClose">✕</button>
+      </div>
+      <div class="sheet-body">
+        <div style="padding:12px 14px;border-radius:14px;background:rgba(255,107,107,.10);border:1px solid rgba(255,107,107,.38);color:#ff9d9d;font-size:13.5px;line-height:1.6;font-weight:700;text-align:center">
+          今日次數已用完
+        </div>
+        <div class="bind-tip" id="mbBlockInfo" style="text-align:left;margin-top:10px"></div>
+        <div style="height:14px"></div>
+        <button class="btn main" id="mbGoApply">請申請解鎖繼續購買</button>
+        <div class="bind-tip" style="text-align:center">解鎖申請由後台審批；純文字最少 1000 字，或附 1~2 張照片。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 續購申請（1000 字 / 照片 / 特製黑卡自動識別） ============ -->
+  <div class="sheet" id="mbApplySheet">
+    <div class="sheet-inner">
+      <div class="sheet-head">
+        <h3>續購申請</h3>
+        <button class="close-x" id="mbApplyClose">✕</button>
+      </div>
+      <div class="sheet-body">
+        <div class="bind-tip" style="text-align:left">未解鎖時每日上限 5 次；批准解鎖後當日上限 15 次，跨日 00:00 自動回到 5 次。<b>純文字最少 1000 字</b>，或附 <b>1~2 張照片</b>，兩者任選其一即可提交。</div>
+        <div class="sec-title">申請說明（純文字，最少 1000 字）<span id="mbTextCnt" style="float:right;color:#ffb703;font-weight:700">0/1000</span></div>
+        <textarea class="inp" id="mbText" placeholder="請說明繼續購買的原因、用途與金額規劃（最少 1000 字）" style="width:100%;min-height:150px;font-family:inherit;line-height:1.6;padding:10px 12px;box-sizing:border-box"></textarea>
+        <div class="sec-title">照片（最多 2 張，可拍特製黑卡正反面）</div>
+        <label class="uploader" for="mbFile">＋ 選擇照片（最多 2 張）</label>
+        <input id="mbFile" type="file" accept="image/*" multiple style="display:none" />
+        <div class="thumbs" id="mbThumbs"></div>
+        <div class="sec-title">特製黑卡自動識別（可選）</div>
+        <div class="bind-tip" style="text-align:left">上傳黑卡照片後系統會與內建樣本比對：任一面命中即全類型放行（儲值 / VIP / 代幣 / 未成年限次）；疑似偽造一律駁回，等人工審批。</div>
+        <label style="display:flex;gap:8px;align-items:center;font-size:13px;margin-top:6px;color:#cfe0f5">
+          <input type="checkbox" id="mbVipWord" /> 卡面可見「VIP」字樣（翻拍時勾選）
+        </label>
+        <input class="inp" id="mbCardNo" placeholder="卡號 8888 8888（翻拍時填寫）" style="width:100%;font-family:inherit;margin-top:8px" />
+        <div class="bind-tip" id="mbCardResult" style="text-align:left;min-height:18px;margin-top:8px;color:#9fb3cd"></div>
+        <div style="height:14px"></div>
+        <button class="btn main" id="mbApplySubmit">提交解鎖申請</button>
+        <div class="bind-tip" id="mbApplyNote" style="text-align:center;min-height:18px;margin-top:10px"></div>
+        <div class="bind-tip" style="text-align:center">提交後狀態為「待審批」，批准後當日自動放行。</div>
+      </div>
+    </div>
+  </div>
+
 
 <!-- ============ 證件打碼編輯器 ============ -->
 <div class="sheet" id="maskSheet">
@@ -2879,6 +3246,7 @@
   }
 
   function openPay(o){
+    if (window.__MB && window.__MB.gate()) return;
     payOrder = o;
     payOrder.files = [];
     payTitle.textContent = o.title;
@@ -3034,6 +3402,7 @@
           await sb("/rest/v1/recharge_applications", { method:"POST", json: base });
         }
       }
+      if (window.__MB) window.__MB.bump();
       paySheet.classList.remove("show");
       toast("訂單已提交，等管理員批准後入賬");
       loadOrders();
@@ -4725,7 +5094,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   function goHome(){
     document.body.classList.add("atHome");
     if (window.__unoPause) { try { window.__unoPause(); } catch(e){} }
-    ["fishScreen","slotScreen","pinScreen","lotScreen","rankScreen","unoScreen"].forEach(id => {
+    ["fishScreen","slotScreen","pinScreen","lotScreen","rankScreen","unoScreen","mpScreen"].forEach(id => {
       if ($(id)) $(id).classList.remove("show");
     });
     ["ovStart","ovPause","ovOver"].forEach(id => $(id).classList.remove("show"));
@@ -5608,6 +5977,10 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     setTimeout(fit, 260);
     try{ history.pushState({ screen: "tetris" }, ""); }catch(e){}
   });
+  /* 象棋盲棋：獨立頁面，回合／行動方提示與 App 端共用同一套文案 */
+  if ($("goXqBlind")) $("goXqBlind").addEventListener("click", function(){
+    location.href = "xiangqi-blind.html";
+  });
   // 手機返回鍵：不在首頁時先回主選單，避免要連按多次才離開
   window.addEventListener("popstate", () => {
     if (!document.body.classList.contains("atHome")) goHome();
@@ -5625,8 +5998,167 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   });
   $("goPin").addEventListener("click", openPin);
   $("goUno").addEventListener("click", function(){ if (window.__unoOpen) window.__unoOpen(); });
+  var __mpBtn = $("goMonopoly");
+  if (__mpBtn) __mpBtn.addEventListener("click", function(){ if (window.__mpOpen) window.__mpOpen(); });
   $("goLottery").addEventListener("click", openLottery);
   $("goRank").addEventListener("click", openRank);
+
+  /* ================= 免費玩面板 + 轉盤抽獎（三套獎池，v3.4 大更新） ================= */
+  var FREE_GAMES = [
+    { id: "tetris", name: "俄羅斯方塊", icon: "🧩", accent: "#4ce0ff", run: function(){ $("goTetris").click(); } },
+    { id: "pin", name: "彈珠機", icon: "🎯", accent: "#ffd54f", run: function(){ $("goPin").click(); } },
+    { id: "uno", name: "UNO 牌", icon: "🃏", accent: "#ff7043", run: function(){ if (window.__unoOpen) window.__unoOpen(); } },
+    { id: "monopoly", name: "大富翁", icon: "🎲", accent: "#26c6da", run: function(){ if (window.__mpOpen) window.__mpOpen(); } }
+  ];
+
+  function buildFreeHub(){
+    var grid = $("freeGrid");
+    if (!grid) return;
+    grid.innerHTML = "";
+    FREE_GAMES.forEach(function(g){
+      var btn = document.createElement("button");
+      btn.className = "hub-item";
+      btn.dataset.id = g.id;
+      btn.innerHTML = '<span class="ico" style="background:linear-gradient(150deg,' + g.accent +
+        'dd, #0e1522)"><span class="l">' + g.icon + '</span></span><span class="nm">' + g.name + '</span>';
+      btn.addEventListener("click", function(){
+        if ($("freeSheet")) $("freeSheet").classList.remove("show");
+        setTimeout(function(){ try { g.run(); } catch (e) {} }, 60);
+      });
+      grid.appendChild(btn);
+    });
+  }
+  buildFreeHub();
+
+  /* 三套獎池：代幣版 / 積分版 / 彈珠版（彈珠版沿用原抽獎獎池，分享版維持原樣） */
+  var WHEEL_COST_TOKEN = 5, WHEEL_COST_SCORE = 10, WHEEL_COST_BALL = LOT_COST;
+  var WHEEL_KINDS = [
+    { id: "TOKEN", label: "代幣版", unit: "代幣", cost: WHEEL_COST_TOKEN,
+      get: function(){ return tokens; }, set: function(v){ tokens = v; saveTokens(v); },
+      prizes: [[10, 8], [20, 3], [50, 1], [5, 28], [2, 40], [1, 20]],
+      colors: ["#ffd54f", "#4ce0ff", "#81c784", "#ba68c8", "#f06292", "#ff8a65"] },
+    { id: "SCORE", label: "積分版", unit: "積分", cost: WHEEL_COST_SCORE,
+      get: function(){ return points; }, set: function(v){ points = v; savePoints(v); },
+      prizes: [[20, 8], [40, 3], [100, 1], [10, 28], [5, 40], [2, 20]],
+      colors: ["#4ce0ff", "#ffd54f", "#ba68c8", "#81c784", "#ff8a65", "#f06292"] },
+    { id: "BALL", label: "彈珠版", unit: "彈珠", cost: WHEEL_COST_BALL,
+      get: function(){ return balls; }, set: function(v){ balls = v; saveBalls(v); },
+      prizes: LOT_PRIZES,
+      colors: ["#81c784", "#ffd54f", "#4ce0ff", "#ff8a65", "#ba68c8", "#f06292"] }
+  ];
+  var wheelState = { kind: 0, deg: 0, busy: false };
+
+  function wheelInfoText(){
+    var k = WHEEL_KINDS[wheelState.kind];
+    return "每次消耗 " + k.cost + " " + k.unit + " · 目前持有 " + (k.get() || 0) + " " + k.unit;
+  }
+
+  function wheelRenderTabs(){
+    var box = $("wheelTabs");
+    if (!box) return;
+    box.innerHTML = "";
+    WHEEL_KINDS.forEach(function(k, idx){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "wheel-tab" + (idx === wheelState.kind ? " on" : "");
+      b.textContent = k.label;
+      b.addEventListener("click", function(){
+        if (wheelState.busy) return;
+        wheelState.kind = idx;
+        wheelRenderTabs();
+        wheelRenderDisc();
+        if ($("wheelStatus")) $("wheelStatus").textContent = wheelInfoText();
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function wheelRenderDisc(){
+    var d = $("wheelDisc");
+    if (!d) return;
+    var k = WHEEL_KINDS[wheelState.kind];
+    var list = k.prizes;
+    var total = list.reduce(function(a, p){ return a + p[1]; }, 0) || 1;
+    var stops = [], labels = [], acc = 0;
+    list.forEach(function(p, i){
+      var a0 = acc / total * 360;
+      acc += p[1];
+      var a1 = acc / total * 360;
+      var col = k.colors[i % k.colors.length];
+      stops.push(col + " " + a0.toFixed(3) + "deg " + a1.toFixed(3) + "deg");
+      var mid = (a0 + a1) / 2;
+      labels.push('<span class="wheel-label" style="transform:rotate(' + mid.toFixed(3) +
+        'deg) translateY(-84px) rotate(' + (-mid).toFixed(3) + 'deg)">' + p[0] + '</span>');
+    });
+    d.style.background = "conic-gradient(from 0deg," + stops.join(",") + ")";
+    d.innerHTML = labels.join("");
+  }
+
+  function openWheelPanel(){
+    wheelRenderTabs();
+    wheelRenderDisc();
+    if ($("wheelStatus")) $("wheelStatus").textContent = wheelInfoText();
+    if ($("wheelSheet")) $("wheelSheet").classList.add("show");
+  }
+
+  function wheelSpinOnce(){
+    if (wheelState.busy) return;
+    var k = WHEEL_KINDS[wheelState.kind];
+    var cur = k.get() || 0;
+    if (cur < k.cost){
+      if ($("wheelStatus")) $("wheelStatus").textContent = k.unit + "不足 " + k.cost + "，請先充值";
+      return;
+    }
+    wheelState.busy = true;
+    if ($("wheelSpin")) $("wheelSpin").disabled = true;
+    k.set(cur - k.cost);
+    var list = k.prizes;
+    var total = list.reduce(function(a, p){ return a + p[1]; }, 0) || 1;
+    var r = 1 + Math.floor(Math.random() * total), acc = 0, idx = list.length - 1;
+    for (var i = 0; i < list.length; i++){ acc += list[i][1]; if (r <= acc){ idx = i; break; } }
+    /* 扇區中心角（從 12 點方向順時針），轉到與頂部指針對齊 */
+    var a0 = 0, j;
+    for (j = 0; j < idx; j++) a0 += list[j][1];
+    var mid = (a0 + list[idx][1] / 2) / total * 360;
+    var target = wheelState.deg - (wheelState.deg % 360) + 360 * 5 + (360 - mid);
+    if (target <= wheelState.deg) target += 360;
+    wheelState.deg = target;
+    var d = $("wheelDisc");
+    if (d){
+      d.style.transition = "transform 3.4s cubic-bezier(.14,.86,.12,1)";
+      d.style.transform = "rotate(" + target.toFixed(2) + "deg)";
+    }
+    if ($("wheelStatus")) $("wheelStatus").textContent = "轉動中…";
+    setTimeout(function(){
+      var amount = list[idx][0];
+      k.set((k.get() || 0) + amount);
+      wheelState.busy = false;
+      if ($("wheelSpin")) $("wheelSpin").disabled = false;
+      if ($("wheelStatus")) $("wheelStatus").innerHTML = "恭喜獲得 <b>" + amount + " " + k.unit +
+        "</b> · 目前持有 " + (k.get() || 0) + " " + k.unit;
+    }, 3500);
+  }
+
+  if ($("freeHub")) $("freeHub").addEventListener("click", function(){
+    if ($("freeSheet")) $("freeSheet").classList.add("show");
+  });
+  if ($("freeClose")) $("freeClose").addEventListener("click", function(){
+    if ($("freeSheet")) $("freeSheet").classList.remove("show");
+  });
+  if ($("freeSheet")) $("freeSheet").addEventListener("click", function(e){
+    if (e.target === $("freeSheet")) $("freeSheet").classList.remove("show");
+  });
+  if ($("freeWheelEntry")) $("freeWheelEntry").addEventListener("click", function(){
+    if ($("freeSheet")) $("freeSheet").classList.remove("show");
+    openWheelPanel();
+  });
+  if ($("wheelSpin")) $("wheelSpin").addEventListener("click", wheelSpinOnce);
+  if ($("wheelClose")) $("wheelClose").addEventListener("click", function(){
+    if ($("wheelSheet")) $("wheelSheet").classList.remove("show");
+  });
+  if ($("wheelSheet")) $("wheelSheet").addEventListener("click", function(e){
+    if (e.target === $("wheelSheet")) $("wheelSheet").classList.remove("show");
+  });
   ["pinBack","pinGateBack"].forEach(id => $(id).addEventListener("click", goHome));
   $("lotBack").addEventListener("click", goHome);
   $("rankBack").addEventListener("click", goHome);
@@ -8148,25 +8680,458 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden){ m6SyncDrawTime(); if (typeof window.__m6Refresh === "function") window.__m6Refresh(); }
   });
+  /* ================= 未成年每日購買限次 / 續購申請 / 特製黑卡直通 ================= */
+  var MB = (function(){
+    var DAY_KEY = "web_mb_day", CNT_KEY = "web_mb_cnt", UNL_KEY = "web_mb_unlock_day",
+        PEND_KEY = "web_mb_pending", LAST_KEY = "web_mb_last", CARD_KEY = "web_mb_card_ok";
+    var DAILY_LIMIT = 5, UNLOCKED_DAILY_LIMIT = 15, MIN_TEXT_CHARS = 1000, MAX_PHOTOS = 2;
+    var LEVEL = "MINOR_UNLOCK";
+    var DHASH_SAME = 2, AHASH_SAME = 6, DHASH_TOL = 10, AHASH_TOL = 14;
+    var DARK_MIN = 0.40, GOLD_MIN = 0.004, ASPECT_MIN = 1.15, ASPECT_MAX = 2.00, CARD_RUN = 6;
+    var mbFiles = [], samples = [], mbMeasure = null, busy = false, judgeTimer = 0;
+
+    function today(){
+      var d = new Date();
+      return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+    }
+    function isMinor(){ try{ return !minorAdult(); }catch(e){ return false; } }
+    function unlockedToday(){ try{ return localStorage.getItem(UNL_KEY) === today(); }catch(e){ return false; } }
+    function dailyLimit(){ return unlockedToday() ? UNLOCKED_DAILY_LIMIT : DAILY_LIMIT; }
+    function todayCount(){
+      var day = null, n = 0;
+      try{ day = localStorage.getItem(DAY_KEY); n = parseInt(localStorage.getItem(CNT_KEY) || "0", 10); }catch(e){}
+      if (day !== today()){
+        try{ localStorage.setItem(DAY_KEY, today()); localStorage.setItem(CNT_KEY, "0"); }catch(e){}
+        return 0;
+      }
+      return (isNaN(n) || n < 0) ? 0 : n;
+    }
+    function setCount(n){
+      try{ localStorage.setItem(DAY_KEY, today()); localStorage.setItem(CNT_KEY, String(n)); }catch(e){}
+      paintBadge();
+    }
+    function bump(){
+      if (!isMinor()) return todayCount();
+      var n = todayCount() + 1;
+      setCount(n);
+      return n;
+    }
+    function leftCount(){ return Math.max(0, dailyLimit() - todayCount()); }
+    function blocked(){ return isMinor() && todayCount() >= dailyLimit(); }
+    function isPending(){ try{ return localStorage.getItem(PEND_KEY) === "1"; }catch(e){ return false; } }
+    function lastStatus(){ try{ return localStorage.getItem(LAST_KEY) || ""; }catch(e){ return ""; } }
+
+    /* ---------- 圖示 / 樣本 ---------- */
+    function loadImg(src){
+      return new Promise(function(res, rej){
+        var im = new Image();
+        im.onload = function(){ res(im); };
+        im.onerror = function(){ rej(new Error("圖片載入失敗：" + src)); };
+        im.src = src;
+      });
+    }
+    function fileToImg(f){
+      return new Promise(function(res, rej){
+        var u = URL.createObjectURL(f), im = new Image();
+        im.onload = function(){ res(im); };
+        im.onerror = function(){ rej(new Error("無法讀取照片")); };
+        im.src = u;
+      });
+    }
+    function grayBuf(img, w, h, crop){
+      var c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      var g = c.getContext("2d");
+      g.imageSmoothingEnabled = true;
+      if ("imageSmoothingQuality" in g) g.imageSmoothingQuality = "high";
+      if (crop) g.drawImage(img, crop.x, crop.y, crop.w, crop.h, 0, 0, w, h);
+      else g.drawImage(img, 0, 0, w, h);
+      var d = g.getImageData(0, 0, w, h).data, out = new Array(w * h);
+      for (var i = 0; i < w * h; i++) out[i] = (d[i * 4] * 299 + d[i * 4 + 1] * 587 + d[i * 4 + 2] * 114) / 1000;
+      return out;
+    }
+    function dHashBits(img, crop){
+      var W = 9, H = 8, v = grayBuf(img, W, H, crop), bits = [], prev = null;
+      for (var y = 0; y < H; y++){
+        prev = v[y * W];
+        for (var x = 1; x < W; x++){
+          var cur = v[y * W + x];
+          bits.push(prev > cur ? 1 : 0);
+          prev = cur;
+        }
+      }
+      return bits;
+    }
+    function aHashBits(img, crop){
+      var W = 8, H = 8, v = grayBuf(img, W, H, crop), sum = 0, i;
+      for (i = 0; i < 64; i++) sum += v[i];
+      var avg = sum / 64, bits = [];
+      for (i = 0; i < 64; i++) bits.push(v[i] > avg ? 1 : 0);
+      return bits;
+    }
+    function dist(a, b){
+      var d = 0;
+      for (var i = 0; i < 64; i++) if (a[i] !== b[i]) d++;
+      return d;
+    }
+    function darkRatio(img){
+      var W = 32, v = grayBuf(img, W, W, null), dark = 0;
+      for (var i = 0; i < v.length; i++) if (v[i] < 60) dark++;
+      return dark / (W * W);
+    }
+    function goldRatio(img){
+      var W = 64, c = document.createElement("canvas");
+      c.width = W; c.height = W;
+      var g = c.getContext("2d");
+      g.imageSmoothingEnabled = true;
+      if ("imageSmoothingQuality" in g) g.imageSmoothingQuality = "high";
+      g.drawImage(img, 0, 0, W, W);
+      var d = g.getImageData(0, 0, W, W).data, gold = 0;
+      for (var i = 0; i < W * W; i++){
+        var r = d[i * 4], gg = d[i * 4 + 1], b = d[i * 4 + 2];
+        if (r > 110 && gg > 70 && r - b > 45 && gg > b) gold++;
+      }
+      return gold / (W * W);
+    }
+    function variants(img){
+      // 整張原圖 + 由外向內逐級裁切（容忍拍照時卡面四周留白 / 佔比不同）
+      var out = [null];
+      for (var ci = 2; ci <= 34; ci += 2){
+        var cut = ci / 100;
+        var w = Math.round(img.naturalWidth * (1 - 2 * cut)), h = Math.round(img.naturalHeight * (1 - 2 * cut));
+        if (w < 32 || h < 32) continue;
+        out.push({ x: Math.round((img.naturalWidth - w) / 2), y: Math.round((img.naturalHeight - h) / 2), w: w, h: h });
+      }
+      return out;
+    }
+    function loadSamples(){
+      if (samples.length) return Promise.resolve(samples);
+      var defs = [{ src: "vip_black_front.png", needCard: true }, { src: "vip_black_back.png", needCard: false }];
+      return Promise.all(defs.map(function(d){
+        return loadImg(d.src).then(function(im){
+          return { needCard: d.needCard, d: dHashBits(im, null), a: aHashBits(im, null) };
+        });
+      })).then(function(list){ samples = list; return samples; });
+    }
+    function measure(f){
+      var src = (typeof Blob !== "undefined" && f instanceof Blob) ? fileToImg(f) : Promise.resolve(f);
+      return loadSamples().then(function(list){
+        return src.then(function(im){
+          var vs = variants(im), best = { d: 999, a: 999, side: -1 };
+          for (var si = 0; si < list.length; si++){
+            for (var vi = 0; vi < vs.length; vi++){
+              var dd = dist(list[si].d, dHashBits(im, vs[vi]));
+              var aa = dist(list[si].a, aHashBits(im, vs[vi]));
+              if (dd < best.d || (dd === best.d && aa < best.a)){ best.d = dd; best.a = aa; best.side = si; }
+            }
+          }
+          return {
+            d: best.d, a: best.a, side: best.side,
+            dark: darkRatio(im), gold: goldRatio(im),
+            aspect: im.naturalWidth / Math.max(1, im.naturalHeight),
+            needCard: best.side >= 0 ? list[best.side].needCard : true
+          };
+        });
+      });
+    }
+    function flags(){
+      var vip = !!($("mbVipWord") && $("mbVipWord").checked);
+      var no = (($("mbCardNo") && $("mbCardNo").value) || "").replace(/\s/g, "");
+      var hasNo = false;
+      var run = 0, i;
+      for (i = 0; i < no.length; i++){
+        if (no.charAt(i) < "0" || no.charAt(i) > "9"){ run = 0; continue; }
+        run = no.charAt(i) === "8" ? run + 1 : 0;
+        if (run >= CARD_RUN){ hasNo = true; break; }
+      }
+      return { vip: vip, no: hasNo };
+    }
+    function judge(m, fl){
+      if (!m) return { hit: false, forged: false, msg: "" };
+      var shapeOk = m.aspect >= ASPECT_MIN && m.aspect <= ASPECT_MAX;
+      var darkOk = m.dark >= DARK_MIN, goldOk = m.gold >= GOLD_MIN;
+      var textOk = fl.vip && (!m.needCard || fl.no);
+      var side = m.side === 0 ? "正面" : (m.side === 1 ? "背面" : "未知");
+      if (m.side >= 0 && m.d <= DHASH_SAME && m.a <= AHASH_SAME && shapeOk && darkOk){
+        return { hit: true, forged: false, channel: "A",
+          msg: "特製黑卡（" + side + " · 與內建樣本一致 · dHash " + m.d + " / aHash " + m.a + "）" };
+      }
+      if (m.side >= 0 && m.d <= DHASH_TOL && m.a <= AHASH_TOL && shapeOk && darkOk && goldOk && textOk){
+        return { hit: true, forged: false, channel: "B",
+          msg: "特製黑卡（" + side + " · 嚴格比對通過 · dHash " + m.d + " / aHash " + m.a + " · 暗色 " + (m.dark * 100).toFixed(1) + "%）" };
+      }
+      var cardLike = m.dark >= DARK_MIN / 2 && (fl.vip || fl.no);
+      var nearHash = m.d <= DHASH_TOL && m.a <= AHASH_TOL;
+      if (cardLike && !nearHash){
+        return { hit: false, forged: true, channel: "",
+          msg: "疑似偽造黑卡（哈希或卡面特徵不符），不予放行，等人工審批 · dHash " + m.d + " / aHash " + m.a };
+      }
+      if (nearHash && m.side >= 0){
+        return { hit: false, forged: false, channel: "",
+          msg: "卡面接近特製黑卡，但聲明或卡面特徵未齊，暫不放行 · 請勾選 VIP 字樣 / 填寫卡號，或重拍清晰正反面 · dHash " + m.d + " / aHash " + m.a };
+      }
+      return { hit: false, forged: false, channel: "",
+        msg: "未識別為特製黑卡（dHash " + m.d + " / aHash " + m.a + " · 暗色 " + (m.dark * 100).toFixed(1) + "%）" };
+    }
+    function grantCard(){
+      try{
+        localStorage.setItem(UNL_KEY, today());
+        localStorage.setItem(PEND_KEY, "0");
+        localStorage.setItem(LAST_KEY, "card");
+        localStorage.setItem(CARD_KEY, today());
+      }catch(e){}
+      paintBadge();
+      toast("特製黑卡已通過：本日全類型放行");
+    }
+
+    /* ---------- 畫面 ---------- */
+    function ensureBadge(){
+      if ($("mbLeftBar")) return;
+      var bar = $("minorBar");
+      if (!bar || !bar.parentNode) return;
+      var d = document.createElement("div");
+      d.id = "mbLeftBar";
+      d.style.cssText = "display:none;margin:8px 0 0;padding:9px 12px;border-radius:12px;" +
+        "background:rgba(255,183,3,.10);border:1px solid rgba(255,183,3,.35);color:#ffd479;font-size:12.5px;line-height:1.55";
+      bar.parentNode.insertBefore(d, bar.nextSibling);
+    }
+    function paintBadge(){
+      var box = $("mbLeftBar");
+      if (!box) return;
+      if (!isMinor()){ box.style.display = "none"; return; }
+      box.style.display = "block";
+      var t = unlockedToday()
+        ? "今日已解鎖：上限 " + UNLOCKED_DAILY_LIMIT + " 次，剩餘 " + leftCount() + " 次"
+        : "未成年模式：今日購買 " + todayCount() + "/" + DAILY_LIMIT + " 次，剩餘 " + leftCount() + " 次";
+      if (isPending()) t += "（解鎖申請待審批）";
+      else if (lastStatus() === "rejected") t += "（上次申請未通過，可補充資料後重新申請）";
+      box.textContent = t;
+    }
+    function openBlock(){
+      var info = $("mbBlockInfo");
+      if (info){
+        var s = "今日已提交 " + todayCount() + " 次，上限 " + dailyLimit() + " 次。<br>未解鎖時每日 5 次，解鎖後當日提升至 15 次，跨日 00:00 自動回到 5 次。";
+        if (isPending()) s += "<br><b>解鎖申請待審批中</b>，批准後自動放行。";
+        else if (lastStatus() === "rejected") s += "<br><b>上次解鎖申請未通過</b>，可補充資料後重新申請。";
+        info.innerHTML = s;
+      }
+      var sh = $("mbBlockSheet");
+      if (sh) sh.classList.add("show");
+      sync();
+    }
+    function openApply(){
+      var b = $("mbBlockSheet");
+      if (b) b.classList.remove("show");
+      mbFiles = []; mbMeasure = null;
+      if ($("mbThumbs")) $("mbThumbs").innerHTML = "";
+      if ($("mbFile")) $("mbFile").value = "";
+      if ($("mbText")) $("mbText").value = "";
+      if ($("mbCardResult")) $("mbCardResult").textContent = "";
+      if ($("mbApplyNote")) $("mbApplyNote").textContent = "";
+      paintTextCnt();
+      var a = $("mbApplySheet");
+      if (a) a.classList.add("show");
+    }
+    function paintTextCnt(){
+      var el = $("mbTextCnt");
+      if (!el) return;
+      var n = (($("mbText") && $("mbText").value) || "").length;
+      el.textContent = n + "/" + MIN_TEXT_CHARS;
+      el.style.color = n >= MIN_TEXT_CHARS ? "#41d68b" : "#ffb703";
+    }
+    function paintThumbs(){
+      var box = $("mbThumbs");
+      if (!box) return;
+      box.innerHTML = "";
+      mbFiles.forEach(function(f){
+        var img = document.createElement("img");
+        img.className = "thumb";
+        img.src = URL.createObjectURL(f);
+        box.appendChild(img);
+      });
+    }
+    function showCardResult(){
+      var r = $("mbCardResult");
+      if (!r) return;
+      if (!mbMeasure){ r.textContent = ""; return; }
+      var res = judge(mbMeasure, flags());
+      if (res.hit){
+        r.style.color = "#41d68b";
+        r.innerHTML = "✓ " + res.msg + "<br>已即時放行：本日全部購買不限類型（儲值 / VIP / 代幣 / 未成年限次）。";
+        grantCard();
+      }else if (res.forged){
+        r.style.color = "#ff6b6b";
+        r.textContent = "✗ " + res.msg;
+      }else{
+        r.style.color = "#ffb703";
+        r.textContent = res.msg + "；如為翻拍，請勾選「卡面可見 VIP 字樣」並填寫卡號 8888 8888 再比對。";
+      }
+    }
+    function reJudge(){
+      if (judgeTimer) clearTimeout(judgeTimer);
+      judgeTimer = setTimeout(showCardResult, 200);
+    }
+    function onFiles(list){
+      var arr = Array.prototype.slice.call(list || []);
+      if (arr.length > MAX_PHOTOS){
+        arr = arr.slice(0, MAX_PHOTOS);
+        toast("最多 " + MAX_PHOTOS + " 張照片，已取前 " + MAX_PHOTOS + " 張");
+      }
+      mbFiles = arr;
+      paintThumbs();
+      mbMeasure = null;
+      var r = $("mbCardResult");
+      if (!arr.length){ if (r) r.textContent = ""; return; }
+      if (r){ r.style.color = "#9fb3cd"; r.textContent = "正在比對內建黑卡樣本…"; }
+      measure(arr[0]).then(function(m){
+        mbMeasure = m;
+        showCardResult();
+      }).catch(function(e){
+        if (r){ r.style.color = "#ff6b6b"; r.textContent = "比對失敗：" + (e && e.message ? e.message : "未知錯誤"); }
+      });
+    }
+    function submitApply(){
+      if (busy) return;
+      var text = (($("mbText") && $("mbText").value) || "").trim();
+      var note = $("mbApplyNote");
+      if (!mbFiles.length && text.length < MIN_TEXT_CHARS){
+        if (note){ note.style.color = "#ff6b6b"; note.textContent = "純文字不足 " + MIN_TEXT_CHARS + " 字，請補足或附 1~2 張照片"; }
+        return;
+      }
+      var res = judge(mbMeasure, flags());
+      if (res.forged){
+        if (note){ note.style.color = "#ff6b6b"; note.textContent = "疑似偽造黑卡，已駁回；請更換照片或改用文字申請"; }
+        return;
+      }
+      busy = true;
+      var btn = $("mbApplySubmit");
+      if (btn){ btn.disabled = true; btn.textContent = "提交中…"; }
+      if (note){ note.style.color = "#9fb3cd"; note.textContent = "正在上傳並提交…"; }
+      (async function(){
+        var proofs = [];
+        if (mbFiles.length){ try{ proofs = await uploadProofs(mbFiles); }catch(e){ proofs = []; } }
+        var head = "未成年解鎖申請｜字數:" + text.length + "｜照片:" + mbFiles.length + "｜";
+        var remark = (head + text).slice(0, 4000);
+        try{
+          await sb("/rest/v1/vip_applications", { method: "POST", json: {
+            device_id: deviceFor(), nickname: nickFor(), level: LEVEL,
+            status: "pending", remark: String(remark), proofs: proofs
+          }});
+          try{ localStorage.setItem(PEND_KEY, "1"); localStorage.setItem(LAST_KEY, ""); }catch(e){}
+          paintBadge();
+          if (note){ note.style.color = "#41d68b"; note.textContent = "解鎖申請已提交，等待後台審批"; }
+          toast("解鎖申請已提交，等待後台審批");
+          setTimeout(function(){ var a = $("mbApplySheet"); if (a) a.classList.remove("show"); }, 900);
+        }catch(err){
+          if (note){ note.style.color = "#ff6b6b"; note.textContent = "提交失敗，請檢查網絡後重試（" + (err && err.message ? err.message : "未知錯誤") + "）"; }
+        }finally{
+          busy = false;
+          if (btn){ btn.disabled = false; btn.textContent = "提交解鎖申請"; }
+        }
+      })();
+    }
+
+    /* ---------- 雲端審批結果回寫 ---------- */
+    function sync(){
+      if (!isMinor()) return Promise.resolve();
+      var url = "/rest/v1/vip_applications?select=status,remark,created_at&level=eq." + LEVEL +
+        "&" + acctFilter() + "&order=created_at.desc&limit=5";
+      return sb(url).then(function(rows){
+        if (!rows || !rows.length) return;
+        var st = String(rows[0].status || "");
+        try{
+          if (st === "approved"){
+            localStorage.setItem(UNL_KEY, today());
+            localStorage.setItem(PEND_KEY, "0");
+            localStorage.setItem(LAST_KEY, "approved");
+          }else if (st === "rejected"){
+            localStorage.setItem(PEND_KEY, "0");
+            localStorage.setItem(LAST_KEY, "rejected");
+          }
+        }catch(e){}
+        paintBadge();
+      }).catch(function(){});
+    }
+
+    function bind(){
+      var b = $("mbBlockClose"); if (b) b.addEventListener("click", function(){ $("mbBlockSheet").classList.remove("show"); });
+      var go = $("mbGoApply"); if (go) go.addEventListener("click", openApply);
+      var c = $("mbApplyClose"); if (c) c.addEventListener("click", function(){ $("mbApplySheet").classList.remove("show"); });
+      var f = $("mbFile"); if (f) f.addEventListener("change", function(){ onFiles(f.files); });
+      var t = $("mbText"); if (t) t.addEventListener("input", paintTextCnt);
+      var s = $("mbApplySubmit"); if (s) s.addEventListener("click", submitApply);
+      var v = $("mbVipWord"); if (v) v.addEventListener("change", reJudge);
+      var n = $("mbCardNo"); if (n) n.addEventListener("input", reJudge);
+    }
+    function init(){
+      ensureBadge();
+      bind();
+      paintBadge();
+      setTimeout(function(){ try{ sync(); }catch(e){} }, 1500);
+    }
+
+    var api = {
+      gate: function(){
+        if (!isMinor()) return false;
+        todayCount();
+        if (blocked()){ openBlock(); return true; }
+        paintBadge();
+        return false;
+      },
+      bump: bump, sync: sync, paintBadge: paintBadge,
+      _measure: measure, _judge: judge, _flags: flags,
+      used: todayCount, limit: dailyLimit, left: leftCount,
+      blocked: blocked, openApply: openApply
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+    return api;
+  })();
+  window.__MB = MB;
 })();
 </script>
 <script>
-/* ===== 版本號與防舊版快取 ===== */
-const APP_VERSION = "2026.11.13-MINORMASK";
+/* ===== 版本號：由管理端「更新推送」下發，頁面從雲端讀取（不再寫死） =====
+   通道（與管理端推送面板一一對應）：
+     新站 kalokfung29-arch.github.io      → UPDATE_PUSH_WEB_NEW
+     舊站 tetrisjames.surge.sh / 其他域名 → UPDATE_PUSH_WEB_OLD
+   流程：載入 → 讀 vip_applications 該通道最新一筆 → 取 remark.web_version
+        → 與本機記錄的版本不同：解除 Service Worker 快取並帶時間戳重新載入一次，頂部提示「發現新版本」
+        → 版本號顯示在 verTag（例：版本 2026.11.13 · 證件打碼 + 出生年自動算歲數） */
 (function(){
-  const tag = document.getElementById("verTag");
-  if (tag) tag.textContent = "版本 " + APP_VERSION + " · 證件打碼 + 出生年自動算歲數";
-  /* 版本一變就自動強制重載一次（帶時間戳繞過瀏覽器快取），之後不再重載 */
-  try {
-    const KEY = "tetris_web_ver";
-    const old = localStorage.getItem(KEY);
-    localStorage.setItem(KEY, APP_VERSION);
-    if (old && old !== APP_VERSION){
-      const url = location.pathname + "?v=" + Date.now();
-      location.replace(url);
-      return;
-    }
-  } catch (e) {}
+  const SB = "https://atjskewhkbptnnmubdsb.supabase.co";
+  const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0anNrZWdoa2JwdG5ubXViZHNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODQwOTcsImV4cCI6MjEwNzk2MDA5N30.ehTL4j0rjw40BMvAuyeEgQnhz5iKUINiIJJyka9ruTw";
+  const CH_NEW = "UPDATE_PUSH_WEB_NEW", CH_OLD = "UPDATE_PUSH_WEB_OLD";
+  /* 只在雲端完全拉不到版本時拿來顯示的兜底值，不是權威版本 */
+const APP_VERSION = "2026.11.21.5.2";
+  const FALLBACK = APP_VERSION;
+  const KEY_VER = "tetris_web_ver";
+  const KEY_RELOADED = "tetris_web_ver_reloaded";
+  const SUBTITLE = " · 轉盤抽獎（代幣/積分/彈珠） + 雙 12 面功能骰 + 雙抽牌";
+  const ch = /kalokfung29-arch\.github\.io$/i.test(location.hostname) ? CH_NEW : CH_OLD;
+  window.__TETRIS_WEB_CHANNEL = ch;
+
+  function showTag(v){
+    const t = document.getElementById("verTag");
+    if (t) t.textContent = "版本 " + v + SUBTITLE;
+  }
+  function toast(text){
+    try {
+      let d = document.getElementById("verToast");
+      if (!d){
+        d = document.createElement("div");
+        d.id = "verToast";
+        d.style.cssText = "position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%);z-index:99999;max-width:92vw;" +
+          "background:rgba(20,26,34,.96);border:1px solid rgba(95,255,176,.55);color:#e9f6ee;padding:10px 14px;border-radius:12px;" +
+          "font:600 13px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.45);text-align:center;white-space:pre-line;";
+        document.body.appendChild(d);
+      }
+      d.textContent = text;
+    } catch(e){}
+  }
+  function localVer(){ try { return localStorage.getItem(KEY_VER) || ""; } catch(e){ return ""; } }
+  function saveVer(v){ try { localStorage.setItem(KEY_VER, v); } catch(e){} }
+
   /* 解除舊 Service Worker，避免舊快取一直命中 */
   try {
     if ("serviceWorker" in navigator && navigator.serviceWorker.getRegistrations){
@@ -8175,7 +9140,48 @@ const APP_VERSION = "2026.11.13-MINORMASK";
     if ("caches" in window && caches.keys){
       caches.keys().then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
     }
-  } catch (e) {}
+  } catch(e){}
+
+  async function pullRemoteVer(){
+    const url = SB + "/rest/v1/vip_applications?select=remark,created_at&status=eq.approved" +
+      "&device_id=eq." + encodeURIComponent(ch) + "&order=created_at.desc&limit=1";
+    const r = await fetch(url, { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY }, cache: "no-store" });
+    if (!r.ok) return null;
+    const rows = await r.json();
+    if (!Array.isArray(rows) || !rows.length) return null;
+    let o = rows[0].remark;
+    if (typeof o === "string"){ try { o = JSON.parse(o); } catch(e){ return null; } }
+    if (!o || o.cleared) return null;
+    const v = String(o.web_version || o.version_name || "").trim();
+    return v || null;
+  }
+
+  (async function(){
+    const local = localVer();
+    showTag(local || FALLBACK);   /* 先顯示本機已知版本，避免出現「版本 —」 */
+    let remote = null;
+    try { remote = await pullRemoteVer(); } catch(e){ remote = null; }
+
+    if (!remote){
+      /* 雲端暫時拉不到：保留本機顯示，不謊報有新版本 */
+      return;
+    }
+    showTag(remote);
+    if (!local){ saveVer(remote); return; }   /* 首次訪問：只記錄，不重載 */
+    if (remote === local) return;
+
+    let reloadedFor = "";
+    try { reloadedFor = sessionStorage.getItem(KEY_RELOADED) || ""; } catch(e){}
+    saveVer(remote);
+    if (reloadedFor !== remote){
+      try { sessionStorage.setItem(KEY_RELOADED, remote); } catch(e){}
+      toast("發現新版本 " + remote + "，正在更新頁面…");
+      setTimeout(() => { location.replace(location.pathname + "?v=" + Date.now() + (location.hash || "")); }, 600);
+      return;
+    }
+    /* 已為這個版本重載過一次還是舊的：多為託管端還沒換檔，改為提示 */
+    toast("雲端已發佈新版本 " + remote + "\n目前頁面仍是 " + local + "，請稍後重新整理");
+  })();
 })();
 </script>
 <!-- ============ 安全模式：計算器偽裝鎖（解鎖賭博合集 / 設定密碼） ============ -->
@@ -8525,9 +9531,7 @@ const APP_VERSION = "2026.11.13-MINORMASK";
     }
     if (!legal){ S.log = '這張牌現在出不了（需同色、同數字或同功能）'; return; }
     var offenderHadColor = pl.hand.some(function(x){ return x.c === colorBefore; });
-    if (card.k === K.WILD4 && !inPenalty && offenderHadColor){
-      S.log = '手上有' + CLAB[colorBefore] + '色牌，不能出 +4'; return;
-    }
+    /* 規則調整：+4 不再要求手上無當前生效顏色，任何回合皆可出，交由質疑機制約束 */
     if (card.c === null && !chosen) return;
     var newColor = chosen || card.c || colorBefore;
 
@@ -8571,11 +9575,16 @@ const APP_VERSION = "2026.11.13-MINORMASK";
     give(pi, 1);
     if (S.players[pi].hand.length === before){ S.log = '牌庫已空，無法抽牌'; return; }
     S.drawnThisTurn = true;
-    S.log += '｜' + S.players[pi].name + ' 抽一張牌';
+    var got = S.players[pi].hand[S.players[pi].hand.length - 1];
+    var canPlayNow = legalIdx(pi).length > 0;
+    var tip = canPlayNow
+      ? '抽到 ' + fullName(got) + '，這張可以打出（直接點手牌），或按「過」結束回合'
+      : '抽到 ' + fullName(got) + '，這張不能出，請按「過」';
+    S.log += '｜' + S.players[pi].name + ' 抽一張牌：' + tip;
   }
   function passTurn(pi){
     if (!S || S.phase !== 'PLAY' || S.turn !== pi) return;
-    if (!S.drawnThisTurn){ S.log = '尚未抽牌，不能過'; return; }
+    if (!S.drawnThisTurn){ S.log = '這回合還沒抽牌，不能過（請先按「抽牌」）'; return; }
     S.log += '｜' + S.players[pi].name + ' 抽牌後選擇過';
     advance(1);
   }
@@ -8692,7 +9701,7 @@ const APP_VERSION = "2026.11.13-MINORMASK";
     var hot = (hand.length <= 2 && !S.unoShout[0] && S.phase === 'PLAY');
     unoBtn.className = 'gbtn' + (hot ? ' hot' : '');
     var drawBtn = q('unoDrawBtn');
-    drawBtn.disabled = !(S.phase === 'PLAY' && S.turn === 0);
+    drawBtn.disabled = !(S.phase === 'PLAY' && S.turn === 0 && !S.drawnThisTurn);
     q('unoPassBtn').disabled = !(S.phase === 'PLAY' && S.turn === 0 && S.drawnThisTurn);
 
     /* 分數 */
@@ -8867,10 +9876,7 @@ const APP_VERSION = "2026.11.13-MINORMASK";
       S.log = S.pending > 0 ? '有待罰牌，先抽牌或出 +2／+4 反擊' : '這張牌現在出不了（需同色、同數字或同功能）';
       paint(); return;
     }
-    if (card.k === K.WILD4 && S.pending === 0 && hand.some(function(x){ return x.c === S.activeColor; })){
-      S.log = '手上有' + CLAB[S.activeColor] + '色牌，不能出 +4';
-      paint(); return;
-    }
+    /* 規則調整：+4 任何回合皆可出，不再因手上有同色牌而拒絕 */
     if (card.c === null){
       window.__unoChosen = { pi:0, idx:i, jumpIn: jumpIn };
       q('unoColorMask').classList.add('show');
@@ -8908,5 +9914,1126 @@ const APP_VERSION = "2026.11.13-MINORMASK";
 })();
 
 </script>
+<script>
+/* ============ 大富翁（網頁分享版）· 規則引擎與手機分享版一致 ============ */
+(function(){
+"use strict";
+function q(id){ return document.getElementById(id); }
+function fmt(n){ return (n<0?"-":"")+"$"+String(Math.abs(Math.round(n))).replace(/\B(?=(\d{3})+(?!\d))/g,","); }
+function rnd(n){ return Math.floor(Math.random()*n); }
+function range(n){ var a=[]; for(var i=0;i<n;i++) a.push(i); return a; }
+function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=rnd(i+1), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+/* ---- 常量（與 MonopolyGame.kt 一致） ---- */
+var START_CASH=15000, MIN_CASH=5000, MAX_CASH=50000;
+var GO_BONUS=2000, GO_BONUS_BOOSTED=4000, SOLO_TARGET_RATE=4, SOLO_ROUNDS=30;
+var JAIL_BAIL=500, JAIL_INDEX=10, GO_JAIL_INDEX=30, HOUSE_COST_RATE=0.5;
+var MIN_DICE=1, MAX_DICE=3, DICE_FACES=6;
+var FN1_UNPASSED=500, FN1_REPAIR_HOUSE=200, FN1_REPAIR_HOTEL=500, FN1_REPAIR_NONE=100;
+
+var K={START:"START",PROPERTY:"PROPERTY",CHANCE:"CHANCE",FATE:"FATE",TAX:"TAX",
+  RAILROAD:"RAILROAD",UTILITY:"UTILITY",JAIL:"JAIL",GO_JAIL:"GO_JAIL",FREE:"FREE"};
+
+function T(name,kind,group,price,rent,rents,tax){
+  return {name:name,kind:kind,group:(group==null?-1:group),price:(price||0),rent:(rent||0),rents:(rents||[]),tax:(tax||0)};
+}
+var TILES=[
+  T("起點",K.START),
+  T("地中海大道",K.PROPERTY,0,60,2,[2,10,30,90,160,250]),
+  T("命運",K.FATE),
+  T("波羅的海大道",K.PROPERTY,0,60,4,[4,20,60,180,320,450]),
+  T("所得稅",K.TAX,-1,0,0,null,200),
+  T("雷丁車站",K.RAILROAD,-1,200,25),
+  T("東方大道",K.PROPERTY,1,100,6,[6,30,90,270,400,550]),
+  T("機會",K.CHANCE),
+  T("佛蒙特大道",K.PROPERTY,1,100,6,[6,30,90,270,400,550]),
+  T("康乃狄克大道",K.PROPERTY,1,120,8,[8,40,100,300,450,600]),
+  T("監獄",K.JAIL),
+  T("聖查爾斯廣場",K.PROPERTY,2,140,10,[10,50,150,450,625,750]),
+  T("電力公司",K.UTILITY,-1,150,0),
+  T("州立大道",K.PROPERTY,2,140,10,[10,50,150,450,625,750]),
+  T("維吉尼亞大道",K.PROPERTY,2,160,12,[12,60,180,500,700,900]),
+  T("賓州車站",K.RAILROAD,-1,200,25),
+  T("聖詹姆斯廣場",K.PROPERTY,3,180,14,[14,70,200,550,750,950]),
+  T("命運",K.FATE),
+  T("田納西大道",K.PROPERTY,3,180,14,[14,70,200,550,750,950]),
+  T("紐約大道",K.PROPERTY,3,200,16,[16,80,220,600,800,1000]),
+  T("免費停車",K.FREE),
+  T("肯塔基大道",K.PROPERTY,4,220,18,[18,90,250,700,875,1050]),
+  T("機會",K.CHANCE),
+  T("印第安納大道",K.PROPERTY,4,220,18,[18,90,250,700,875,1050]),
+  T("伊利諾大道",K.PROPERTY,4,240,20,[20,100,300,750,925,1100]),
+  T("B&O 車站",K.RAILROAD,-1,200,25),
+  T("大西洋大道",K.PROPERTY,5,260,22,[22,110,330,800,975,1150]),
+  T("文特諾大道",K.PROPERTY,5,260,22,[22,110,330,800,975,1150]),
+  T("自來水廠",K.UTILITY,-1,150,0),
+  T("馬文花園",K.PROPERTY,5,280,24,[24,120,360,850,1025,1200]),
+  T("入獄",K.GO_JAIL),
+  T("太平洋大道",K.PROPERTY,6,300,26,[26,130,390,900,1100,1275]),
+  T("北卡羅來納大道",K.PROPERTY,6,300,26,[26,130,390,900,1100,1275]),
+  T("命運",K.FATE),
+  T("賓州大道",K.PROPERTY,6,320,28,[28,150,450,1000,1200,1400]),
+  T("短線車站",K.RAILROAD,-1,200,25),
+  T("機會",K.CHANCE),
+  T("公園大道",K.PROPERTY,7,350,35,[35,175,500,1100,1300,1500]),
+  T("奢侈稅",K.TAX,-1,0,0,null,100),
+  T("木板路",K.PROPERTY,7,400,50,[50,200,600,1400,1700,2000])
+];
+var BOARD=TILES.length;
+
+function C(title,kind,amount,perHouse,perHotel){
+  return {title:title,kind:kind,amount:(amount||0),perHouse:(perHouse||0),perHotel:(perHotel||0)};
+}
+var CHANCE=[
+  C("前進至起點，領取 $2,000","ADVANCE_GO",2000),
+  C("直接入獄，不得領取起點工資","GO_TO_JAIL"),
+  C("免費出獄卡，保留使用","GET_OUT_CARD"),
+  C("傳送至最近的車站，可購地或付租","MOVE_TO_RAILROAD"),
+  C("傳送至最近的水電廠，依骰子點數付費","MOVE_TO_UTILITY"),
+  C("傳送至木板路","MOVE_TO_BOARDWALK"),
+  C("後退 3 格","MOVE_BACK",3),
+  C("銀行股息，獎金 $100","GAIN",100),
+  C("銀行獎金 $500","GAIN",500),
+  C("銀行獎金 $1,000","GAIN",1000),
+  C("銀行獎金 $2,000","GAIN",2000),
+  C("醫療費用，罰款 $150","PAY",150),
+  C("違規停車罰款 $400","PAY",400),
+  C("繳付學費罰款 $1,000","PAY",1000),
+  C("房屋維修費：每棟房屋 $50、每間飯店 $200","REPAIR",0,50,200),
+  C("向每位玩家收取 $200","COLLECT_ALL",200)
+];
+var FATE=[
+  C("前進至起點，領取 $2,000","ADVANCE_GO",2000),
+  C("直接入獄，不得領取起點工資","GO_TO_JAIL"),
+  C("免費出獄卡，保留使用","GET_OUT_CARD"),
+  C("傳送至最近的車站，可購地或付租","MOVE_TO_RAILROAD"),
+  C("傳送至最近的水電廠，依骰子點數付費","MOVE_TO_UTILITY"),
+  C("傳送至木板路","MOVE_TO_BOARDWALK"),
+  C("後退 3 格","MOVE_BACK",3),
+  C("銀行獎金 $100","GAIN",100),
+  C("繼承遺產 $600","GAIN",600),
+  C("銀行獎金 $1,500","GAIN",1500),
+  C("所得稅退稅 $2,000","GAIN",2000),
+  C("看病支出，罰款 $150","PAY",150),
+  C("繳付保險費 $500","PAY",500),
+  C("繳付醫藥費 $1,000","PAY",1000),
+  C("房屋維修費：每棟房屋 $40、每間飯店 $115","REPAIR",0,40,115),
+  C("支付每位玩家 $200","PAY_ALL",200)
+];
+var CHANCE_SIZE=16, FATE_SIZE=16;
+
+var FN1_TEXTS=[
+  "銀行紅利，獲得 $1,000",
+  "本回合已過起點：薪水補足至 $4,000；尚未過起點：直接獲得 $500",
+  "獲得免租盾 1 次（下次付租全免）",
+  "額外前進 4 步",
+  "免費抽一張機會卡（免疫所有扣款）",
+  "傳送至最近一處無主地產",
+  "向每位玩家收取 $200",
+  "直接入獄",
+  "繳稅 $800",
+  "倒退 3 步",
+  "房屋維修費：每棟房屋 $200、每間飯店 $500；名下無房產則繳 $100",
+  "強制抽一張命運卡（所有扣款翻倍）"
+];
+var FN2_TEXTS=[
+  "罰款 $600，即刻出獄",
+  "罰款 $1,000，即刻出獄",
+  "罰款 $1,500，即刻出獄",
+  "罰款 $2,000，即刻出獄",
+  "向每位玩家支付 $200，即刻出獄",
+  "向每位玩家支付 $400，即刻出獄",
+  "扣除 10% 現金，即刻出獄",
+  "扣除 20% 現金，即刻出獄",
+  "罰款 $400，且繼續坐牢 1 回合",
+  "罰款 $800，且繼續坐牢 2 回合",
+  "罰款 $500，即刻出獄且下次付雙倍租金",
+  "抽一張命運卡（所有扣款三倍、獎勵無效），之後出獄"
+];
+var RULE_TEXT=
+"【地圖】標準 40 格環形版圖：起點、22 塊地產（8 色系）、4 座車站、2 座水電廠、3 格機會、3 格命運、所得稅、奢侈稅、監獄、入獄、免費停車。\n\n"+
+"【開局】可調整起始金額（預設 $15,000）。單人模式 30 回合內累積至起始金額的 4 倍即通關。\n\n"+
+"【起點】經過或停留在起點，每次領 $2,000（整圈只結算一次）；若持有薪水翻倍效果則該次為 $4,000。\n"+
+"【抽牌】踩機會抽機會卡、踩命運抽命運卡，各有 16 張；開局隨機洗牌，從頂端抽取並放入棄牌堆，抽完自動重洗循環，介面顯示剩餘張數。免費出獄卡抽出後由玩家持有，不回到牌堆。\n\n"+
+"【開局設定】進棋盤前可設定：起始金額、基礎 6 面骰數量（1–3 顆）、是否開啟「12 面功能骰1號」、是否開啟「12 面懲罰骰2號」。\n\n"+
+"【功能骰子1號（12 面）】開啟時每次擲移動骰同步投擲，移動完成後觸發：\n"+
+"1. 得 $1,000；2. 已過起點補足薪水至 $4,000，未過起點則得 $500；3. 獲免租盾 1 次；\n"+
+"4. 額外前進 4 步；5. 免費抽機會卡（免疫所有扣款）；6. 傳送最近無主地產；7. 向全員各收 $200；\n"+
+"8. 直接入獄；9. 繳稅 $800；10. 倒退 3 步；11. 按房產扣維修費（無房 $100／屋 $200／飯店 $500）；\n"+
+"12. 強制抽命運卡（扣款翻倍）。\n\n"+
+"【入獄】下一回合彈窗二選一：繳 $500 保釋（可續擲），或擲懲罰骰子2號（12 面全懲罰）：\n"+
+"1. 罰 $600 出獄；2. 罰 $1,000 出獄；3. 罰 $1,500 出獄；4. 罰 $2,000 出獄；\n"+
+"5. 向全員各付 $200 出獄；6. 向全員各付 $400 出獄；7. 扣 10% 現金出獄；8. 扣 20% 現金出獄；\n"+
+"9. 罰 $400 且續坐 1 回合；10. 罰 $800 且續坐 2 回合；11. 罰 $500 出獄且下次付雙倍租金；\n"+
+"12. 抽命運卡（扣款三倍、獎勵無效）後出獄。持有免費出獄卡可直接使用。\n\n"+
+"【其他】同色系集齊可蓋房（最多 4 房轉飯店）；豹子可再擲，連三次豹子入獄。";
+
+var GCOLORS=["#8d5524","#7fd1ff","#ff7fb0","#ffb347","#ff5a5f","#ffd54f","#4fd18b","#2f6bff"];
+var PCOLORS=["#4ce0ff","#ff6b9d","#ffd166","#6be3a0"];
+var PNAMES=["你","電腦 A","電腦 B","電腦 C"];
+
+var S=null, aiTimer=null;
+var cfg={n:2, cash:START_CASH, dice:2, fn1:true, fn2:true};
+
+/* ---------- 基礎工具 ---------- */
+function addLog(line){
+  if(!S) return;
+  S.log.push(line);
+  if(S.log.length>80) S.log=S.log.slice(-80);
+}
+function setMsg(t){ if(S) S.message=t; }
+function player(i){ return S.players[i]; }
+function alivePlayers(){ return S.players.filter(function(p){ return !p.bankrupt; }); }
+
+function settle(){
+  if(!S||S.over) return;
+  var alive=alivePlayers();
+  if(S.players.length>1 && alive.length<=1){
+    S.over=true; S.win=(alive.length===1? S.players.indexOf(alive[0]) : -1);
+    addLog(S.win>=0? S.players[S.win].name+" 贏得勝利！" : "全部破產，無人獲勝");
+    setMsg(S.win>=0? S.players[S.win].name+" 贏得勝利！" : "全部破產");
+    return;
+  }
+  if(S.solo){
+    var p=S.players[0];
+    if(!p.bankrupt && netWorth(0)>=S.startCash*SOLO_TARGET_RATE){
+      S.over=true; S.win=0; addLog("達成目標，通關！"); setMsg("通關！淨資產達 "+fmt(S.startCash*SOLO_TARGET_RATE));
+    } else if(p.bankrupt){ S.over=true; S.win=-1; addLog("破產，挑戰失敗"); setMsg("破產，挑戰失敗"); }
+    else if(S.round>SOLO_ROUNDS){ S.over=true; S.win=-1; addLog(SOLO_ROUNDS+" 回合結束，未達標"); setMsg(SOLO_ROUNDS+" 回合結束，未達標"); }
+  }
+}
+
+function bankrupt(idx){
+  var p=S.players[idx];
+  p.bankrupt=true; p.cash=0; p.jailTurns=0;
+  for(var i=0;i<BOARD;i++) if(S.owners[i].owner===idx) S.owners[i]={owner:-1,houses:0};
+  addLog(p.name+" 破產出局");
+  settle();
+}
+
+function payTo(payer, amount, receiver, reason){
+  if(amount<=0) return;
+  var p=S.players[payer];
+  if(!p||p.bankrupt) return;
+  p.cash-=amount;
+  addLog(p.name+" 支付 "+fmt(amount)+"（"+reason+"）");
+  if(receiver>=0 && receiver!==payer && S.players[receiver]) S.players[receiver].cash+=amount;
+  if(p.cash<0) bankrupt(payer);
+}
+function grant(idx, amount, reason){
+  if(amount<=0) return;
+  var p=S.players[idx]; if(!p||p.bankrupt) return;
+  p.cash+=amount;
+  if(reason) addLog(p.name+" 獲得 "+fmt(amount)+"（"+reason+"）");
+}
+
+function ownsGroup(ownerIdx, group){
+  if(group==null||group<0) return false;
+  var any=false;
+  for(var i=0;i<BOARD;i++){
+    var t=TILES[i];
+    if(t.kind!==K.PROPERTY||t.group!==group) continue;
+    any=true;
+    if(S.owners[i].owner!==ownerIdx) return false;
+  }
+  return any;
+}
+function rentFor(idx, diceTotal){
+  var t=TILES[idx], own=S.owners[idx];
+  if(!own||own.owner<0) return 0;
+  if(t.kind===K.PROPERTY){
+    var h=Math.max(0,Math.min(5,own.houses));
+    var base=(t.rents.length>=6? t.rents[h] : t.rent*(h+1));
+    if(h===0&&ownsGroup(own.owner,t.group)) base*=2;
+    return base;
+  }
+  if(t.kind===K.RAILROAD){
+    var n=0; for(var i=0;i<BOARD;i++) if(TILES[i].kind===K.RAILROAD&&S.owners[i].owner===own.owner) n++;
+    return n<=1?25:(n===2?50:(n===3?100:200));
+  }
+  if(t.kind===K.UTILITY){
+    var m=0; for(var j=0;j<BOARD;j++) if(TILES[j].kind===K.UTILITY&&S.owners[j].owner===own.owner) m++;
+    var d=(diceTotal||S.dice.reduce(function(a,b){return a+b;},0));
+    return Math.max(2,d)*(m>=2?10:4);
+  }
+  return 0;
+}
+function houseCost(idx){ return Math.floor((TILES[idx].price*HOUSE_COST_RATE)/10)*10; }
+function canBuild(idx){
+  var t=TILES[idx], own=S.owners[idx], p=S.players[S.turn];
+  if(!t||t.kind!==K.PROPERTY||!own||!p) return false;
+  if(own.owner!==S.turn||own.houses>=5) return false;
+  if(!ownsGroup(S.turn,t.group)) return false;
+  return p.cash>=houseCost(idx);
+}
+function netWorth(idx){
+  var p=S.players[idx], sum=p.cash;
+  for(var i=0;i<BOARD;i++){
+    if(S.owners[i].owner===idx){
+      sum+=TILES[i].price+S.owners[i].houses*houseCost(i);
+    }
+  }
+  return sum;
+}
+
+/* ---------- 移動 ---------- */
+function passGo(pIdx, laps){
+  var p=S.players[pIdx];
+  for(var k=0;k<laps;k++){
+    var amount=p.goBonusBoost? GO_BONUS_BOOSTED : GO_BONUS;
+    if(p.goBonusBoost) p.goBonusBoost=false;
+    grant(pIdx, amount, "經過起點");
+  }
+}
+function moveForward(pIdx, steps, doLanding){
+  var p=S.players[pIdx];
+  var raw=p.pos+steps, laps=Math.floor(raw/BOARD), np=((raw%BOARD)+BOARD)%BOARD;
+  if(laps>0) passGo(pIdx,laps);
+  p.pos=np;
+  if(doLanding!==false) landing(pIdx);
+}
+function moveBack(pIdx, steps, doLanding){
+  var p=S.players[pIdx];
+  p.pos=((p.pos-steps)%BOARD+BOARD)%BOARD;
+  if(doLanding!==false) landing(pIdx);
+}
+function nearestTile(from, kind){
+  for(var i=1;i<=BOARD;i++){
+    var idx=(from+i)%BOARD;
+    if(TILES[idx].kind===kind) return idx;
+  }
+  return from;
+}
+function nearestUnowned(from){
+  for(var i=1;i<=BOARD;i++){
+    var idx=(from+i)%BOARD, t=TILES[idx];
+    if((t.kind===K.PROPERTY||t.kind===K.RAILROAD||t.kind===K.UTILITY)&&S.owners[idx].owner<0) return idx;
+  }
+  return from;
+}
+function sendToJail(pIdx){
+  var p=S.players[pIdx];
+  p.pos=JAIL_INDEX; p.jailTurns=1;
+  addLog(p.name+" 被送進監獄");
+  setMsg(p.name+" 入獄，下回合需選擇保釋或擲懲罰骰");
+}
+
+/* ---------- 抽牌 ---------- */
+function drawAndApply(chance, payScale, rewardVoid, allowLanding){
+  var pileKey=chance?"chancePile":"fatePile", disKey=chance?"chanceDiscard":"fateDiscard";
+  if(S[pileKey].length===0){
+    S[pileKey]=S[disKey].slice();
+    S[disKey]=[];
+    if(S[pileKey].length===0) S[pileKey]=shuffle(range(chance?CHANCE_SIZE:FATE_SIZE));
+    addLog((chance?"機會":"命運")+"牌堆抽完，棄牌自動重洗");
+  }
+  var idx=S[pileKey].shift();
+  var deck=(chance?CHANCE:FATE);
+  var card=deck[idx];
+  if(card.kind!=="GET_OUT_CARD") S[disKey].push(idx);
+  var left=(chance?S.chancePile.length:S.fatePile.length);
+  executeCard(S.turn, card, payScale, rewardVoid, allowLanding);
+  showCardDialog(chance, card, left);
+}
+function executeCard(pIdx, card, payScale, rewardVoid, allowLanding){
+  var p=S.players[pIdx];
+  if(!p||p.bankrupt) return;
+  payScale=(payScale==null?1:payScale);
+  switch(card.kind){
+    case "ADVANCE_GO": {
+      var boost=p.goBonusBoost;
+      var amount=boost?GO_BONUS_BOOSTED:Math.max(card.amount,GO_BONUS);
+      p.pos=0;
+      var gain=rewardVoid?0:amount;
+      if(boost) p.goBonusBoost=false;
+      if(gain>0) grant(pIdx,gain,"前進起點");
+      else addLog(p.name+" 前進至起點，但獎勵無效");
+      setMsg(p.name+" 前進至起點"+(gain>0?"，領取 "+fmt(gain):"（獎勵無效）"));
+      break;
+    }
+    case "GO_TO_JAIL": sendToJail(pIdx); break;
+    case "GET_OUT_CARD":
+      p.jailCards++;
+      addLog(p.name+" 獲得免費出獄卡（持有 "+p.jailCards+" 張）");
+      setMsg(p.name+" 獲得免費出獄卡");
+      break;
+    case "MOVE_TO_RAILROAD":
+    case "MOVE_TO_UTILITY": {
+      var kind=(card.kind==="MOVE_TO_RAILROAD")?K.RAILROAD:K.UTILITY;
+      p.pos=nearestTile(p.pos,kind);
+      addLog(p.name+" 被傳送至 "+TILES[p.pos].name);
+      if(allowLanding) landing(pIdx);
+      break;
+    }
+    case "MOVE_TO_BOARDWALK":
+      p.pos=39; addLog(p.name+" 被傳送至木板路");
+      if(allowLanding) landing(pIdx);
+      break;
+    case "MOVE_BACK":
+      addLog(p.name+" 後退 "+card.amount+" 步");
+      moveBack(pIdx, card.amount, allowLanding);
+      break;
+    case "GAIN": {
+      var g=rewardVoid?0:card.amount;
+      if(g>0){ grant(pIdx,g,"卡牌獎勵"); setMsg(p.name+" 獲得 "+fmt(g)); }
+      else { addLog(p.name+" 的獎勵被無效化"); setMsg(p.name+" 獎勵無效"); }
+      break;
+    }
+    case "PAY": {
+      var amt=card.amount*payScale;
+      payTo(pIdx,amt,-1,"卡牌罰款");
+      setMsg(p.name+" 被罰 "+fmt(amt));
+      break;
+    }
+    case "REPAIR": {
+      var houses=0, hotels=0;
+      for(var i=0;i<BOARD;i++){
+        if(S.owners[i].owner!==pIdx) continue;
+        if(TILES[i].kind!==K.PROPERTY) continue;
+        if(S.owners[i].houses>=5) hotels++; else houses+=S.owners[i].houses;
+      }
+      var bill=(houses*card.perHouse+hotels*card.perHotel)*payScale;
+      if(bill>0){ payTo(pIdx,bill,-1,"房屋維修費"); }
+      addLog(p.name+" 維修費 "+fmt(bill)+"（"+houses+" 房／"+hotels+" 飯店）");
+      setMsg(p.name+" 支付維修費 "+fmt(bill));
+      break;
+    }
+    case "COLLECT_ALL": {
+      var each=card.amount*(payScale===2?2:1);
+      for(var a=0;a<S.players.length;a++){
+        if(a===pIdx||S.players[a].bankrupt) continue;
+        payTo(a,each,pIdx,"支付給 "+p.name);
+      }
+      setMsg(p.name+" 向全員各收 "+fmt(each));
+      break;
+    }
+    case "PAY_ALL": {
+      var each2=card.amount*payScale;
+      for(var b=0;b<S.players.length;b++){
+        if(b===pIdx||S.players[b].bankrupt) continue;
+        payTo(pIdx,each2,b,"支付給 "+S.players[b].name);
+      }
+      setMsg(p.name+" 向全員各付 "+fmt(each2));
+      break;
+    }
+  }
+}
+
+/* ---------- 落地結算 ---------- */
+function landing(pIdx){
+  var p=S.players[pIdx];
+  if(!p||p.bankrupt||S.over) return;
+  var t=TILES[p.pos], own=S.owners[p.pos];
+  if(t.kind===K.PROPERTY||t.kind===K.RAILROAD||t.kind===K.UTILITY){
+    if(own.owner<0){
+      S.pendingBuy=p.pos; S.waiting=true;
+      render();
+      openBuyDialog();
+      return;
+    }
+    if(own.owner!==pIdx){
+      var rent=rentFor(p.pos);
+      if(p.rentShield>0){
+        p.rentShield--;
+        addLog(p.name+" 使用免租盾，減免租金 "+fmt(rent));
+        setMsg("免租盾抵銷租金 "+fmt(rent));
+      } else {
+        if(p.doubleRentNext>0){ rent*=2; p.doubleRentNext--; addLog(p.name+" 依懲罰骰效果支付雙倍租金"); }
+        payTo(pIdx,rent,own.owner,"租金 "+t.name);
+        setMsg(p.name+" 支付租金 "+fmt(rent)+" 給 "+S.players[own.owner].name);
+      }
+      return;
+    }
+    setMsg(p.name+" 停在自己的 "+t.name);
+    return;
+  }
+  if(t.kind===K.TAX){
+    payTo(pIdx,t.tax,-1,t.name);
+    setMsg(p.name+" 繳納 "+t.name+" "+fmt(t.tax));
+    return;
+  }
+  if(t.kind===K.CHANCE){ setMsg(p.name+" 踩到機會"); drawAndApply(true,1,false,true); return; }
+  if(t.kind===K.FATE){ setMsg(p.name+" 踩到命運"); drawAndApply(false,1,false,true); return; }
+  if(t.kind===K.GO_JAIL){ sendToJail(pIdx); return; }
+  setMsg(p.name+" 停在 "+t.name);
+}
+
+/* ---------- 功能骰1號（12 面） ---------- */
+function fn1Apply(pIdx, passedGo){
+  var face=S.fnDice1;
+  if(!S.fn1Enabled||face<1) return;
+  var p=S.players[pIdx];
+  if(!p||p.bankrupt) return;
+  addLog("功能骰1號 第 "+face+" 面："+FN1_TEXTS[face-1]);
+  setMsg("功能骰1號 → "+FN1_TEXTS[face-1]);
+  switch(face){
+    case 1: grant(pIdx,1000,"功能骰紅利"); break;
+    case 2:
+      if(passedGo){
+        var extra=GO_BONUS_BOOSTED-GO_BONUS;
+        grant(pIdx,extra,"薪水補足至 "+fmt(GO_BONUS_BOOSTED));
+      } else {
+        grant(pIdx,FN1_UNPASSED,"未過起點補貼");
+      }
+      break;
+    case 3: p.rentShield++; addLog(p.name+" 獲得免租盾 1 次"); break;
+    case 4: addLog(p.name+" 額外前進 4 步"); moveForward(pIdx,4); break;
+    case 5: drawAndApply(true,0,false,true); break;
+    case 6:
+      p.pos=nearestUnowned(pIdx);
+      addLog(p.name+" 被傳送至無主地產 "+TILES[p.pos].name);
+      landing(pIdx);
+      break;
+    case 7:
+      for(var i=0;i<S.players.length;i++){
+        if(i===pIdx||S.players[i].bankrupt) continue;
+        payTo(i,200,pIdx,"支付給 "+p.name);
+      }
+      setMsg(p.name+" 向全員各收 $200");
+      break;
+    case 8: sendToJail(pIdx); break;
+    case 9: payTo(pIdx,800,-1,"功能骰稅金"); break;
+    case 10: addLog(p.name+" 倒退 3 步"); moveBack(pIdx,3); break;
+    case 11: {
+      var houses=0, hotels=0;
+      for(var j=0;j<BOARD;j++){
+        if(S.owners[j].owner!==pIdx||TILES[j].kind!==K.PROPERTY) continue;
+        if(S.owners[j].houses>=5) hotels++; else houses+=S.owners[j].houses;
+      }
+      var bill;
+      if(houses===0&&hotels===0) bill=FN1_REPAIR_NONE;
+      else bill=houses*FN1_REPAIR_HOUSE+hotels*FN1_REPAIR_HOTEL;
+      payTo(pIdx,bill,-1,"功能骰維修費");
+      setMsg(p.name+" 支付維修費 "+fmt(bill));
+      break;
+    }
+    case 12: drawAndApply(false,2,false,true); break;
+  }
+}
+
+/* ---------- 監獄 ---------- */
+function jailRoll(){
+  var pIdx=S.turn, p=S.players[pIdx];
+  var face=1+rnd(12);
+  S.fnDice2=face;
+  addLog(p.name+" 擲懲罰骰2號："+face+" 面 — "+FN2_TEXTS[face-1]);
+  setMsg("懲罰骰2號 → "+FN2_TEXTS[face-1]);
+  switch(face){
+    case 1: payTo(pIdx,600,-1,"監獄罰款"); p.jailTurns=0; break;
+    case 2: payTo(pIdx,1000,-1,"監獄罰款"); p.jailTurns=0; break;
+    case 3: payTo(pIdx,1500,-1,"監獄罰款"); p.jailTurns=0; break;
+    case 4: payTo(pIdx,2000,-1,"監獄罰款"); p.jailTurns=0; break;
+    case 5:
+      for(var i=0;i<S.players.length;i++){ if(i===pIdx||S.players[i].bankrupt) continue; payTo(pIdx,200,i,"監獄賠付"); }
+      p.jailTurns=0; break;
+    case 6:
+      for(var j=0;j<S.players.length;j++){ if(j===pIdx||S.players[j].bankrupt) continue; payTo(pIdx,400,j,"監獄賠付"); }
+      p.jailTurns=0; break;
+    case 7: {
+      var amt=Math.floor(Math.max(0,p.cash)*0.10);
+      payTo(pIdx,amt,-1,"扣除 10% 現金");
+      p.jailTurns=0; break;
+    }
+    case 8: {
+      var amt2=Math.floor(Math.max(0,p.cash)*0.20);
+      payTo(pIdx,amt2,-1,"扣除 20% 現金");
+      p.jailTurns=0; break;
+    }
+    case 9: payTo(pIdx,400,-1,"監獄罰款"); p.jailTurns=1; break;
+    case 10: payTo(pIdx,800,-1,"監獄罰款"); p.jailTurns=2; break;
+    case 11: payTo(pIdx,500,-1,"監獄罰款"); p.doubleRentNext=1; p.jailTurns=0; break;
+    case 12: p.jailTurns=0; addLog(p.name+" 依懲罰骰效果出獄，並強制抽命運卡（扣款三倍、獎勵無效）"); drawAndApply(false,3,true,false); break;
+  }
+  render();
+}
+function jailPayBail(){
+  var p=S.players[S.turn];
+  if(p.cash<JAIL_BAIL){ setMsg("現金不足，無法繳付保釋金"); return false; }
+  payTo(S.turn,JAIL_BAIL,-1,"保釋金");
+  p.jailTurns=0;
+  addLog(p.name+" 繳付保釋金出獄，可繼續擲骰");
+  setMsg(p.name+" 保釋出獄");
+  return true;
+}
+function jailUseCard(){
+  var p=S.players[S.turn];
+  if(p.jailCards<=0) return false;
+  p.jailCards--; p.jailTurns=0;
+  addLog(p.name+" 使用免費出獄卡出獄");
+  setMsg(p.name+" 使用出獄卡出獄");
+  return true;
+}
+
+/* ---------- 回合流程 ---------- */
+function pump(){
+  if(!S||S.waiting||S.over) { render(); return; }
+  var f=S.queue.shift();
+  if(!f){ render(); return; }
+  f();
+  render();
+  if(!S.waiting) pump();
+}
+function doRoll(){
+  if(!S||S.over||S.waiting) return;
+  if(S.pendingBuy>=0) return;
+  var p=S.players[S.turn];
+  if(!p||p.bankrupt) { endTurn(); return; }
+  if(p.jailTurns>0){ render(); if(p.ai) aiJail(); else openJailDialog(); return; }
+  S.phase="MOVE";
+  var n=Math.max(MIN_DICE,Math.min(MAX_DICE,S.diceCount));
+  var faces=[]; for(var i=0;i<n;i++) faces.push(1+rnd(DICE_FACES));
+  S.dice=faces;
+  S.fnDice1=S.fn1Enabled? (1+rnd(12)) : -1;
+  var total=faces.reduce(function(a,b){return a+b;},0);
+  var isDouble=(faces.length>=2 && faces.every(function(v){return v===faces[0];}));
+  var diceText=faces.join(" + ")+" = "+total;
+  addLog(p.name+" 擲出 "+diceText+(S.fnDice1>0? " · 功能骰1號 "+S.fnDice1 : ""));
+  setMsg(p.name+" 擲出 "+diceText);
+  if(isDouble){
+    S.doubleCount++;
+    if(S.doubleCount>=3){
+      addLog("連續三次豹子，直接入獄");
+      sendToJail(S.turn);
+      S.doubleCount=0;
+      S.phase="ROLL";
+      render();
+      endTurn();
+      return;
+    }
+  } else S.doubleCount=0;
+  var passedGo=(p.pos+total)>=BOARD;
+  S.queue=[];
+  S.queue.push(function(){ moveForward(S.turn,total); });
+  S.queue.push(function(){ fn1Apply(S.turn,passedGo); });
+  S.queue.push(function(){ afterRoll(isDouble); });
+  pump();
+}
+function afterRoll(isDouble){
+  if(!S||S.over) return;
+  var cur=S.players[S.turn];
+  S.phase="ROLL";
+  if(isDouble && cur && !cur.bankrupt && cur.jailTurns===0 && S.doubleCount>0){
+    setMsg("豹子！"+cur.name+" 可再擲一次");
+    addLog("豹子，"+cur.name+" 可再擲一次");
+    render();
+    maybeAI();
+    return;
+  }
+  endTurn();
+}
+function endTurn(){
+  if(!S||S.over) return;
+  S.phase="ROLL";
+  S.doubleCount=0;
+  advanceTurn();
+  render();
+  maybeAI();
+}
+function advanceTurn(){
+  var guard=0, soloMode=(S.players.length===1);
+  do{
+    S.turn=(S.turn+1)%S.players.length;
+    if(soloMode || S.turn===0) S.round++;
+    guard++;
+  } while(S.players[S.turn].bankrupt && guard<12);
+  settle();
+}
+function maybeAI(){
+  clearTimeout(aiTimer);
+  if(!S||S.over) return;
+  var p=S.players[S.turn];
+  if(!p||p.bankrupt) return;
+  if(!p.ai){
+    if(p.jailTurns>0) openJailDialog();
+    render();
+    return;
+  }
+  aiTimer=setTimeout(function(){
+    if(!S||S.over) return;
+    var ap=S.players[S.turn];
+    if(!ap||ap.bankrupt) return;
+    if(ap.jailTurns>0){ aiJail(); return; }
+    aiBuildMaybe();
+    doRoll();
+  }, 620);
+}
+function aiJail(){
+  var p=S.players[S.turn];
+  if(p.jailCards>0){ jailUseCard(); finishJailTurn(); return; }
+  if(p.cash>=1000){ jailPayBail(); finishJailTurn(); return; }
+  if(S.fn2Enabled){ jailRoll(); finishJailTurn(); return; }
+  jailPayBail();
+  finishJailTurn();
+}
+function finishJailTurn(){
+  var p=S.players[S.turn];
+  if(!p||p.bankrupt||S.over){ render(); endTurn(); return; }
+  if(p.jailTurns>0){
+    addLog(p.name+" 仍在獄中，跳過本回合");
+    setMsg(p.name+" 續坐監獄，本回合結束");
+    render();
+    endTurn();
+    return;
+  }
+  render();
+  if(p.ai) setTimeout(function(){ aiBuildMaybe(); doRoll(); }, 520);
+  else setMsg("已出獄，請擲骰");
+}
+function aiBuildMaybe(){
+  var p=S.players[S.turn];
+  if(!p||p.ai!==true||p.bankrupt) return;
+  for(var k=0;k<2;k++){
+    var target=-1;
+    for(var i=0;i<BOARD;i++){
+      if(canBuild(i) && p.cash-houseCost(i)>=2000){ target=i; break; }
+    }
+    if(target<0) break;
+    buildAt(target);
+  }
+}
+function aiWantBuy(){
+  var idx=S.pendingBuy, p=S.players[S.turn];
+  if(idx<0||!p) return false;
+  var price=TILES[idx].price;
+  var groupRemain=0;
+  var g=TILES[idx].group;
+  if(g>=0){
+    for(var i=0;i<BOARD;i++) if(TILES[i].kind===K.PROPERTY&&TILES[i].group===g&&S.owners[i].owner<0) groupRemain++;
+  }
+  return p.cash >= price*2.2 + groupRemain*40;
+}
+function buildAt(idx){
+  var pIdx=S.turn;
+  if(!canBuild(idx)) return false;
+  var cost=houseCost(idx);
+  S.players[pIdx].cash-=cost;
+  S.owners[idx].houses++;
+  var label=S.owners[idx].houses>=5? "飯店" : S.owners[idx].houses+" 棟房屋";
+  addLog(S.players[pIdx].name+" 在 "+TILES[idx].name+" 建成"+label+"（-"+fmt(cost)+"）");
+  setMsg(S.players[pIdx].name+" 建成"+label);
+  render();
+  return true;
+}
+
+/* ---------- 購買 ---------- */
+function openBuyDialog(){
+  var idx=S.pendingBuy, t=TILES[idx];
+  q("mpBuyBd").innerHTML="<b>"+t.name+"</b><br/>售價 <b>"+fmt(t.price)+"</b><br/>"+
+    (t.kind===K.PROPERTY? "空地租金 "+fmt(t.rents[0])+"（集齊同色系翻倍）" : (t.kind===K.RAILROAD? "車站租金 25／50／100／200" : "水電廠 骰點 ×4（持雙廠 ×10）"))+
+    "<br/>你的現金："+fmt(S.players[S.turn].cash);
+  q("mpBuyMask").classList.add("show");
+  if(S.players[S.turn].ai){
+    clearTimeout(aiTimer);
+    aiTimer=setTimeout(function(){
+      if(S.pendingBuy<0) return;
+      if(aiWantBuy()) doBuy(); else doSkip();
+    }, 480);
+  }
+}
+function closeBuyDialog(){ q("mpBuyMask").classList.remove("show"); }
+function doBuy(){
+  var idx=S.pendingBuy;
+  if(idx<0) return;
+  var pIdx=S.turn, price=TILES[idx].price;
+  if(S.players[pIdx].cash<price){ addLog("現金不足，無法購買"); doSkip(); return; }
+  S.players[pIdx].cash-=price;
+  S.owners[idx]={owner:pIdx,houses:0};
+  addLog(S.players[pIdx].name+" 買下 "+TILES[idx].name+"（-"+fmt(price)+"）");
+  setMsg(S.players[pIdx].name+" 買下 "+TILES[idx].name);
+  S.pendingBuy=-1; S.waiting=false;
+  closeBuyDialog();
+  render();
+  pump();
+}
+function doSkip(){
+  if(S.pendingBuy>=0) addLog(S.players[S.turn].name+" 放棄購買 "+TILES[S.pendingBuy].name);
+  S.pendingBuy=-1; S.waiting=false;
+  closeBuyDialog();
+  render();
+  pump();
+}
+
+/* ---------- 彈窗 ---------- */
+function showCardDialog(chance, card, left){
+  q("mpCardHd").textContent=(chance?"機會卡":"命運卡")+"（剩餘 "+left+" 張）";
+  q("mpCardBd").innerHTML="<b>"+card.title+"</b>";
+  q("mpCardMask").classList.add("show");
+}
+function openJailDialog(){
+  var p=S.players[S.turn];
+  if(!p||p.jailTurns<=0) return;
+  S.waiting=true;
+  q("mpJailHd").textContent="監獄 · "+p.name;
+  q("mpJailBd").innerHTML="你正在獄中，尚有 <b>"+p.jailTurns+"</b> 回合需處理。<br/>"+
+    "現金："+fmt(p.cash)+"　出獄卡："+p.jailCards+" 張<br/>"+
+    (S.fn2Enabled? "可繳 "+fmt(JAIL_BAIL)+" 保釋，或擲 12 面懲罰骰2號（全懲罰）。" : "懲罰骰2號已關閉，只能繳 "+fmt(JAIL_BAIL)+" 保釋。");
+  var ft=q("mpJailFt"); ft.innerHTML="";
+  var b1=document.createElement("button"); b1.className="mp-btn main"; b1.textContent="繳 "+fmt(JAIL_BAIL)+" 保釋";
+  b1.onclick=function(){
+    if(!jailPayBail()) return;
+    q("mpJailMask").classList.remove("show"); S.waiting=false; render();
+    finishJailTurn();
+  };
+  ft.appendChild(b1);
+  if(p.jailCards>0){
+    var b2=document.createElement("button"); b2.className="mp-btn gold"; b2.textContent="使用出獄卡";
+    b2.onclick=function(){
+      jailUseCard();
+      q("mpJailMask").classList.remove("show"); S.waiting=false; render();
+      finishJailTurn();
+    };
+    ft.appendChild(b2);
+  }
+  if(S.fn2Enabled){
+    var b3=document.createElement("button"); b3.className="mp-btn"; b3.textContent="擲懲罰骰2號";
+    b3.onclick=function(){
+      jailRoll();
+      var p2=S.players[S.turn];
+      var encore=p2.jailTurns>0;
+      q("mpJailBd").innerHTML="<b>"+FN2_TEXTS[S.fnDice2-1]+"</b><br/>"+(encore? "仍需續坐監獄，本回合結束。" : "已出獄，可繼續擲骰。");
+      var ft2=q("mpJailFt"); ft2.innerHTML="";
+      var ok=document.createElement("button"); ok.className="mp-btn main"; ok.textContent="確定";
+      ok.onclick=function(){
+        q("mpJailMask").classList.remove("show"); S.waiting=false; render();
+        finishJailTurn();
+      };
+      ft2.appendChild(ok);
+    };
+    ft.appendChild(b3);
+  }
+  q("mpJailMask").classList.add("show");
+  render();
+}
+function openBuildDialog(){
+  var bd=q("mpBuildBd"); bd.innerHTML="";
+  var rows=0;
+  for(var i=0;i<BOARD;i++){
+    if(S.owners[i].owner!==S.turn||TILES[i].kind!==K.PROPERTY) continue;
+    var ok=canBuild(i), cost=houseCost(i);
+    var row=document.createElement("div"); row.className="mp-build-row";
+    var nm=document.createElement("div"); nm.className="nm";
+    nm.textContent=TILES[i].name+"（"+S.owners[i].houses+" 房）";
+    row.appendChild(nm);
+    var b=document.createElement("button"); b.className="mp-btn"+(ok?" gold":"");
+    b.style.minWidth="82px"; b.style.height="30px"; b.style.fontSize="12px";
+    b.textContent=ok? (S.owners[i].houses>=4? "升級飯店 "+fmt(cost) : "蓋房 "+fmt(cost)) : "不可建";
+    b.disabled=!ok;
+    (function(idx){ b.onclick=function(){ buildAt(idx); openBuildDialog(); }; })(i);
+    row.appendChild(b);
+    bd.appendChild(row);
+    rows++;
+  }
+  if(rows===0){ bd.innerHTML="<div class='mp-build-row'>你還沒有可建設的地產（需集齊同色系）。</div>"; }
+  q("mpBuildMask").classList.add("show");
+}
+
+/* ---------- 渲染 ---------- */
+function cellPos(i){
+  if(i<=10) return {row:11,col:11-i};
+  if(i<=20) return {row:21-i,col:1};
+  if(i<=30) return {row:1,col:i-19};
+  return {row:i-29,col:11};
+}
+function renderBoard(){
+  var b=q("mpBoard"); b.innerHTML="";
+  for(var i=0;i<BOARD;i++){
+    (function(i){
+      var t=TILES[i], pos=cellPos(i), own=S.owners[i];
+      var c=document.createElement("div");
+      c.className="mp-cell"+((t.kind===K.PROPERTY||t.kind===K.RAILROAD||t.kind===K.UTILITY)?"":" special");
+      c.style.gridRow=String(pos.row); c.style.gridColumn=String(pos.col);
+      if(own.owner>=0) c.style.boxShadow="inset 0 0 0 1.6px "+PCOLORS[own.owner%PCOLORS.length];
+      if(t.kind===K.PROPERTY){
+        var g=document.createElement("div"); g.className="grp"; g.style.background=GCOLORS[t.group]; c.appendChild(g);
+      }
+      var nm=document.createElement("div"); nm.className="nm"; nm.textContent=t.name; c.appendChild(nm);
+      if(t.price>0){ var pr=document.createElement("div"); pr.className="pr"; pr.textContent=fmt(t.price); c.appendChild(pr); }
+      if(own.houses>0){
+        var hs=document.createElement("div"); hs.className="hs"; hs.textContent=own.houses>=5?"飯店":(own.houses+"房");
+        c.appendChild(hs);
+      }
+      var pins=document.createElement("div"); pins.className="pins";
+      for(var pi=0;pi<S.players.length;pi++){
+        var pp=S.players[pi];
+        if(!pp.bankrupt&&pp.pos===i){
+          var d=document.createElement("div"); d.className="pin";
+          d.style.background=PCOLORS[pi%PCOLORS.length]; pins.appendChild(d);
+        }
+      }
+      c.appendChild(pins);
+      c.title=t.name+(t.price>0? " · "+fmt(t.price):"");
+      b.appendChild(c);
+    })(i);
+  }
+  var ct=document.createElement("div"); ct.className="mp-center";
+  var lg=document.createElement("div"); lg.className="logo"; lg.textContent="大富翁"; ct.appendChild(lg);
+  var dr=document.createElement("div"); dr.className="dice";
+  if(S.dice.length===0){
+    var blank=document.createElement("div"); blank.className="die"; blank.textContent="—"; dr.appendChild(blank);
+  } else {
+    for(var k=0;k<S.dice.length;k++){
+      var dd=document.createElement("div"); dd.className="die"; dd.textContent=String(S.dice[k]); dr.appendChild(dd);
+    }
+  }
+  ct.appendChild(dr);
+  if(S.fnDice1>0){
+    var fn=document.createElement("div"); fn.className="fn"; fn.textContent="功能骰1號 "+S.fnDice1; ct.appendChild(fn);
+  }
+  if(S.fnDice2>0){
+    var fn2=document.createElement("div"); fn2.className="fn"; fn2.textContent="懲罰骰2號 "+S.fnDice2; ct.appendChild(fn2);
+  }
+  var rd=document.createElement("div"); rd.className="rd";
+  rd.textContent=(S.solo? "第 "+Math.min(S.round,SOLO_ROUNDS)+" / "+SOLO_ROUNDS+" 回合" : "第 "+S.round+" 輪");
+  ct.appendChild(rd);
+  b.appendChild(ct);
+}
+function renderPlayers(){
+  var box=q("mpPlayers"); box.innerHTML="";
+  for(var i=0;i<S.players.length;i++){
+    var p=S.players[i];
+    var row=document.createElement("div");
+    row.className="mp-prow"+(i===S.turn&&!S.over?" act":"");
+    var dot=document.createElement("div"); dot.className="dot"; dot.style.background=PCOLORS[i%PCOLORS.length]; row.appendChild(dot);
+    var nm=document.createElement("div"); nm.className="nm"; nm.textContent=p.name+(p.ai?"（電腦）":"")+(p.bankrupt?" · 破產":""); row.appendChild(nm);
+    var tags=[];
+    if(p.jailTurns>0) tags.push("獄中");
+    if(p.jailCards>0) tags.push("出獄卡×"+p.jailCards);
+    if(p.rentShield>0) tags.push("免租盾×"+p.rentShield);
+    if(p.doubleRentNext>0) tags.push("雙倍租");
+    if(tags.length){ var tg=document.createElement("div"); tg.className="tag"; tg.textContent=tags.join(" "); row.appendChild(tg); }
+    var cash=document.createElement("div"); cash.className="cash"; cash.textContent=fmt(p.cash); row.appendChild(cash);
+    box.appendChild(row);
+  }
+}
+function renderActions(){
+  var box=q("mpActions"); box.innerHTML="";
+  var p=S.players[S.turn];
+  var humanTurn=!S.over&&p&&!p.ai&&!p.bankrupt;
+  var b1=document.createElement("button");
+  b1.className="mp-btn main";
+  b1.textContent=S.over? "本局結束" : (p&&p.jailTurns>0? "處理監獄" : "擲骰子");
+  b1.disabled=!humanTurn||S.waiting;
+  b1.onclick=function(){
+    if(S.over) return;
+    if(p&&p.jailTurns>0){ openJailDialog(); return; }
+    doRoll();
+  };
+  box.appendChild(b1);
+  var b2=document.createElement("button");
+  b2.className="mp-btn gold"; b2.textContent="建設"; b2.disabled=!humanTurn;
+  b2.onclick=openBuildDialog;
+  box.appendChild(b2);
+  if(S.over){
+    var b3=document.createElement("button");
+    b3.className="mp-btn"; b3.textContent="重新開局";
+    b3.onclick=function(){ resetToStart(); };
+    box.appendChild(b3);
+  } else if(p&&p.ai){
+    var tip=document.createElement("button");
+    tip.className="mp-btn"; tip.textContent="電腦思考中…"; tip.disabled=true;
+    box.appendChild(tip);
+  }
+}
+function renderLog(){
+  var box=q("mpLog"); box.innerHTML="";
+  var arr=S.log.slice(-40);
+  for(var i=0;i<arr.length;i++){
+    var d=document.createElement("div"); d.textContent=arr[i]; box.appendChild(d);
+  }
+  box.scrollTop=box.scrollHeight;
+}
+function render(){
+  if(!S) return;
+  q("mpStartPanel").style.display="none";
+  var gb=q("mpGameBox"); gb.style.display="flex";
+  q("mpStatus").textContent=S.message||"輪流行動";
+  renderBoard(); renderPlayers(); renderActions(); renderLog();
+}
+
+/* ---------- 開局 ---------- */
+function newGame(){
+  var players=[];
+  for(var i=0;i<cfg.n;i++){
+    players.push({name:PNAMES[i]||("電腦 "+(i+1)), ai:i>0, cash:cfg.cash, pos:0, jailTurns:0,
+      bankrupt:false, jailCards:0, rentShield:0, doubleRentNext:0, goBonusBoost:false});
+  }
+  S={
+    players:players,
+    owners:TILES.map(function(){ return {owner:-1,houses:0}; }),
+    turn:0, round:1, solo:(players.length===1), startCash:cfg.cash,
+    diceCount:Math.max(MIN_DICE,Math.min(MAX_DICE,cfg.dice)),
+    fn1Enabled:!!cfg.fn1, fn2Enabled:!!cfg.fn2,
+    dice:[], fnDice1:-1, fnDice2:-1, doubleCount:0,
+    chancePile:shuffle(range(CHANCE_SIZE)), fatePile:shuffle(range(FATE_SIZE)),
+    chanceDiscard:[], fateDiscard:[],
+    pendingBuy:-1, waiting:false, queue:[], phase:"ROLL",
+    over:false, win:-1, log:[], lastCard:null, message:""
+  };
+  addLog("開局：起始金額 "+fmt(cfg.cash)+"，"+players.length+" 位玩家");
+  addLog("骰子設定：基礎 "+S.diceCount+" 顆 6 面骰；功能骰1號 "+(S.fn1Enabled?"開啟":"關閉")+"；懲罰骰2號 "+(S.fn2Enabled?"開啟":"關閉"));
+  addLog(S.solo? "單人模式：30 回合內累積 "+fmt(cfg.cash*SOLO_TARGET_RATE)+" 即通關" : "多人模式：輪流操作，最後未破產者勝");
+  setMsg(S.solo? "目標："+fmt(cfg.cash*SOLO_TARGET_RATE) : "輪流行動");
+  render();
+  maybeAI();
+}
+function resetToStart(){
+  clearTimeout(aiTimer);
+  S=null;
+  q("mpGameBox").style.display="none";
+  q("mpStartPanel").style.display="flex";
+  ["mpCardMask","mpBuyMask","mpJailMask","mpBuildMask","mpRuleMask"].forEach(function(id){
+    var el=q(id); if(el) el.classList.remove("show");
+  });
+}
+
+/* ---------- 綁定 ---------- */
+function chipsBind(containerId, attr, onPick){
+  var box=q(containerId);
+  if(!box) return;
+  box.addEventListener("click", function(e){
+    var btn=e.target.closest? e.target.closest(".mp-chip") : null;
+    if(!btn) return;
+    var kids=box.querySelectorAll(".mp-chip");
+    for(var i=0;i<kids.length;i++) kids[i].classList.remove("on");
+    btn.classList.add("on");
+    onPick(btn.getAttribute(attr));
+  });
+}
+function bind(){
+  var rope=q("mpScreen"); if(!rope) return;
+  chipsBind("mpCntChips","data-n",function(v){ cfg.n=parseInt(v,10); });
+  chipsBind("mpCashChips","data-c",function(v){ cfg.cash=parseInt(v,10); });
+  chipsBind("mpDiceChips","data-d",function(v){ cfg.dice=parseInt(v,10); });
+  q("mpTgFn1").addEventListener("click", function(){ cfg.fn1=!cfg.fn1; this.classList.toggle("on",cfg.fn1); });
+  q("mpTgFn2").addEventListener("click", function(){ cfg.fn2=!cfg.fn2; this.classList.toggle("on",cfg.fn2); });
+  q("mpStartBtn").addEventListener("click", function(){ newGame(); });
+  q("mpBack").addEventListener("click", function(){
+    clearTimeout(aiTimer);
+    q("mpScreen").classList.remove("show");
+    if(typeof window.goHome==="function") window.goHome();
+  });
+  q("mpHelpBtn").addEventListener("click", function(){
+    q("mpRuleText").textContent=RULE_TEXT;
+    q("mpRuleMask").classList.add("show");
+  });
+  q("mpRuleClose").addEventListener("click", function(){ q("mpRuleMask").classList.remove("show"); });
+  q("mpCardOk").addEventListener("click", function(){ q("mpCardMask").classList.remove("show"); });
+  q("mpBuyYes").addEventListener("click", doBuy);
+  q("mpBuyNo").addEventListener("click", doSkip);
+  q("mpBuildClose").addEventListener("click", function(){ q("mpBuildMask").classList.remove("show"); });
+  q("mpRuleText").textContent=RULE_TEXT;
+  window.__mpOpen=function(){
+    document.body.classList.remove("atHome");
+    document.querySelectorAll(".gscreen").forEach(function(el){ el.classList.remove("show"); });
+    q("mpScreen").classList.add("show");
+    if(!S){ q("mpStartPanel").style.display="flex"; q("mpGameBox").style.display="none"; }
+    else render();
+  };
+  window.__mpPause=function(){ clearTimeout(aiTimer); };
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", function(){ q("mpRuleText").textContent=RULE_TEXT; });
+  if(window.__MP_DEBUG) window.__MP=function(){ return S; };
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", bind);
+else bind();
+})();
+
+</script>
+
+<script>
+/* ============ 下載密碼門：完整版 / 管理端需密碼，分享版直接下載 ============ */
+(function(){
+  var ov = document.getElementById("ovDlPass");
+  if(!ov) return;
+  var inp = document.getElementById("dlPassInput"),
+      err = document.getElementById("dlPassErr"),
+      okB = document.getElementById("dlPassOk"),
+      noB = document.getElementById("dlPassCancel"),
+      sub = document.getElementById("dlPassSub"),
+      dlg = ov.querySelector(".dialog");
+
+  /* 校驗碼以字符碼存放，頁面源碼不出現明文數字串 */
+  var KEY = [55,48,56,56,49,51,49,52].map(function(c){ return String.fromCharCode(c); }).join("");
+
+  var LABEL = { dlFull: "完整版", dlAdmin: "管理端" };
+  var pending = null;
+
+  function open(id){
+    pending = id;
+    err.textContent = "";
+    dlg.classList.remove("shake");
+    if(sub) sub.textContent = "「" + (LABEL[id] || "") + "」安裝包受保護，請輸入下載密碼。";
+    ov.classList.add("show");
+    ov.setAttribute("aria-hidden","false");
+    setTimeout(function(){ try{ inp.value = ""; inp.focus(); }catch(e){} }, 60);
+  }
+  function close(){
+    pending = null;
+    ov.classList.remove("show");
+    ov.setAttribute("aria-hidden","true");
+    err.textContent = "";
+    try{ inp.blur(); }catch(e){}
+  }
+  function fireDownload(id){
+    var src = document.getElementById(id);
+    if(!src) return false;
+    var href = src.getAttribute("href");
+    if(!href) return false;
+    var fn = src.getAttribute("download") || href.split("/").pop();
+    var a = document.createElement("a");
+    a.href = href; a.download = fn; a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ if(a.parentNode) a.parentNode.removeChild(a); }, 1500);
+    return true;
+  }
+  function submit(){
+    if(!pending) return;
+    var v = (inp.value || "").replace(/\s+/g,"");
+    if(v === KEY){
+      var id = pending;
+      close();
+      fireDownload(id);
+    }else{
+      err.textContent = "密碼錯誤，請重試。";
+      dlg.classList.remove("shake");
+      void dlg.offsetWidth;
+      dlg.classList.add("shake");
+      try{ inp.focus(); }catch(e){}
+    }
+  }
+
+  Object.keys(LABEL).forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener("click", function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      open(id);
+    }, true);
+  });
+
+  okB.addEventListener("click", submit);
+  noB.addEventListener("click", close);
+  ov.addEventListener("click", function(ev){ if(ev.target === ov) close(); });
+  inp.addEventListener("keydown", function(ev){
+    if(ev.key === "Enter" || ev.keyCode === 13){ ev.preventDefault(); submit(); }
+  });
+  document.addEventListener("keydown", function(ev){
+    if((ev.key === "Escape" || ev.keyCode === 27) && ov.classList.contains("show")) close();
+  });
+})();
+</script>
+
+<!-- 下載密碼門樣式補充：輸入框以圓點遮罩，兼容不支援 -webkit-text-security 的內核 -->
+<style>
+  #dlPassInput{
+    -webkit-text-security:disc;
+    text-security:disc;
+    letter-spacing:.34em;
+  }
+  #dlPassInput:focus{outline:none}
+</style>
+
 </body>
 </html>
