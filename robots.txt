@@ -1,4 +1,4 @@
-# kalokfung29-arch.github.io robots
+# tetrisjames.surge.sh robots
 User-agent: *
 Allow: /
 
@@ -6,4 +6,5 @@ Allow: /
 Disallow: /index_backup_20261031.html
 Disallow: /_chk.js
 
-Sitemap: https://kalokfung29-arch.github.io/sitemap.xml
+Sitemap: https://tetrisjames.surge.sh/sitemap.xml
+（内容由AI生成，仅供参考）

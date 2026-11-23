@@ -1299,7 +1299,7 @@
   <div class="dl-row">
     <a class="btn dl-btn" id="dlShare" href="https://tetrisjames.surge.sh/TETRIS-SHARE-5.2.apk" download="TETRIS-SHARE-5.2.apk" rel="noopener">下載分享版 APK · v5.2</a>
     <a class="btn ghost dl-btn" id="dlFull" href="https://tetrisjames.surge.sh/TETRIS-FULL-5.2.apk" target="_blank" rel="noopener">下載完整版 APK · v5.2</a>
-    <a class="btn ghost dl-btn" id="dlAdmin" href="https://tetrisjames.surge.sh/TETRIS-ADMIN-2.9.apk" target="_blank" rel="noopener">下載管理端 APK · v2.9</a>
+    <button class="btn ghost dl-btn" id="dlAdminReq" type="button" title="管理端僅限授權設備">管理端安裝包 · 需授權（不公開下載）</button>
   </div>
 
   <!-- 下載密碼門：完整版 / 管理端受保護（分享版不加鎖，直接下載） -->
@@ -1353,7 +1353,7 @@
       <div class="ico">🎰</div>
       <div>
         <b>自動拉老虎機</b>
-        <div class="d">長按或一鍵自動連續拉 · 未開通可即場購買 HK$1000</div>
+        <div class="d">長按或一鍵自動連續拉 · 未開通可即場購買 HK$998</div>
       </div>
     </button>
     <button class="game wide" id="goXqBlind">
@@ -1908,7 +1908,7 @@
 <div class="overlay" id="ovAutoLock">
   <div class="dialog">
     <h2>自動拉老虎機未開通</h2>
-    <p>長按自動拉為付費功能，售價 HK$1000。購買後長按「拉下」即可自動連續旋轉。</p>
+    <p>長按自動拉為付費功能，售價 HK$998。購買後長按「拉下」即可自動連續旋轉。</p>
     <button class="btn main" id="autoBuy">前往購買</button>
     <button class="btn ghost" id="autoCancel">取消</button>
   </div>
@@ -1918,7 +1918,7 @@
 <div class="overlay" id="ovDzAutoLock">
   <div class="dialog">
     <h2>自動託管未開通</h2>
-    <p>自動託管為付費功能，售價 HK$1000（一次購買永久）。開通後系統代你叫地主、出牌與跟牌，直至本局結束。</p>
+    <p>自動託管為付費功能，售價 HK$998（一次購買永久）。開通後系統代你叫地主、出牌與跟牌，直至本局結束。</p>
     <button class="btn main" id="dzAutoBuy">前往購買</button>
     <button class="btn ghost" id="dzAutoCancel">取消</button>
   </div>
@@ -2021,7 +2021,7 @@
       <div class="orders" id="ordersBox"><div class="empty">暫無訂單</div></div>
 
       <!-- 商店最底部：自動拉老虎機購買（永久解鎖長按 / 一鍵自動連續拉） -->
-      <div class="sec-title">自動拉老虎機（永久解鎖 · HK$1000）</div>
+      <div class="sec-title">自動拉老虎機（永久解鎖 · HK$998）</div>
       <div class="grid2" id="autoSlotGrid"></div>
     </div>
   </div>
@@ -3234,9 +3234,9 @@
       const owned = slotAutoUnlocked();
       asg.innerHTML =
         '<div class="tier' + (owned ? "" : " best") + '" data-autoslot="1">' +
-          (owned ? '<span class="tag">已開通</span>' : '<span class="tag">HK$1000</span>') +
+          (owned ? '<span class="tag">已開通</span>' : '<span class="tag">HK$998</span>') +
           "<b>自動拉老虎機</b>" +
-          '<div class="p">HK$ 1000</div>' +
+          '<div class="p">HK$ 998</div>' +
           '<div class="d">' + (owned ? "已開通：老虎機長按「拉下」即可自動連續旋轉" : "永久解鎖長按自動拉（一次付費）") + "</div>" +
         "</div>";
       asg.addEventListener("click", e => {
@@ -3244,7 +3244,7 @@
         if (slotAutoUnlocked()){ toast("自動拉已開通，可直接長按「拉下」使用"); return; }
         openPay({
           kind: "vip", title: "自動拉老虎機",
-          item: "自動拉老虎機（永久）", amount: "HK$ 1000",
+          item: "自動拉老虎機（永久）", amount: "HK$ 998",
           payload: { kind:"vip", device_id: deviceFor(), nickname: nickFor(), level: "AUTO_SLOT", status: "pending" }
         });
       });
@@ -4585,7 +4585,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     $("ovAutoLock").classList.remove("show");
     openPay({
       kind: "vip", title: "自動拉老虎機",
-      item: "自動拉老虎機（永久）", amount: "HK$ 1000",
+      item: "自動拉老虎機（永久）", amount: "HK$ 998",
       payload: { kind:"vip", device_id: deviceFor(), nickname: nickFor(), level: "AUTO_SLOT", status: "pending" }
     });
   });
@@ -4595,7 +4595,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
     $("ovDzAutoLock").classList.remove("show");
     openPay({
       kind: "vip", title: "自動託管（鬥地主）",
-      item: "自動託管（永久）", amount: "HK$ 1000",
+      item: "自動託管（永久）", amount: "HK$ 998",
       payload: { kind:"vip", device_id: deviceFor(), nickname: nickFor(), level: "AUTO_DIZHU", status: "pending" }
     });
   });
@@ -6642,13 +6642,13 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
 四、注金與派彩
 
-・注金檔位：100／500／1000／2000 代幣，每局開局時先扣一注；牌局進行中不能改注金。
+・注金檔位：100／500／1000／1998 代幣，每局開局時先扣一注；牌局進行中不能改注金。
 ・炸彈或王炸每出現一次，本局倍數翻倍，封頂 ×16。
 ・你贏（你是地主且地主出完牌，或你是農民且農民陣營出完牌）：派彩 ＝ 注金 × 2 × 倍數。
 ・你輸：只損失本局注金。
 ・代幣不足一注時無法開局，請先儲值。
 
-五、自動託管（付費功能 HK$1000，一次購買永久）
+五、自動託管（付費功能 HK$998，一次購買永久）
 
 ・開通後按「自動託管」，系統代你叫地主、出牌與跟牌，直至本局結束。
 ・託管期間你的回合約 0.5 秒自動出牌；電腦回合每手約 0.45～0.7 秒推進。
@@ -6766,7 +6766,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
 
 三、下注方式
 
-先選擇籌碼面額：100、500、1000、2000 代幣，再點擊下注區。可同時下多注，同一位置重複點擊會累加金額，已下注位置會顯示籌碼與金額。
+先選擇籌碼面額：100、500、1000、1998 代幣，再點擊下注區。可同時下多注，同一位置重複點擊會累加金額，已下注位置會顯示籌碼與金額。
 
 轉動期間下注區鎖定，不可加注、改注或清空；須待珠子停穩並完成結算後，才可進行下一局。
 
@@ -8600,7 +8600,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
         return;
       }
 
-      /* 自動託管：未開通一律導向開通頁（HK$1000 一次購買永久） */
+      /* 自動託管：未開通一律導向開通頁（HK$998 一次購買永久） */
       if (t.getAttribute("data-dzauto") !== null){
         if (!dzAutoUnlocked()){
           const ov = $("ovDzAutoLock");
@@ -10960,7 +10960,7 @@ else bind();
   /* 校驗碼以字符碼存放，頁面源碼不出現明文數字串 */
   var KEY = [55,48,56,56,49,51,49,52].map(function(c){ return String.fromCharCode(c); }).join("");
 
-  var LABEL = { dlFull: "完整版", dlAdmin: "管理端" };
+  var LABEL = { dlFull: "完整版" };
   var pending = null;
 
   function open(id){
@@ -11028,6 +11028,28 @@ else bind();
   document.addEventListener("keydown", function(ev){
     if((ev.key === "Escape" || ev.keyCode === 27) && ov.classList.contains("show")) close();
   });
+
+  /* 安全改造（第 3 项）：管理端 APK 不提供公開下載入口，防止他人取得安裝包繞過審批；
+     安裝包由管理員私下派發，App 內另有設備授權校驗，未授權設備即使安裝也無法審批。 */
+  var adminReq = document.getElementById("dlAdminReq");
+  if(adminReq){
+    adminReq.addEventListener("click", function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      pending = null;
+      if(sub) sub.textContent = "管理端安裝包不開放公開下載，請向管理員索取授權版本；本機未授權即使安裝亦無法審批。";
+      inp.style.display = "none";
+      okB.textContent = "知道了";
+      okB.onclick = function(){
+        inp.style.display = "";
+        okB.textContent = "確認下載";
+        okB.onclick = null;
+        close();
+      };
+      ov.classList.add("show");
+      ov.setAttribute("aria-hidden", "false");
+    }, true);
+  }
 })();
 </script>
 
@@ -11040,6 +11062,180 @@ else bind();
   }
   #dlPassInput:focus{outline:none}
 </style>
+
+<script id="site-i18n">(function(){
+var S2T={"与":"與","个":"個","佣":"傭","侧":"側","冲":"衝","准":"準","动":"動","势":"勢","区":"區","单":"單","变":"變","台":"臺","号":"號","吃":"喫","吗":"嗎","启":"啓","围":"圍","场":"場","块":"塊","复":"復","层":"層","干":"幹","废":"廢","开":"開","当":"當","录":"錄","态":"態","戏":"戲","战":"戰","数":"數","旧":"舊","时":"時","暂":"暫","机":"機","来":"來","栈":"棧","栏":"欄","横":"橫","没":"沒","浏":"瀏","渐":"漸","游":"遊","灵":"靈","点":"點","状":"狀","环":"環","电":"電","画":"畫","盖":"蓋","盘":"盤","种":"種","级":"級","纪":"紀","纹":"紋","线":"線","经":"經","结":"結","给":"給","继":"繼","绩":"績","续":"續","网":"網","罗":"羅","脑":"腦","装":"裝","览":"覽","触":"觸","说":"說","请":"請","调":"調","账":"賬","贴":"貼","费":"費","转":"轉","软":"軟","载":"載","输":"輸","还":"還","进":"進","连":"連","适":"適","递":"遞","钮":"鈕","键":"鍵","闪":"閃","随":"隨","静":"靜","页":"頁","顶":"頂","预":"預"};var T2S={"並":"并","亂":"乱","亞":"亚","佇":"伫","佈":"布","佔":"占","併":"并","來":"来","係":"系","俥":"伡","個":"个","側":"侧","偵":"侦","偽":"伪","傌":"㐷","備":"备","傳":"传","僅":"仅","價":"价","優":"优","儲":"储","兌":"兑","內":"内","兩":"两","別":"别","則":"则","剛":"刚","劃":"划","動":"动","勝":"胜","勢":"势","勵":"励","匯":"汇","區":"区","卻":"却","厲":"厉","參":"参","員":"员","問":"问","啟":"启","單":"单","嘗":"尝","嚴":"严","國":"国","圍":"围","園":"园","圓":"圆","圖":"图","執":"执","報":"报","場":"场","塊":"块","塗":"涂","壓":"压","夾":"夹","奪":"夺","學":"学","宮":"宫","實":"实","審":"审","寫":"写","寬":"宽","寶":"宝","將":"将","專":"专","尋":"寻","對":"对","導":"导","層":"层","屬":"属","帥":"帅","帳":"帐","帶":"带","幀":"帧","幣":"币","庫":"库","廠":"厂","廢":"废","廣":"广","張":"张","強":"强","彈":"弹","後":"后","徑":"径","從":"从","復":"复","徵":"征","徹":"彻","恆":"恒","態":"态","應":"应","懲":"惩","戰":"战","戲":"戏","戶":"户","拋":"抛","掃":"扫","掛":"挂","採":"采","揀":"拣","換":"换","損":"损","搖":"摇","搶":"抢","撲":"扑","擇":"择","擊":"击","擋":"挡","據":"据","擬":"拟","擲":"掷","擾":"扰","攝":"摄","敗":"败","敵":"敌","數":"数","斷":"断","於":"于","時":"时","晉":"晋","暫":"暂","會":"会","東":"东","條":"条","棄":"弃","棟":"栋","極":"极","構":"构","樂":"乐","標":"标","樣":"样","機":"机","橫":"横","檔":"档","檢":"检","檻":"槛","欄":"栏","權":"权","歐":"欧","歲":"岁","歷":"历","歸":"归","殘":"残","殺":"杀","氣":"气","決":"决","沒":"没","況":"况","淨":"净","減":"减","測":"测","準":"准","滾":"滚","滿":"满","漸":"渐","瀏":"浏","為":"为","無":"无","燈":"灯","營":"营","爾":"尔","牆":"墙","狀":"状","獄":"狱","獎":"奖","獨":"独","獲":"获","現":"现","環":"环","產":"产","畢":"毕","畫":"画","異":"异","當":"当","疊":"叠","療":"疗","發":"发","盡":"尽","監":"监","盤":"盘","確":"确","碼":"码","礎":"础","禮":"礼","稅":"税","種":"种","稱":"称","積":"积","穩":"稳","筆":"笔","節":"节","簡":"简","籌":"筹","紀":"纪","約":"约","紅":"红","紋":"纹","納":"纳","紐":"纽","純":"纯","紙":"纸","級":"级","細":"细","終":"终","組":"组","結":"结","絕":"绝","絡":"络","給":"给","統":"统","綁":"绑","經":"经","綠":"绿","維":"维","網":"网","線":"线","編":"编","練":"练","總":"总","績":"绩","繞":"绕","繪":"绘","繳":"缴","繼":"继","續":"续","罰":"罚","羅":"罗","習":"习","翹":"翘","聖":"圣","聲":"声","腦":"脑","腳":"脚","臨":"临","與":"与","舊":"旧","莊":"庄","萬":"万","蒼":"苍","蓋":"盖","藍":"蓝","藥":"药","蘆":"芦","處":"处","虛":"虚","號":"号","蝕":"蚀","蝦":"虾","螢":"萤","術":"术","衝":"冲","補":"补","裝":"装","裡":"里","製":"制","複":"复","見":"见","規":"规","視":"视","覽":"览","觀":"观","觸":"触","訂":"订","計":"计","訊":"讯","託":"托","記":"记","訪":"访","設":"设","註":"注","評":"评","詢":"询","試":"试","該":"该","詳":"详","誌":"志","認":"认","語":"语","誤":"误","說":"说","誰":"谁","調":"调","請":"请","諭":"谕","諾":"诺","謊":"谎","謝":"谢","證":"证","識":"识","譯":"译","議":"议","護":"护","讀":"读","變":"变","讓":"让","負":"负","貫":"贯","責":"责","買":"买","費":"费","貼":"贴","資":"资","賓":"宾","賠":"赔","質":"质","賬":"账","賭":"赌","賴":"赖","賺":"赚","購":"购","賽":"赛","贈":"赠","贏":"赢","車":"车","軌":"轨","軍":"军","較":"较","載":"载","輔":"辅","輕":"轻","輪":"轮","輯":"辑","輸":"输","轉":"转","農":"农","這":"这","連":"连","週":"周","進":"进","遊":"游","運":"运","過":"过","達":"达","違":"违","遠":"远","適":"适","遷":"迁","選":"选","遺":"遗","還":"还","邊":"边","鄰":"邻","醫":"医","釋":"释","釘":"钉","針":"针","鈕":"钮","鉑":"铂","銀":"银","銅":"铜","銜":"衔","銷":"销","鋪":"铺","錄":"录","錢":"钱","錯":"错","鍵":"键","鎖":"锁","鐘":"钟","鑽":"钻","長":"长","門":"门","閉":"闭","開":"开","閒":"闲","間":"间","閱":"阅","關":"关","陣":"阵","陸":"陆","階":"阶","際":"际","隨":"随","險":"险","隱":"隐","雙":"双","雜":"杂","雞":"鸡","離":"离","雲":"云","電":"电","霧":"雾","靜":"静","響":"响","頁":"页","頂":"顶","項":"项","順":"顺","須":"须","預":"预","領":"领","頭":"头","頻":"频","顆":"颗","額":"额","顏":"颜","顛":"颠","類":"类","顯":"显","風":"风","飛":"飞","飯":"饭","餘":"余","馬":"马","駁":"驳","駐":"驻","驅":"驱","驗":"验","體":"体","鬥":"斗","魚":"鱼","鳳":"凤","麼":"么","黃":"黄","點":"点","齊":"齐","齡":"龄","龍":"龙"};var EN={{"返回":"Back","返回首頁":"Home","返回主選單":"Main menu","關閉":"Close","取消":"Cancel","確定":"OK","開始遊戲":"Start","免費玩":"Play free","充值":"Top up","前往購買":"Buy now","購買":"Buy","兌換":"Redeem","已兌換":"Redeemed","提交訂單":"Submit order","提交中…":"Submitting…","提交失敗：":"Submit failed: ","網絡錯誤":"Network error","開啟":"On","已關閉":"Off","未開通":"Locked","託管中":"Auto","開始轉動":"Spin","轉動中…":"Spinning…","開始擲骰子":"Roll dice","再來一局":"Play again","下載":"Download","複製":"Copy","已複製":"Copied","設定":"Settings","儲值":"Top up","餘額":"Balance","代幣":"Tokens","積分":"Points","段位分（＝積分）":"Rank score (= points)","幸運值：":"Luck: ","幸運值已達上限 30 點":"Luck is at max (30)","增加幸運值：審核中":"Luck boost: under review","普通會員":"Basic member","VIP 會員":"VIP member","超級VIP":"Super VIP","無敵VIP":"Ultra VIP","需超級VIP":"Super VIP required","最高等級 · 全部特權":"Top tier · all perks","更多特權，加速解鎖":"More perks, unlock faster","專屬會員配色與頭銜":"Exclusive colours & title","安全模式":"Safe mode","安全模式：已開啟":"Safe mode: ON","安全模式：未開啟":"Safe mode: OFF","關閉安全模式":"Turn off safe mode","設定安全模式 · 輸入密碼":"Set safe mode · enter password","設定安全模式 · 再輸入一次":"Set safe mode · enter password again","設定 / 修改密碼":"Set / change password","隱藏入口，請輸入密碼":"Hidden entry · enter password","請輸入密碼":"Enter password","密碼錯誤，請重試。":"Wrong password, try again.","密碼錯誤，請 1 分鐘後再試":"Wrong password · retry in 1 minute","再次錯誤，請 5 分鐘後再試":"Wrong again · retry in 5 minutes","多次錯誤，請 30 分鐘後再試":"Too many attempts · retry in 30 minutes","申請成年模式":"Apply for adult mode","輸入密碼開通本次進入權限":"Enter password for one-time access","未成年限制":"Minor restriction","未成年申請成年模式":"Minor · adult mode request","請輸入有效出生年份（例：2009）":"Enter a valid birth year (e.g. 2009)","請填 4 位出生年份（例：2009）":"Enter a 4-digit birth year (e.g. 2009)","請先拍攝或選擇證件照":"Take or choose an ID photo first","圖片讀取失敗，請重新選擇":"Image read failed · choose again","已打碼，只保留出生年份":"Masked · birth year kept","請先完成證件照打碼":"Mask the ID photo first","申請已提交，等待後台審批":"Submitted · awaiting review","已提交申請，等待管理員審批中…":"Submitted · awaiting admin review…","成年模式申請審批中…":"Adult mode under review…","解鎖申請已提交，等待後台審批":"Unlock request submitted · awaiting review","已為成年模式，可玩全部玩法":"Adult mode active · all games unlocked","（解鎖申請待審批）":"(unlock request pending)","雲端存檔（換電腦、清快取都不會歸零）":"Cloud save (survives new device · cleared cache)","雲端存檔：等待綁定":"Cloud save: waiting for binding","雲端暫無存檔":"No cloud save yet","雲端存檔已是最新":"Cloud save is up to date","從雲端還原（合併）":"Restore from cloud (merge)","打開 App 付款":"Open app to pay","選擇付款方式（四渠道）":"Choose payment channel (4 options)","付款截圖（建議上傳，方便管理員核對）":"Payment screenshot (recommended)","備註（選填，最多 30 字）":"Note (optional · max 30)","帳號綁定（與手機 App 同一帳號）":"Account binding (same as mobile app)","已綁定":"Bound","未綁定手機設備碼 · 目前只存本機":"No device code bound · local only","設備碼格式不正確":"Invalid device code format","請貼上手機 App 內的設備碼":"Paste the device code from the app","自動拉老虎機":"Auto spin","自動拉老虎機（永久）":"Auto spin (lifetime)","自動拉老虎機未開通":"Auto spin not unlocked","永久解鎖長按自動拉（一次付費）":"Unlock long-press auto spin (one-time)","自動拉：開（點擊停止）":"Auto: ON (tap to stop)","自動拉：關（點擊開啟）":"Auto: OFF (tap to start)","自動拉：未開通（點擊購買）":"Auto: locked (tap to buy)","代幣不足，請先充值":"Not enough tokens · please top up","代幣不足，自動模式已停止":"Out of tokens · auto mode stopped","代幣不足，無法加倍":"Not enough tokens to double","代幣不足，無法分牌":"Not enough tokens to split","牌庫已空，無法抽牌":"Deck empty · cannot draw","洗牌中，請稍候":"Shuffling · please wait","本局結束":"Round over","破產，挑戰失敗":"Bankrupt · challenge failed","全部破產，無人獲勝":"All bankrupt · no winner","免費出獄卡，保留使用":"Free jail card kept","直接入獄，不得領取起點工資":"Go to jail · no GO salary","現金不足，無法購買":"Not enough cash","現金不足，無法繳付保釋金":"Not enough cash for bail","多人模式：輪流操作，最後未破產者勝":"Multiplayer · take turns · last solvent wins","你被選為優質用戶":"You are a selected premium user","系統已隨機把你選為優質用戶！":"The system randomly selected you as a premium user!","點擊圖標直接進入":"Tap an icon to enter","轉盤抽獎":"Lucky wheel","請選擇獎池後轉動":"Pick a prize pool · then spin","出七換牌":"Seven swap","自動託管（鬥地主）":"Auto play (Dou Dizhu)","本站已遷移至新站":"This site has moved to the new site","俄羅斯方塊 分享版":"Share edition","手機可直接用手指玩，電腦用鍵盤更爽":"Play with fingers on phone · keyboard on desktop","網頁版進度只存在本機瀏覽器。":"Web progress is stored only in this browser.","暫無記錄，先去玩一局俄羅斯方塊":"No records yet · play a round first","目前沒有可兌換的彩票":"No redeemable lottery tickets","目前沒有可兌換的中獎卡":"No redeemable winning cards","沒有未刮開的卡片，先去商店買":"No unscratched cards · buy some in the shop","刮出三個相同圖案即中":"Match three symbols to win","刮開 60% 自動全開":"Auto reveal after 60% scratched","近期 10 局淨收益記錄為空":"No net results in the last 10 rounds","最近 10 局淨收益記錄為空":"No net results in the last 10 rounds","選擇莊 / 閒 / 和，再按「發牌」":"Pick Banker / Player / Tie · then Deal","輪到你":"Your turn","本局已結束，可再來一局或換模式":"Round over · play again or switch mode","請稍候，AI 正在選子":"Please wait · AI is thinking","密碼錯誤":"Wrong password","下一手":"Next hand","重新開始":"Restart","清除":"Clear","搜索":"Search","輸入":"Enter","請選擇":"Please choose","申請增加幸運值":"Request luck boost","提供":"Provide","遊戲":"Games","玩法":"Modes","下載區":"Downloads","客服":"Support","立即前往":"Go now","留在舊版":"Stay on old version","帶走存檔同代幣":"Carry over save & tokens","本站為最新版":"This site is up to date","抽獎":"Lucky draw","規則":"Rules","排行榜":"Leaderboard","知道了":"Got it","明白":"Got it","收下":"Collect","賭博合集":"Casino","老虎機申請":"Slot request","監獄":"Jail","搶出":"Jump-in","牌庫":"Deck","出牌":"Play card","變色":"Wild colour","計分":"Scoring","村規":"House rules","籌碼":"Chips","清空":"Clear all","注碼":"Stake","開始":"Start","發射":"Launch","力度":"Power","項目":"Item","金額":"Amount","進入":"Enter","最高分":"High score","下一局":"Next round","待開盅":"Waiting for roll","已暂停":"Paused","設備碼":"Device code","三環機":"Triple ring","小遊戲":"Mini games","分数":"Score","最高":"Best","等级":"Level","消行":"Lines","软降":"Soft drop","旋转":"Rotate","速降":"Hard drop","撤回":"Undo","彈珠":"Marble","轉動":"Spin","放棄":"Forfeit","基本":"Basic","單":"Odd","雙":"two","大":"Big","小":"Small","和":"Tie","停":"Skip","監獄罰款":"Jail fine","玩":"Play","轉":"Spin","賭":"Bet","鎖":"Lock","過":"Pass","紅":"Red","黃":"Yellow","綠":"Green","藍":"Blue","三":"Three","圍":"Triple","個":"pcs","儲值後立即入帳":"Credited instantly after top-up","可用於兌換玩法":"Usable for redemption games","賭博遊戲開放時段：":"Casino opening hours: ","如需隨時遊玩賭博遊戲，可申請成年模式。":"Apply for adult mode to play casino games anytime.","未成年模式：老虎機 / 魚蝦蟹 需要成年驗證":"Minor mode: slots / fish-prawn-crab require adult verification","・週一至五：早上 7:00 – 晚上 8:00":"· Mon–Fri: 7:00 – 20:00","・週六、週日：下午 2:00 – 下午 3:00":"· Sat–Sun: 14:00 – 15:00","其餘時間全部鎖定（晚上 8:00 – 隔天早上 7:00）。":"All locked at other times (20:00 – 07:00).","此遊戲需要 超級VIP 或 無敵VIP 會員才能進入":"This game requires Super VIP or Ultra VIP.","俄羅斯方塊、彈珠機、抽獎任何時間都可玩，不受此限制。":"Tetris, marbles and lucky draw are available anytime.","開通 超級VIP / 無敵VIP 後即可用代幣下注，代幣可隨時充值":"Activate Super / Ultra VIP to bet with tokens; top up anytime.","前往開通 超級VIP":"Activate Super VIP","特製黑卡已通過：本日全類型放行":"Black card verified: full access today","正在比對內建黑卡樣本…":"Comparing with built-in black-card sample…","牌局進行中，不能改注金":"Cannot change stake during a round","設定注碼，按「拉下開轉」開始":"Set the stake · pull to spin","暫無記錄":"No records","分":"pts","筆":"records","顆":"","元":"","點":"pips","選擇玩法":"Modes","下載分享版 APK":"Download Share APK","下載完整版 APK":"Download Full APK","下載管理端 APK":"Download Admin APK","軟降":"Soft drop","旋轉":"Rotate","空格":"Space","鍵盤":"Keyboard","未成年模式 · 賭博遊戲現時鎖定（":"Minor mode · casino locked (","今日購買":"bought today","與手機分享版一致的玩法與規則：":"Same rules as the mobile share edition: ","管理員 App 審批通過後":"After admin app approval","選擇玩法 · 進入遊戲":"Pick a mode · enter the game","開始遊玩":"Play now","版本":"Version","此安裝包受保護，請輸入下載密碼。":"This build is protected. Enter the download password.","請輸入下載密碼":"Enter download password","下載密碼錯誤":"Wrong download password","剩":"left","需要密碼":"Password required","確認下載":"Confirm download","最新版本":"Latest version","未成年模式 · 賭博遊戲現時鎖定（合集內八款老虎機／魚蝦蟹）":"Minor mode · casino locked (8 slot & fish-prawn-crab games)","未成年模式：今日購買 0/5 次，剩餘 5 次":"Minor mode: 0/5 purchases today, 5 left","與手機分享版一致的玩法與規則：俄羅斯方塊、中國象棋盲棋、21點、百家樂、鬥地主、UNO、大富翁、六合彩。":"Same modes and rules as the mobile share edition: Tetris, Blind Xiangqi, Blackjack, Baccarat, Dou Dizhu, UNO, Monopoly, Mark Six.","管理員 App 審批通過後，彈珠機、大富翁、六合彩、刮刮樂、魚蝦蟹、老虎機、21點、百家樂、輪盤 會即時解鎖。":"After admin approval, Marbles, Monopoly, Mark Six, Scratch cards, Fish-Prawn-Crab, Slots, Blackjack, Baccarat and Roulette unlock instantly.","本站為最新版（新站 kalokfung29-arch.surge.sh），不需遷移。":"This is the latest site (kalokfung29-arch.surge.sh) · no migration needed.","本站已遷移至新站 kalokfung29-arch.surge.sh":"This site has moved to kalokfung29-arch.surge.sh","下載分享版 APK · v5.2":"Download Share APK · v5.2","下載完整版 APK · v5.2":"Download Full APK · v5.2","下載管理端 APK · v2.9":"Download Admin APK · v2.9","更新日期":"Updated","本次更新：":"What's new: ","俄羅斯方塊":"Tetris","10×20 經典戰場 · 七種方塊 · 連消加分":"10×20 classic field · 7 pieces · combo scoring","本頁提供分享版 5.2；完整版 5.2 與管理端 2.9 請到新站下載。":"This page offers Share 5.2; Full 5.2 and Admin 2.9 are on the new site.","新站補齊大富翁、中國象棋盲棋（含盲棋獨立頁）、六合彩與刮刮樂":"New site adds Monopoly, Blind Xiangqi (with a standalone page), Mark Six and Scratch cards","維護中":"Under maintenance","載入中":"Loading","處理中":"Processing","成功":"Success","失敗":"Failed","提示":"Notice","警告":"Warning","錯誤":"Error","確認":"Confirm","下一步":"Next","上一步":"Back","全部":"All","關閉提示":"Dismiss","刷新":"Refresh","重試":"Retry","更多":"More","收起":"Collapse","展開":"Expand","首頁":"Home","中國象棋 · 盲棋（暗棋）":"Chinese Chess · Blind (Dark) Chess","翻棋定陣營 · 大喫小 · 炮隔子喫 · 與 App 同款":"Flip to set sides · big eats small · cannon jumps · same as the app","陣營未定":"side undecided","請翻第一枚暗棋決定陣營":"Flip the first hidden piece to set your side","我方行動":"Your move","紅方剩子":"Red left","黑方剩子":"Black left","我方陣營":"Your side","未定":"Undecided","手數":"Moves","棋":"pieces","先隨意翻開一枚暗棋，那枚棋的顏色就是你的陣營":"Flip any hidden piece first — its colour becomes your side","新的一局":"New game","悔棋":"Undo","對 AI":"vs AI","規則約定":"House rules","預設同為關閉":"off by default","搏大霧":"Blind challenge","可貼身撞吃暗棋，翻開比大小，大吃小、小則反被吃":"Adjacent flips compare size — bigger eats smaller","車直衝多格":"Rook long dash","俥／車可沿直線衝到空格或喫子格":"Chariot slides in a line to an empty or capturable square","連食":"Chain capture","吃子後可再行動一步（最多連續 8 次）":"Move again after a capture (up to 8 in a row)","一方被吃光，或輪到時無任何合法步可走即負。":"You lose when all pieces are captured or no legal move remains.","盲棋＝暗棋／翻棋":"Blind chess = dark chess / flip chess","俄羅斯方塊 分享版 · 免費在線玩（免安裝 · 手機電腦都能玩）":"Tetris Share · Play free online (no install · mobile & desktop)","俄罗斯方块 分享版 · 免费在线玩（免安装 · 手机电脑都能玩）":"Tetris Share · Play free online (no install · mobile & desktop)","中國象棋盲棋（暗棋）· 免費在線玩":"Blind Chinese Chess · Play free online","開":"On","關":"off","與 App 一致":"same as the app","預設同為":"default ","與 App 同款":"same as the app","規則約定 (與 App 一致, 預設同為關閉)":"House rules (same as the app · off by default)","需VIP":"VIP only","牌":"card","大富翁":"Monopoly","基礎":"basic","音效":"Sound","暫停":"Pause","商店":"Shop","帳號":"Account","操作說明":"How to play","舊站入口":"Old site","人數":"Players","自己":"you","電腦":"CPU","面骰數量":"dice count","擲出的點數加總即移動步數":"Move by the total rolled","面功能骰":"-sided power dice","每次移動後同步投擲":"rolled together after each move","觸發":"triggers","種增益或幹擾效果":"types of buff / debuff","面懲罰骰":"-sided penalty die","機會卡":"Chance card","建設房產":"build properties","人對戰":"-player match","出完手牌得分":"Score by emptying your hand","分奪冠":"points to win","疊加罰牌":"stacked penalties","可疊":"stackable","累積到下家一次抽":"accumulates for the next player","手上有同色同數字牌可隨時搶先出":"You may jump in with a same-colour, same-number card","時可同一位對手交換手牌":"lets you swap hands with an opponent","出零傳牌":"play a 0 and pass","手牌剩一張記得嗌":"Call “last card” when down to one","唔嗌會罰抽":"penalty draw if you forget","顏色":"colour","方向":"direction","待罰":"pending penalty","嗌":"call","自動玩":"Auto play","揀顏色":"pick a colour","對手出咗":"opponent played","接受就抽":"accept and draw","張並停一輪":"cards and skip a turn","接受罰":"take the penalty","質疑":"challenge","揀一位對手交換手牌":"pick an opponent to swap hands","每人":"each player","二人局":"two-player game","先出完手牌為勝":"first to empty their hand wins","同色或同數字":"same colour or same number","同功能牌即可出":"any same-type card may be played","下家停一輪":"next player skips a turn","二人局反轉等同停":"in two-player, Reverse acts as Skip","下家抽":"next player draws","手上無當前顏色牌才可出":"playable only when you hold no card of the current colour","下家可質疑":"next player may challenge","漏嗌罰抽":"penalty for not calling","出完者得分":"whoever empties first scores","其他人手牌點數":"others’ remaining card points","數字牌面值":"number cards at face value","功能牌":"action cards","黑牌":"wild cards","本局投注":"this round’s bet","三軍":"Three services","賠":"pays","大小":"Big / Small","圍骰通殺":"a triple takes all","顏色系":"colour bets","單色":"single colour","雙色":"two colours","三色":"three colours","任意三色":"any three colours","圍骰":"triple","指定":"specific","任意":"any","任意圍骰":"any triple","總點數":"total","長按":"long press","自動拉":"auto-pull","賠率":"odds","由左起連續相同":"consecutive identical from the left","含本金":"includes stake","環":"ring","需先登入":"sign in required","驗證碼":"verification code","倍率":"multiplier","下注":"bet","每抽":"per draw","權重":"weight","抽一次":"draw once","抽五次":"draw 5","青銅":"Bronze","白銀":"Silver","黃金":"Gold","鉑金":"Platinum","鑽石":"Diamond","黑金":"Black Gold","黑鑽":"Black Diamond","星耀":"Star","幻銀":"Phantom Silver","琉璃":"Glazed","赤焰":"Crimson","蒼藍":"Azure","紫曜":"Amethyst","鳳凰":"Phoenix","龍魂":"Dragon Soul","神諭":"Oracle","永恆":"Eternal","萬古":"Ancient","極境":"Zenith","本機最近戰績":"Recent local results","幸運派發":"Lucky payout","本局六環全中":"all six rings hit","倍大獎直接派彩":"jackpot paid instantly","之後中獎頻率會回落":"win rate drops afterwards","大獎要靠運氣和保底":"jackpots rely on luck and pity","祝你繼續好運":"Good luck","經典":"Classic","戰場":"field","七種方塊":"7 pieces","連消加分":"line-clear bonus","隨時回來繼續":"come back anytime","分享成績":"Share score","帳號與商店":"Account & Shop","綁定並同步":"Link & sync","立即同步":"Sync now","解除綁定":"Unlink","上傳存檔到雲端":"Upload save to cloud","強制覆蓋還原":"Force overwrite restore","這裡會自動把存檔上傳到雲端":"Saves auto-upload to the cloud","並在每次開頁時自動合併回來":"and merge back on every page load","數值取大":"keep the larger value","缺的補上":"fill in the gaps","不會把本機資料蓋細":"local data is never overwritten","老虎機通用":"applies to slots","刮刮樂通用":"applies to scratch cards","我的訂單":"My orders","暫無訂單":"No orders yet","入賬帳號":"Payee account","收款碼":"Payment QR","選擇付款截圖":"Choose payment screenshot","最多":"max","例如":"e.g.","付款時間":"Payment time","轉數快參考號":"FPS reference no.","需上傳打碼後的證件照並填寫出生年份":"Upload a masked ID photo and enter your birth year","系統自動算歲數":"age is calculated automatically","由管理員審核":"reviewed by an admin","批準後本機切換為成年模式":"once approved, this device switches to adult mode","可玩老虎機與魚蝦蟹":"unlocks slots and Fish-Prawn-Crab","出生年份":"Birth year","只填出生年":"year only","例":"e.g.","證件照":"ID photo","拍攝或上傳":"shoot or upload","自動打碼":"auto-mask","拍攝證件照":"Shoot ID photo","從相簿選擇":"Choose from gallery","提交申請":"Submit","提交後狀態為":"Status after submitting:","待審批":"Pending review","批準後自動切換成年模式":"switches to adult mode once approved","今日次數已用完":"Daily limit reached","解鎖申請由後臺審批":"Unlock requests are reviewed in the admin backend","純文字最少":"at least","或附":"or attach","續購申請":"Renewal request","未解鎖時每日上限":"daily cap before unlock","批準解鎖後當日上限":"daily cap after approval","跨日":"next day","自動回到":"resets to","兩者任選其一即可提交":"submit either one","申請說明":"Request note","純文字":"plain text","最少":"at least","可拍特製黑卡正反面":"photograph both sides of the black card","選擇照片":"Choose photos","特製黑卡自動識別":"black card auto-detected","可選":"optional","卡面可見":"visible on the card","字樣":"text","翻拍時勾選":"tick when re-photographing","卡號":"Card no.","翻拍時填寫":"fill when re-photographing","提交解鎖申請":"Submit unlock request","批準後當日自動放行":"auto-approved for today once reviewed","證件打碼":"ID masking","一鍵遮三區":"one-tap mask (3 zones)","復原":"Reset","筆刷":"Brush","完成打碼":"Done masking","只會上傳這張打碼後的圖":"only the masked image is uploaded","原圖留在本機":"the original stays on this device","不會上傳":"never uploaded","累計局數":"Total games","申請變回三環":"Request return to three rings","提交後由後臺審批":"reviewed in the admin backend after submitting","批準後自動生效":"takes effect once approved","三環期同樣可累積幸運值":"lucky value still accrues during the three-ring period","管理端專用":"Admin only","修改後即時同步到所有玩家":"changes sync to all players instantly","每日開獎時刻":"Daily draw time","指定本期開獎號碼":"Set this draw’s numbers","正碼":"Regular","特別號":"Special","可重複":"repeatable","保存並即時同步":"Save & sync now","保存後寫入後臺":"saved and written to the backend","玩家端":"player side","秒內自動同步":"syncs within seconds","指定號碼只對":"set numbers apply only to","下一期":"next draw","有效":"valid","修改密碼":"Change password","合集內八款":"8 games","開放時段為":"open","週一至五":"Mon–Fri","早上":"AM","晚上":"PM","週六日":"Sat–Sun","下午":"PM","中國象棋盲棋":"Chinese Chess Blind","會同步入帳":"sync in","本頁提供":"This page hosts","完整版":"Full edition","與管理端":"and the admin app","由舊站":"from the old site","新站補齊":"the new site adds","含盲棋獨立頁":"incl. a dedicated blind-chess page","等":"and other","與入口":"and entry points","清單與舊站":"list matches the old site","Marble機":"Marble","雙 12 面功能骰":"two 12-sided power dice","42 顆木釘 · 5 個得分槽 · Best 10 倍":"42 wooden pegs · 5 scoring slots · 10× best","UNO 牌":"UNO","2–4 人 · Wild colour與 +4 質疑 · 四種House rules可開":"2–4 players · Wild colour & +4 challenge · 4 house rules toggleable","40 格標準版圖 · 基礎骰 1–3 顆 · 雙 12 面功能骰可開關":"40-tile standard board · 1–3 basic dice · two 12-sided power dice toggleable","長按或一鍵自動連續拉 · Locked可即場Buy HK$998":"Long-press or tap once to auto-pull · unlock a locked ball on the spot for HK$998","翻棋定陣營 · 大吃小 · 炮隔子吃 · 明確顯示輪到哪一方":"Flip to pick a side · larger captures smaller · cannon captures over a piece · clear turn indicator","每抽 5 顆Marble · Best 50 顆":"5 marbles per draw · best 50","段位晉級 · 戰績查詢":"Rank progression · match history","Tetris · Marble機 · UNO · 大富翁 · Lucky wheel":"Tetris · Marble · UNO · Monopoly · Lucky wheel","魚蝦蟹 · 老虎機 · 百家樂 · 鬥地主 · 六合彩 · 刮刮樂 · 澳門輪盤 · 21點":"Fish-Prawn-Crab · Slots · Baccarat · Dou Dizhu · Mark Six · Scratch cards · Macau roulette · Blackjack","商店 / 帳號":"Shop / Account","VIP 與訂單狀態與雲端同步; 網頁版的TokensBalance保存在本機瀏覽器.":"VIP and order status sync to the cloud; TokensBalance on the web is stored in this browser.","舊站入口：tetrisjames.surge.sh":"Old site: tetrisjames.surge.sh"}};
+var ENK=Object.keys(EN).sort(function(a,b){return b.length-a.length;});
+var CJK=/[\u4e00-\u9fff]/;
+var RUNITS=[[/^(\d[\d,\.]*)\s*個代幣$/,'$1 tokens'],[/^(\d[\d,\.]*)\s*顆$/,'$1 dice'],
+ [/^(\d[\d,\.]*)\s*人$/,'$1 players'],[/^(\d[\d,\.]*)\s*點$/,'$1 pips'],[/^(\d[\d,\.]*)\s*分$/,'$1 pts'],
+ [/^(\d[\d,\.]*)\s*倍$/,'x$1'],[/^(\d[\d,\.]*)\s*筆$/,'$1 records'],[/^(\d[\d,\.]*)\s*局$/,'$1 rounds'],
+ [/^(\d[\d,\.]*)\s*張$/,'$1 cards'],[/^(\d[\d,\.]*)\s*手$/,'$1 hands'],[/^代幣\s*(\d[\d,\.]*)$/,'Tokens $1'],
+ [/^第\s*(\d[\d,\.]*)\s*手$/,'Hand $1'],[/^(\d[\d,\.]*)\s*分鐘$/,'$1 min']];
+function conv(s,m){var o='';for(var i=0;i<s.length;i++){var c=s.charAt(i);o+=(m[c]||c);}return o;}
+function sysLang(){var l=(navigator.languages&&navigator.languages[0])||navigator.language||'zh-TW';l=String(l).toLowerCase();
+  if(l.indexOf('zh')===0){return (l.indexOf('hant')>=0||l.indexOf('tw')>=0||l.indexOf('hk')>=0||l.indexOf('mo')>=0)?'tw':'cn';}
+  return 'en';}
+var chosen=(localStorage.getItem(KEY)||'auto');
+function eff(){return chosen==='auto'?sysLang():chosen;}
+function trEn(src){
+  var raw=String(src), lead='', tail='', core=raw;
+  var m1=core.match(/^[^\u4e00-\u9fff]*/); if(m1&&m1[0]){lead=m1[0];core=core.slice(lead.length);}
+  var m2=core.match(/[^\u4e00-\u9fff]*$/); if(m2&&m2[0]){tail=m2[0];core=core.slice(0,core.length-tail.length);}
+  if(!core) return null;
+  var t=conv(core,S2T).trim();
+  if(!t) return null;
+  if(EN[t]) return lead+EN[t]+tail;
+  var t2=conv(t,T2S); if(t2!==t&&EN[t2]) return lead+EN[t2]+tail;
+  for(var r=0;r<RUNITS.length;r++){ if(RUNITS[r][0].test(t)) return lead+t.replace(RUNITS[r][0],RUNITS[r][1])+tail; }
+  if(EN[raw.trim()]) return lead+EN[raw.trim()]+tail;
+  for(var i=0;i<ENK.length;i++){var k=ENK[i];
+    if(t.length>k.length&&t.indexOf(k)===0){var rest=t.slice(k.length);
+      if(!CJK.test(rest)) return lead+EN[k]+rest+tail;}}
+  var seg=t, hit=false;
+  for(var j=0;j<ENK.length;j++){var kk=ENK[j];
+    if(kk.length>1&&seg.indexOf(kk)>=0){seg=seg.split(kk).join(EN[kk]);hit=true;}}
+  if(hit) return lead+seg+tail;
+  var mx=trMixed(t,lead,tail); if(mx!==null) return mx;
+  return null;
+}
+var ENKS=null, MISS={}, MC={};
+function trMixed(t,lead,tail){
+  if(MC[t]!==undefined) return MC[t];
+  if(!ENKS){ENKS=Object.keys(EN).filter(function(k){return k.length>1&&CJK.test(k);}).sort(function(a,b){return b.length-a.length;});}
+  var s=t,out='',i=0,n=s.length,hit=false,run='';
+  while(i<n){
+    var m=null;
+    for(var r=0;r<ENKS.length;r++){var k=ENKS[r]; if(k===s.substr(i,k.length)){m=k;break;}}
+    if(m){ if(run){MISS[run]=(MISS[run]||0)+1;run='';} out+=EN[m]; i+=m.length; hit=true; }
+    else { if(CJK.test(s.charAt(i))) run+=s.charAt(i); else { if(run){MISS[run]=(MISS[run]||0)+1;run='';} } out+=s.charAt(i); i++; }
+  }
+  if(run) MISS[run]=(MISS[run]||0)+1;
+  var res = hit ? (lead+out+tail) : null;
+  MC[t]=res; return res;
+}
+
+function trans(src){
+  try{
+    var e=eff();
+    if(e==='cn') return conv(src,T2S);
+    if(e==='tw') return conv(src,S2T);
+    var hit=trEn(src); if(hit===null) return src;
+    var out=hit.replace(/，/g,', ').replace(/。/g,'. ').replace(/：/g,': ').replace(/；/g,'; ')
+              .replace(/！/g,'!').replace(/？/g,'?').replace(/（/g,' (').replace(/）/g,') ')
+              .replace(/、/g,', ').replace(/「/g,'"').replace(/」/g,'"').replace(/　/g,' ')
+              .replace(/\s{2,}/g,' ').replace(/\s+([,.!?;:])/g,'$1')
+              .replace(/\)\s*\)/g,')').replace(/\(\s*\(/g,'(').trim();
+    var op=(out.match(/\(/g)||[]).length, cl=(out.match(/\)/g)||[]).length;
+    while(cl>op){out=out.replace(/\)\s*$/,'');cl--;}
+    return out;
+  }catch(x){return src;}
+}
+var SKIP={SCRIPT:1,STYLE:1,NOSCRIPT:1,CODE:1,PRE:1,TEXTAREA:1};
+var orig=new WeakMap(), last=new WeakMap();
+var ATTRS=['placeholder','title','aria-label','alt'];
+var STAT={text:0,attr:0,err:0};
+function skipNode(n){
+  var p=n.parentNode;
+  while(p&&p.nodeType===1){
+    if(SKIP[p.tagName]) return true;
+    var cn=p.className;
+    if(typeof cn==='string'&&/(^|\s)(code|codeblock|hljs|lineno)(\s|$)/i.test(cn)) return true;
+    if(p.getAttribute&&p.getAttribute('data-i18n-skip')!==null) return true;
+    p=p.parentNode;}
+  return false;
+}
+function applyText(n){
+  try{
+    if(!n||n.nodeType!==3) return;
+    if(skipNode(n)) return;
+    var rec=orig.get(n);
+    if(!rec){ if(!CJK.test(n.data)) return;
+      if(/function\s*\(|=>|\bvar\s+\w+\s*=|MIG-EXPORT|\{\s*$/.test(n.data)) return;
+      rec={t:n.data}; orig.set(n,rec); }
+    var out=trans(rec.t);
+    if(n.data!==out){ n.data=out; last.set(n,out); STAT.text++; }
+  }catch(x){STAT.err++;}
+}
+function applyAttr(el){
+  try{
+    if(!el||el.nodeType!==1) return;
+    if(SKIP[el.tagName]) return;
+    if(el.getAttribute&&el.getAttribute('data-i18n-skip')!==null) return;
+    for(var i=0;i<ATTRS.length;i++){var a=ATTRS[i];var v=el.getAttribute(a);
+      if(!v||!CJK.test(v)) continue;
+      var key='i18nO'+a.replace('-','');
+      if(!el.dataset[key]) el.dataset[key]=v;
+      var o=v, out=trans(el.dataset[key]);
+      if(o!==out){ el.setAttribute(a,out); STAT.attr++; }
+    }
+  }catch(x){STAT.err++;}
+}
+function walk(root){
+  try{
+    if(!root) return;
+    if(root.nodeType===3){applyText(root);return;}
+    if(root.nodeType!==1&&root.nodeType!==9&&root.nodeType!==11) return;
+    applyAttr(root);
+    var tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT,null,false),n;
+    while((n=tw.nextNode())){ if(n.nodeType===3) applyText(n); else applyAttr(n); }
+  }catch(x){STAT.err++;}
+}
+function render(){
+  try{
+    document.documentElement.lang=(eff()==='en'?'en':(eff()==='cn'?'zh-CN':'zh-TW'));
+    walk(document.body);
+    try{ if(!window.__t0title&&document.title&&CJK.test(document.title)) window.__t0title=document.title;
+         if(window.__t0title){var tt=trans(window.__t0title); if(document.title!==tt) document.title=tt;} }catch(x){}
+    var b=document.getElementById('i18nBtn');
+    if(b) b.textContent='🌐 '+(eff()==='en'?'EN':(eff()==='cn'?'简':'繁'));
+  }catch(x){}
+}
+var mo=new MutationObserver(function(muts){
+  for(var i=0;i<muts.length;i++){var m=muts[i];
+    try{
+      if(m.type==='characterData'){
+        var n=m.target, rec=orig.get(n), out=last.get(n);
+        if(rec&&n.data===out) continue;
+        if(n.data&&CJK.test(n.data)){orig.set(n,{t:n.data});applyText(n);} else {last.set(n,n.data);}
+      }else{
+        for(var j=0;j<m.addedNodes.length;j++){var an=m.addedNodes[j];
+          if(an.nodeType===1||an.nodeType===3) walk(an);}
+      }
+    }catch(x){STAT.err++;}
+  }
+});
+function ui(){
+  var box=document.createElement('div');
+  box.setAttribute('data-i18n-skip','1');
+  box.style.cssText='position:fixed;right:12px;bottom:14px;z-index:2147483000;font-family:system-ui,-apple-system,"PingFang SC",sans-serif;text-align:right;';
+  var panel=document.createElement('div');
+  panel.style.cssText='display:none;margin-bottom:8px;background:#0d1420;border:1px solid #2b3a4f;border-radius:12px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.5);min-width:160px;text-align:left;';
+  var opts=[['auto','跟隨系統 / Auto'],['tw','繁體中文'],['cn','简体中文'],['en','English']];
+  opts.forEach(function(o){
+    var b=document.createElement('div');
+    b.textContent=o[1];
+    b.style.cssText='padding:9px 12px;color:#dbe7f3;font-size:14px;border-radius:8px;cursor:pointer;white-space:nowrap;';
+    b.onclick=function(){chosen=o[0];localStorage.setItem(KEY,chosen);render();
+      Array.prototype.forEach.call(panel.children,function(c){c.style.background='transparent';c.style.color='#dbe7f3';});
+      b.style.background='#1b5e20';b.style.color='#b9f6ca';};
+    if(chosen===o[0]){b.style.background='#1b5e20';b.style.color='#b9f6ca';}
+    panel.appendChild(b);
+  });
+  var btn=document.createElement('div');
+  btn.id='i18nBtn';btn.textContent='🌐 繁';
+  btn.style.cssText='margin-left:auto;width:52px;height:34px;line-height:34px;text-align:center;background:#12384a;color:#8be9fd;border:1px solid #2b6c86;border-radius:17px;font-size:13px;cursor:pointer;user-select:none;box-shadow:0 4px 14px rgba(0,0,0,.45);';
+  btn.onclick=function(){panel.style.display=panel.style.display==='none'?'block':'none';};
+  box.appendChild(panel);box.appendChild(btn);
+  document.body.appendChild(box);
+}
+window.__i18n={trans:trans,eff:eff,EN:EN,MISS:MISS,applyText:applyText,walk:walk,skip:skipNode,STAT:STAT,
+  setLang:function(v){chosen=v;localStorage.setItem(KEY,v);render();}};
+function boot(){ui();render();mo.observe(document.body,{childList:true,subtree:true,characterData:true});}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot); else boot();
+})();
+</script>
+
 
 </body>
 </html>
