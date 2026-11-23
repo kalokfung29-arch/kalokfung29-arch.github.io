@@ -3491,7 +3491,7 @@
      首頁 + 魚蝦蟹 + 老虎機（與手機分享版規則一致）
      ============================================================ */
   const TOK_KEY = "tetris_web_tokens";
-  const TOKEN_TIERS = [[5,10],[10,20],[15,30],[25,50],[50,100],[100,200],[150,300],[250,500],[500,1000],[1000,2000]];
+  const TOKEN_TIERS = [[5,10],[10,20],[15,30],[25,50],[50,100],[100,200],[150,300],[250,500],[500,998],[1000,1998]];
   function lsNum(key){
     const v = Number(localStorage.getItem(key));
     return Number.isFinite(v) ? v : 0;
@@ -8272,7 +8272,7 @@ const MINOR_OPEN_H = 7, MINOR_CLOSE_H = 20, MINOR_WK_START = 14, MINOR_WK_END = 
   const DZ_STAKES = [100, 500, 1000, 2000];
   /* 自動託管權益落地本機（手機分享版同一規則：後台 AUTO_DIZHU 審批後永久解鎖，離線／未綁帳號照樣可用） */
   const DZ_AUTO_UNLOCK_KEY = "tetris_web_dizhu_auto_unlocked";
-  const DZ_AUTO_PRICE = 1000;
+  const DZ_AUTO_PRICE = 998;
   function dzSetAutoUnlocked(v){
     try { if (v) localStorage.setItem(DZ_AUTO_UNLOCK_KEY, "1");
           else localStorage.removeItem(DZ_AUTO_UNLOCK_KEY); } catch(e){}
